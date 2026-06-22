@@ -2,7 +2,16 @@ import { X, Calendar, User, Clock, Share2 } from "lucide-react";
 import { FaFacebookF, FaTwitter, FaWhatsapp, FaLinkedinIn } from "react-icons/fa";
 
 interface NewsDetailModalProps {
-  article: any;
+  article: {
+    image: string;
+    title: string;
+    category: string;
+    date?: string;
+    author?: string;
+    readTime?: string;
+    excerpt?: string;
+    [key: string]: any;
+  };
   onClose: () => void;
 }
 

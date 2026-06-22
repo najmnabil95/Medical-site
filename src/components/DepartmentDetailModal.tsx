@@ -1,10 +1,14 @@
-import { X, ArrowLeft, Clock, Users, Award, CheckCircle, Star, Stethoscope, Activity } from "lucide-react";
+import { X, ArrowLeft, Clock, Users, Award, CheckCircle, Star, Stethoscope, Activity, Heart, Brain, Bone, Baby, Eye } from "lucide-react";
 import { useState } from "react";
 import AppointmentModal from "./AppointmentModal";
-import { useData } from "../context/DataContext";
+import { useData, Department } from "../context/DataContext";
+
+const iconMap: Record<string, React.ComponentType<{ className?: string; size?: number }>> = {
+  Heart, Brain, Bone, Baby, Eye, Stethoscope, Activity,
+};
 
 interface DepartmentDetailProps {
-  department: any;
+  department: Department;
   onClose: () => void;
 }
 
@@ -51,8 +55,8 @@ export default function DepartmentDetailModal({ department, onClose }: Departmen
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
                   {(() => {
-                    const Icon = department.icon;
-                    return <Icon className="text-white" size={28} />;
+                    const Icon = iconMap[department.icon];
+                    return Icon ? <Icon className="text-white" size={28} /> : null;
                   })()}
                 </div>
                 <div>

@@ -156,8 +156,6 @@ export default function PricesPage() {
 
   // تصدير إلى Excel
   const handleExportExcel = () => {
-    console.log("📊 بدء تصدير الأسعار الحالية...");
-    
     try {
       const exportData = prices.map(p => ({
         "اسم الخدمة": p.service,
@@ -170,45 +168,32 @@ export default function PricesPage() {
         "الحالة": p.active ? "نشط" : "غير نشط",
       }));
 
-      console.log(`✅ تم تجهيز ${exportData.length} خدمة للتصدير`);
-
       const worksheet = XLSX.utils.json_to_sheet(exportData);
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "الأسعار");
       
-      // تعيين عرض الأعمدة
       worksheet['!cols'] = [
-        { wch: 30 }, // اسم الخدمة
-        { wch: 15 }, // التصنيف
-        { wch: 10 }, // السعر
-        { wch: 10 }, // السعر إلى
-        { wch: 8 },  // العملة
-        { wch: 15 }, // المدة
-        { wch: 40 }, // الوصف
-        { wch: 10 }, // الحالة
+        { wch: 30 },
+        { wch: 15 },
+        { wch: 10 },
+        { wch: 10 },
+        { wch: 8 },
+        { wch: 15 },
+        { wch: 40 },
+        { wch: 10 },
       ];
 
-      console.log("✅ تم إنشاء ورقة العمل");
-
       const fileName = `أسعار_المستشفى_${new Date().toISOString().split('T')[0]}.xlsx`;
-      
-      // تنزيل الملف مباشرة إلى جهاز المستخدم
       XLSX.writeFile(workbook, fileName);
-      
-      console.log(`✅ تم تنزيل الملف: ${fileName}`);
       toast("success", `✅ تم تصدير ${exportData.length} خدمة إلى جهازك!`);
     } catch (error) {
-      console.error("❌ خطأ في التصدير:", error);
       toast("error", "حدث خطأ أثناء تصدير الأسعار");
     }
   };
 
   // تنزيل نموذج Excel فارغ
   const handleDownloadTemplate = () => {
-    console.log("📥 بدء تنزيل الملف الفارغ...");
-    
     try {
-      // ملف فارغ مع العناوين فقط
       const emptyTemplate = [
         {
           "اسم الخدمة": "",
@@ -220,8 +205,6 @@ export default function PricesPage() {
           "الوصف": "",
         },
       ];
-
-      console.log("✅ تم إنشاء البيانات");
 
       const worksheet = XLSX.utils.json_to_sheet(emptyTemplate);
       const workbook = XLSX.utils.book_new();
@@ -237,23 +220,15 @@ export default function PricesPage() {
         { wch: 40 },
       ];
 
-      console.log("✅ تم إنشاء ورقة العمل");
-
-      // تنزيل الملف مباشرة إلى جهاز المستخدم
       XLSX.writeFile(workbook, "قالب_الأسعار_فارغ.xlsx");
-      
-      console.log("✅ تم تنزيل الملف بنجاح!");
       toast("success", "✅ تم تنزيل الملف الفارغ إلى جهازك! ابحث عنه في مجلد التنزيلات");
     } catch (error) {
-      console.error("❌ خطأ في تنزيل الملف:", error);
       toast("error", "حدث خطأ أثناء تنزيل الملف");
     }
   };
 
   // تنزيل نموذج مع أمثلة
   const handleDownloadTemplateWithExamples = () => {
-    console.log("📥 بدء تنزيل الملف مع الأمثلة...");
-    
     try {
       const template = [
         {
@@ -303,8 +278,6 @@ export default function PricesPage() {
         },
       ];
 
-      console.log("✅ تم إنشاء البيانات مع 5 أمثلة");
-
       const worksheet = XLSX.utils.json_to_sheet(template);
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "نموذج");
@@ -319,15 +292,9 @@ export default function PricesPage() {
         { wch: 40 },
       ];
 
-      console.log("✅ تم إنشاء ورقة العمل");
-
-      // تنزيل الملف مباشرة إلى جهاز المستخدم
       XLSX.writeFile(workbook, "نموذج_استيراد_الأسعار_مع_أمثلة.xlsx");
-      
-      console.log("✅ تم تنزيل الملف بنجاح!");
       toast("success", "✅ تم تنزيل الملف مع الأمثلة إلى جهازك! ابحث عنه في مجلد التنزيلات");
     } catch (error) {
-      console.error("❌ خطأ في تنزيل الملف:", error);
       toast("error", "حدث خطأ أثناء تنزيل الملف");
     }
   };

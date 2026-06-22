@@ -1,5 +1,5 @@
 import { MessageSquare, Star } from "lucide-react";
-import { useData } from "../../context/DataContext";
+import { useData, Testimonial } from "../../context/DataContext";
 import PageHeader from "../components/PageHeader";
 import { useState } from "react";
 import Modal from "../components/Modal";
@@ -20,7 +20,7 @@ export default function TestimonialsPage() {
   const { toast } = useToast();
   const [search, setSearch] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
-  const [editingItem, setEditingItem] = useState<any | null>(null);
+  const [editingItem, setEditingItem] = useState<Testimonial | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [form, setForm] = useState({ name: "", role: "", text: "", rating: 5, avatar: "", color: "from-primary-500 to-primary-600" });
 
@@ -34,7 +34,7 @@ export default function TestimonialsPage() {
     setModalOpen(true);
   };
 
-  const openEdit = (t: any) => {
+  const openEdit = (t: Testimonial) => {
     setForm({ name: t.name, role: t.role, text: t.text, rating: t.rating, avatar: t.avatar, color: t.color });
     setEditingItem(t);
     setModalOpen(true);

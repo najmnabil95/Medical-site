@@ -13,18 +13,18 @@ interface Field {
   placeholder?: string;
 }
 
-interface GenericCrudProps {
+interface GenericCrudProps<T extends Record<string, any>> {
   title: string;
   subtitle: string;
   icon: React.ReactNode;
-  items: any[];
-  setItems: (items: any[]) => void;
+  items: T[];
+  setItems: (items: T[]) => void;
   fields: Field[];
-  searchFields?: string[];
+  searchFields?: (keyof T)[];
   canToggle?: boolean;
 }
 
-export default function GenericCrud({
+export default function GenericCrud<T extends Record<string, any>>({
   title,
   subtitle,
   icon,
@@ -33,11 +33,11 @@ export default function GenericCrud({
   fields,
   searchFields = [],
   canToggle = false,
-}: GenericCrudProps) {
+}: GenericCrudProps<T>) {
   const { toast } = useToast();
   const [search, setSearch] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
-  const [editingItem, setEditingItem] = useState<any | null>(null);
+  const [editingItem, setEditingItem] = useState<T | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [form, setForm] = useState<Record<string, any>>({});
 
@@ -59,7 +59,7 @@ export default function GenericCrud({
     setModalOpen(true);
   };
 
-  const openEdit = (item: any) => {
+  const openEdit = (item: T) => {
     const initial: Record<string, any> = {};
     fields.forEach((f) => {
       initial[f.name] = item[f.name] ?? "";
@@ -72,10 +72,10 @@ export default function GenericCrud({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (editingItem) {
-      setItems(items.map((i) => (i.id === editingItem.id ? { ...i, ...form } : i)));
+      setItems(items.map((i) => (i.id === editingItem.id ? { ...i, ...form } as unknown as T : i)));
       toast("success", "تم التحديث بنجاح");
     } else {
-      setItems([...items, { id: Date.now().toString(), ...form }]);
+      setItems([...items, { id: Date.now().toString(), ...form } as unknown as T]);
       toast("success", "تمت الإضافة بنجاح");
     }
     setModalOpen(false);
@@ -90,7 +90,7 @@ export default function GenericCrud({
   };
 
   const toggleActive = (id: string) => {
-    setItems(items.map((i) => (i.id === id ? { ...i, active: !i.active } : i)));
+    setItems(items.map((i) => (i.id === id ? { ...i, active: !i.active } as unknown as T : i)));
     toast("info", "تم تحديث الحالة");
   };
 

@@ -1,19 +1,5 @@
-/**
- * API Service Layer
- * 
- * هذا الملف يحاكي Backend API
- * في الإنتاج، استبدل هذا بـ API calls حقيقية
- * 
- * للانتقال إلى Backend حقيقي:
- * 1. قم بإنشاء Backend باستخدام Laravel/Node.js
- * 2. استبدل localStorage بـ API calls
- * 3. استخدم axios أو fetch للاتصال بالـ Backend
- */
-
-// Base URL للـ Backend
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
-// Helper functions
 async function handleResponse(response: Response) {
   if (!response.ok) {
     const error = await response.json();
@@ -22,21 +8,20 @@ async function handleResponse(response: Response) {
   return response.json();
 }
 
-// دالة API Request - سيتم استخدامها عند الانتقال إلى Backend حقيقي
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function apiRequest(endpoint: string, options: RequestInit = {}) {
   const token = localStorage.getItem('authToken');
-  
-  const headers = {
+  const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    ...(token && { 'Authorization': `Bearer ${token}` }),
-    ...options.headers,
+    Accept: 'application/json',
+    ...(token && { Authorization: `Bearer ${token}` }),
+    ...(options.headers as Record<string, string>),
   };
 
   try {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       ...options,
       headers,
+      credentials: 'include',
     });
     return handleResponse(response);
   } catch (error) {
@@ -45,32 +30,24 @@ async function apiRequest(endpoint: string, options: RequestInit = {}) {
   }
 }
 
-// Auth API
 export const AuthAPI = {
   login: async (username: string, password: string) => {
-    // حالياً: محاكاة باستخدام localStorage
-    // عند الانتقال إلى Backend حقيقي، استخدم:
-    // return apiRequest('/auth/login', {
-    //   method: 'POST',
-    //   body: JSON.stringify({ username, password }),
-    // });
-    
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const user = users.find((u: any) => u.username === username && u.password === password);
-    
-    if (user) {
-      const token = btoa(JSON.stringify({ userId: user.id, role: user.role }));
-      localStorage.setItem('authToken', token);
-      localStorage.setItem('currentUser', JSON.stringify(user));
-      return { user, token };
-    }
-    
-    throw new Error('اسم المستخدم أو كلمة المرور غير صحيحة');
+    const response = await apiRequest('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ username, password }),
+    });
+    localStorage.setItem('authToken', response.token);
+    localStorage.setItem('currentUser', JSON.stringify(response.user));
+    return response;
   },
 
-  logout: () => {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('currentUser');
+  logout: async () => {
+    try {
+      await apiRequest('/auth/logout', { method: 'POST' });
+    } finally {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('currentUser');
+    }
   },
 
   getCurrentUser: () => {
@@ -83,153 +60,170 @@ export const AuthAPI = {
   },
 };
 
-// Users API
 export const UsersAPI = {
-  getAll: async () => {
-    // حالياً: محاكاة باستخدام localStorage
-    // عند الانتقال إلى Backend حقيقي، استخدم:
-    // return apiRequest('/users');
-    
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    return users;
-  },
-
-  getById: async (id: string) => {
-    // TODO: استبدل بـ API call
-    // return apiRequest(`/users/${id}`);
-    
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    return users.find((u: any) => u.id === id);
-  },
-
-  create: async (userData: any) => {
-    // حالياً: محاكاة باستخدام localStorage
-    // عند الانتقال إلى Backend حقيقي، استخدم:
-    const response = await apiRequest('/users', {
-      method: 'POST',
-      body: JSON.stringify(userData),
-    });
-    return response;
-    
-    // const users = JSON.parse(localStorage.getItem('users') || '[]');
-    // const newUser = { ...userData, id: Date.now().toString() };
-    // users.push(newUser);
-    // localStorage.setItem('users', JSON.stringify(users));
-    // return newUser;
-  },
-
-  update: async (id: string, userData: any) => {
-    // TODO: استبدل بـ API call
-    // return apiRequest(`/users/${id}`, {
-    //   method: 'PUT',
-    //   body: JSON.stringify(userData),
-    // });
-    
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const index = users.findIndex((u: any) => u.id === id);
-    if (index !== -1) {
-      users[index] = { ...users[index], ...userData };
-      localStorage.setItem('users', JSON.stringify(users));
-      return users[index];
-    }
-    throw new Error('المستخدم غير موجود');
-  },
-
-  delete: async (id: string) => {
-    // TODO: استبدل بـ API call
-    // return apiRequest(`/users/${id}`, { method: 'DELETE' });
-    
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const filtered = users.filter((u: any) => u.id !== id);
-    localStorage.setItem('users', JSON.stringify(filtered));
-    return { success: true };
-  },
+  getAll: async () => apiRequest('/users'),
+  getById: async (id: string) => apiRequest(`/users/${id}`),
+  create: async (userData: Record<string, unknown>) =>
+    apiRequest('/users', { method: 'POST', body: JSON.stringify(userData) }),
+  update: async (id: string, userData: Record<string, unknown>) =>
+    apiRequest(`/users/${id}`, { method: 'PUT', body: JSON.stringify(userData) }),
+  delete: async (id: string) =>
+    apiRequest(`/users/${id}`, { method: 'DELETE' }),
 };
 
-// Appointments API
 export const AppointmentsAPI = {
-  getAll: async () => {
-    const appointments = JSON.parse(localStorage.getItem('reservations') || '[]');
-    return appointments;
-  },
-
-  create: async (appointmentData: any) => {
-    const appointments = JSON.parse(localStorage.getItem('reservations') || '[]');
-    const newAppointment = { 
-      ...appointmentData, 
-      id: Date.now().toString(),
-      createdAt: new Date().toISOString(),
-      status: 'pending'
-    };
-    appointments.push(newAppointment);
-    localStorage.setItem('reservations', JSON.stringify(appointments));
-    return newAppointment;
-  },
-
-  update: async (id: string, appointmentData: any) => {
-    const appointments = JSON.parse(localStorage.getItem('reservations') || '[]');
-    const index = appointments.findIndex((a: any) => a.id === id);
-    if (index !== -1) {
-      appointments[index] = { ...appointments[index], ...appointmentData };
-      localStorage.setItem('reservations', JSON.stringify(appointments));
-      return appointments[index];
-    }
-    throw new Error('الحجز غير موجود');
-  },
-
-  delete: async (id: string) => {
-    const appointments = JSON.parse(localStorage.getItem('reservations') || '[]');
-    const filtered = appointments.filter((a: any) => a.id !== id);
-    localStorage.setItem('reservations', JSON.stringify(filtered));
-    return { success: true };
-  },
+  getAll: async () => apiRequest('/appointments'),
+  getById: async (id: string) => apiRequest(`/appointments/${id}`),
+  create: async (data: Record<string, unknown>) =>
+    apiRequest('/appointments', { method: 'POST', body: JSON.stringify(data) }),
+  update: async (id: string, data: Record<string, unknown>) =>
+    apiRequest(`/appointments/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  delete: async (id: string) =>
+    apiRequest(`/appointments/${id}`, { method: 'DELETE' }),
 };
 
-// Notifications API
+export const DoctorsAPI = {
+  getAll: async () => apiRequest('/doctors'),
+  getById: async (id: string) => apiRequest(`/doctors/${id}`),
+  create: async (data: Record<string, unknown>) =>
+    apiRequest('/doctors', { method: 'POST', body: JSON.stringify(data) }),
+  update: async (id: string, data: Record<string, unknown>) =>
+    apiRequest(`/doctors/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  delete: async (id: string) =>
+    apiRequest(`/doctors/${id}`, { method: 'DELETE' }),
+};
+
+export const DepartmentsAPI = {
+  getAll: async () => apiRequest('/departments'),
+  getById: async (id: string) => apiRequest(`/departments/${id}`),
+  create: async (data: Record<string, unknown>) =>
+    apiRequest('/departments', { method: 'POST', body: JSON.stringify(data) }),
+  update: async (id: string, data: Record<string, unknown>) =>
+    apiRequest(`/departments/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  delete: async (id: string) =>
+    apiRequest(`/departments/${id}`, { method: 'DELETE' }),
+};
+
+export const ServicesAPI = {
+  getAll: async () => apiRequest('/services'),
+  create: async (data: Record<string, unknown>) =>
+    apiRequest('/services', { method: 'POST', body: JSON.stringify(data) }),
+  update: async (id: string, data: Record<string, unknown>) =>
+    apiRequest(`/services/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  delete: async (id: string) =>
+    apiRequest(`/services/${id}`, { method: 'DELETE' }),
+};
+
+export const PackagesAPI = {
+  getAll: async () => apiRequest('/packages'),
+  create: async (data: Record<string, unknown>) =>
+    apiRequest('/packages', { method: 'POST', body: JSON.stringify(data) }),
+  update: async (id: string, data: Record<string, unknown>) =>
+    apiRequest(`/packages/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  delete: async (id: string) =>
+    apiRequest(`/packages/${id}`, { method: 'DELETE' }),
+};
+
+export const TestimonialsAPI = {
+  getAll: async () => apiRequest('/testimonials'),
+  create: async (data: Record<string, unknown>) =>
+    apiRequest('/testimonials', { method: 'POST', body: JSON.stringify(data) }),
+  update: async (id: string, data: Record<string, unknown>) =>
+    apiRequest(`/testimonials/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  delete: async (id: string) =>
+    apiRequest(`/testimonials/${id}`, { method: 'DELETE' }),
+};
+
+export const NewsAPI = {
+  getAll: async () => apiRequest('/news'),
+  getById: async (id: string) => apiRequest(`/news/${id}`),
+  create: async (data: Record<string, unknown>) =>
+    apiRequest('/news', { method: 'POST', body: JSON.stringify(data) }),
+  update: async (id: string, data: Record<string, unknown>) =>
+    apiRequest(`/news/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  delete: async (id: string) =>
+    apiRequest(`/news/${id}`, { method: 'DELETE' }),
+};
+
+export const FaqsAPI = {
+  getAll: async () => apiRequest('/faqs'),
+  create: async (data: Record<string, unknown>) =>
+    apiRequest('/faqs', { method: 'POST', body: JSON.stringify(data) }),
+  update: async (id: string, data: Record<string, unknown>) =>
+    apiRequest(`/faqs/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  delete: async (id: string) =>
+    apiRequest(`/faqs/${id}`, { method: 'DELETE' }),
+};
+
+export const InsurancesAPI = {
+  getAll: async () => apiRequest('/insurances'),
+  create: async (data: Record<string, unknown>) =>
+    apiRequest('/insurances', { method: 'POST', body: JSON.stringify(data) }),
+  update: async (id: string, data: Record<string, unknown>) =>
+    apiRequest(`/insurances/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  delete: async (id: string) =>
+    apiRequest(`/insurances/${id}`, { method: 'DELETE' }),
+};
+
+export const PartnersAPI = {
+  getAll: async () => apiRequest('/partners'),
+  create: async (data: Record<string, unknown>) =>
+    apiRequest('/partners', { method: 'POST', body: JSON.stringify(data) }),
+  update: async (id: string, data: Record<string, unknown>) =>
+    apiRequest(`/partners/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  delete: async (id: string) =>
+    apiRequest(`/partners/${id}`, { method: 'DELETE' }),
+};
+
+export const CertificationsAPI = {
+  getAll: async () => apiRequest('/certifications'),
+  create: async (data: Record<string, unknown>) =>
+    apiRequest('/certifications', { method: 'POST', body: JSON.stringify(data) }),
+  update: async (id: string, data: Record<string, unknown>) =>
+    apiRequest(`/certifications/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  delete: async (id: string) =>
+    apiRequest(`/certifications/${id}`, { method: 'DELETE' }),
+};
+
+export const PricesAPI = {
+  getAll: async () => apiRequest('/prices'),
+  create: async (data: Record<string, unknown>) =>
+    apiRequest('/prices', { method: 'POST', body: JSON.stringify(data) }),
+  update: async (id: string, data: Record<string, unknown>) =>
+    apiRequest(`/prices/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  delete: async (id: string) =>
+    apiRequest(`/prices/${id}`, { method: 'DELETE' }),
+};
+
+export const MessagesAPI = {
+  create: async (data: Record<string, unknown>) =>
+    apiRequest('/messages', { method: 'POST', body: JSON.stringify(data) }),
+  getAll: async () => apiRequest('/messages'),
+  getById: async (id: string) => apiRequest(`/messages/${id}`),
+  update: async (id: string, data: Record<string, unknown>) =>
+    apiRequest(`/messages/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  delete: async (id: string) =>
+    apiRequest(`/messages/${id}`, { method: 'DELETE' }),
+};
+
 export const NotificationsAPI = {
-  getAll: async () => {
-    const notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
-    return notifications;
-  },
-
-  create: async (notificationData: any) => {
-    const notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
-    const newNotification = { 
-      ...notificationData, 
-      id: Date.now().toString(),
-      createdAt: new Date().toISOString(),
-      status: 'pending'
-    };
-    notifications.push(newNotification);
-    localStorage.setItem('notifications', JSON.stringify(notifications));
-    
-    // محاكاة إرسال notification
-    setTimeout(() => {
-      const updated = JSON.parse(localStorage.getItem('notifications') || '[]');
-      const index = updated.findIndex((n: any) => n.id === newNotification.id);
-      if (index !== -1) {
-        updated[index].status = 'sent';
-        localStorage.setItem('notifications', JSON.stringify(updated));
-      }
-    }, 1000);
-    
-    return newNotification;
-  },
+  getAll: async () => apiRequest('/notifications'),
+  create: async (data: Record<string, unknown>) =>
+    apiRequest('/notifications', { method: 'POST', body: JSON.stringify(data) }),
 };
 
-// Upload API
+export const SettingsAPI = {
+  get: async () => apiRequest('/settings'),
+  update: async (settings: Record<string, unknown>) =>
+    apiRequest('/settings', { method: 'PUT', body: JSON.stringify(settings) }),
+};
+
+export const DashboardAPI = {
+  stats: async () => apiRequest('/dashboard/stats'),
+};
+
 export const UploadAPI = {
   uploadImage: async (file: File) => {
-    // TODO: استبدل بـ API call حقيقي
-    // const formData = new FormData();
-    // formData.append('image', file);
-    // return apiRequest('/upload/image', {
-    //   method: 'POST',
-    //   body: formData,
-    //   headers: {}, // لا ترسل Content-Type للـ FormData
-    // });
-    
-    // محاكاة حالياً - تحويل الصورة إلى base64
     return new Promise((resolve) => {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -237,44 +231,5 @@ export const UploadAPI = {
       };
       reader.readAsDataURL(file);
     });
-  },
-};
-
-// Settings API
-export const SettingsAPI = {
-  get: async () => {
-    const settings = localStorage.getItem('generalSettings');
-    return settings ? JSON.parse(settings) : null;
-  },
-
-  update: async (settings: any) => {
-    localStorage.setItem('generalSettings', JSON.stringify(settings));
-    return settings;
-  },
-};
-
-// Content API
-export const ContentAPI = {
-  get: async () => {
-    const content = localStorage.getItem('siteContent');
-    return content ? JSON.parse(content) : [];
-  },
-
-  update: async (content: any) => {
-    localStorage.setItem('siteContent', JSON.stringify(content));
-    return content;
-  },
-};
-
-// Screens API
-export const ScreensAPI = {
-  get: async () => {
-    const screens = localStorage.getItem('screens');
-    return screens ? JSON.parse(screens) : [];
-  },
-
-  update: async (screens: any) => {
-    localStorage.setItem('screens', JSON.stringify(screens));
-    return screens;
   },
 };

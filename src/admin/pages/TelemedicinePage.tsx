@@ -87,7 +87,7 @@ export default function TelemedicinePage() {
 
   const parseNotes = (notes: string) => {
     const lines = notes.split("\n");
-    const data: any = {};
+    const data: Record<string, string> = {};
     lines.forEach(line => {
       const [key, value] = line.split(": ");
       if (key && value) {

@@ -39,7 +39,7 @@ import { hasPermission, Permission } from "../utils/permissions";
 
 interface MenuItem {
   name: string;
-  icon: any;
+  icon: React.ComponentType<{ size?: number }>;
   path: string;
   permission: Permission;
   isDivider?: boolean;
