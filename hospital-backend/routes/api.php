@@ -20,6 +20,8 @@ use App\Http\Controllers\Api\ActivityLogController;
 use App\Http\Controllers\Api\ScreenController;
 use App\Http\Controllers\Api\SettingsController;
 use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\NotificationController as ApiNotificationController;
+use App\Http\Controllers\Api\UploadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -135,6 +137,14 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Settings
     Route::put('/settings', [SettingsController::class, 'update']);
+
+    // Notifications
+    Route::get('/notifications', [ApiNotificationController::class, 'index']);
+    Route::post('/notifications', [ApiNotificationController::class, 'store']);
+    Route::delete('/notifications/{id}', [ApiNotificationController::class, 'destroy']);
+
+    // Upload
+    Route::post('/upload/image', [UploadController::class, 'uploadImage']);
 
     // Dashboard
     Route::get('/dashboard/stats', [DashboardController::class, 'stats']);

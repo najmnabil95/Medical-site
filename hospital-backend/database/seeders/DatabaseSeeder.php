@@ -16,6 +16,7 @@ use App\Models\Partner;
 use App\Models\Certification;
 use App\Models\PriceItem;
 use App\Models\Setting;
+use App\Models\Screen;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -103,5 +104,31 @@ class DatabaseSeeder extends Seeder
             'linkedin' => '#',
             'snapchat' => '#',
         ]);
+
+        Screen::create(['name' => 'الرئيسية', 'component' => 'Hero', 'enabled' => true, 'order' => 1, 'icon' => '🏠']);
+        Screen::create(['name' => 'من نحن', 'component' => 'About', 'enabled' => true, 'order' => 2, 'icon' => '📖']);
+        Screen::create(['name' => 'لماذا تختارنا', 'component' => 'WhyChooseUs', 'enabled' => true, 'order' => 3, 'icon' => '⭐']);
+        Screen::create(['name' => 'الإحصائيات', 'component' => 'Stats', 'enabled' => true, 'order' => 4, 'icon' => '📊']);
+        Screen::create(['name' => 'الأقسام الطبية', 'component' => 'Departments', 'enabled' => true, 'order' => 5, 'icon' => '🏥']);
+        Screen::create(['name' => 'الأطباء', 'component' => 'Doctors', 'enabled' => true, 'order' => 6, 'icon' => '👨‍⚕️']);
+        Screen::create(['name' => 'الخدمات', 'component' => 'Services', 'enabled' => true, 'order' => 7, 'icon' => '💼']);
+        Screen::create(['name' => 'الاستشارات عن بُعد', 'component' => 'Telemedicine', 'enabled' => true, 'order' => 8, 'icon' => '📹']);
+        Screen::create(['name' => 'الفيديو التعريفي', 'component' => 'VideoSection', 'enabled' => true, 'order' => 9, 'icon' => '🎬']);
+        Screen::create(['name' => 'معرض الصور', 'component' => 'Gallery', 'enabled' => true, 'order' => 10, 'icon' => '🖼️']);
+        Screen::create(['name' => 'آراء المرضى', 'component' => 'Testimonials', 'enabled' => true, 'order' => 11, 'icon' => '💬']);
+        Screen::create(['name' => 'العروض والخصومات', 'component' => 'Offers', 'enabled' => true, 'order' => 12, 'icon' => '🎁']);
+        Screen::create(['name' => 'الباقات المميزة', 'component' => 'PremiumPackages', 'enabled' => true, 'order' => 13, 'icon' => '💎']);
+        Screen::create(['name' => 'حاسبة التكلفة', 'component' => 'CostCalculator', 'enabled' => true, 'order' => 14, 'icon' => '🧮']);
+        Screen::create(['name' => 'الرعاية المنزلية', 'component' => 'HomeCare', 'enabled' => true, 'order' => 15, 'icon' => '🏠']);
+        Screen::create(['name' => 'السياحة العلاجية', 'component' => 'MedicalTourism', 'enabled' => true, 'order' => 16, 'icon' => '✈️']);
+        Screen::create(['name' => 'حجز موعد', 'component' => 'Appointment', 'enabled' => true, 'order' => 17, 'icon' => '📅']);
+        Screen::create(['name' => 'المسيرة الزمنية', 'component' => 'Timeline', 'enabled' => true, 'order' => 18, 'icon' => '⏳']);
+        Screen::create(['name' => 'الشهادات والاعتمادات', 'component' => 'Certifications', 'enabled' => true, 'order' => 19, 'icon' => '🏆']);
+        Screen::create(['name' => 'التأمين الطبي', 'component' => 'Insurance', 'enabled' => true, 'order' => 20, 'icon' => '🛡️']);
+        Screen::create(['name' => 'تطبيق الجوال', 'component' => 'MobileApp', 'enabled' => true, 'order' => 21, 'icon' => '📱']);
+        Screen::create(['name' => 'الأخبار', 'component' => 'News', 'enabled' => true, 'order' => 22, 'icon' => '📰']);
+        Screen::create(['name' => 'الأسئلة الشائعة', 'component' => 'FAQ', 'enabled' => true, 'order' => 23, 'icon' => '❓']);
+        Screen::create(['name' => 'الشركاء', 'component' => 'Partners', 'enabled' => true, 'order' => 24, 'icon' => '🤝']);
+        Screen::create(['name' => 'تواصل معنا', 'component' => 'Contact', 'enabled' => true, 'order' => 25, 'icon' => '📞']);
     }
 }

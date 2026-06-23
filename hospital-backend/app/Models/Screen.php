@@ -9,10 +9,13 @@ class Screen extends Model
     protected $fillable = [
         'name',
         'component',
-        'active',
+        'enabled',
+        'order',
+        'icon',
     ];
 
     protected $casts = [
-        'active' => 'boolean',
+        'enabled' => 'boolean',
+        'order' => 'integer',
     ];
 }

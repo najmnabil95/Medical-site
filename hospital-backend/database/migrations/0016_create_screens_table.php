@@ -12,7 +12,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('component');
-            $table->boolean('active')->default(true);
+            $table->boolean('enabled')->default(true);
+            $table->integer('order')->default(0);
+            $table->string('icon')->nullable();
             $table->timestamps();
         });
     }

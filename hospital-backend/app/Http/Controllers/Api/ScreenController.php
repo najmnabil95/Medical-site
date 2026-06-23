@@ -18,7 +18,9 @@ class ScreenController extends Controller
         $validated = $request->validate([
             'name' => 'required',
             'component' => 'required',
-            'active' => 'boolean',
+            'enabled' => 'boolean',
+            'order' => 'integer',
+            'icon' => 'nullable|string',
         ]);
 
         return response()->json(Screen::create($validated), 201);

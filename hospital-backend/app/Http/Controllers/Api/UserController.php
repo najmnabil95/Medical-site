@@ -24,6 +24,8 @@ class UserController extends Controller
             'email' => 'nullable|email',
             'phone' => 'nullable',
             'active' => 'boolean',
+            'assigned_departments' => 'nullable|array',
+            'assigned_doctors' => 'nullable|array',
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
@@ -49,6 +51,8 @@ class UserController extends Controller
             'email' => 'nullable|email',
             'phone' => 'nullable',
             'active' => 'boolean',
+            'assigned_departments' => 'nullable|array',
+            'assigned_doctors' => 'nullable|array',
         ]);
 
         if (isset($validated['password'])) {
