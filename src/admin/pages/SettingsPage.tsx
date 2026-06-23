@@ -60,12 +60,13 @@ export default function SettingsPage() {
   };
 
   const handleSave = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSettings(form);
-    toast("success", "تم حفظ الإعدادات بنجاح");
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
-  };
+     e.preventDefault();
+     setSettings(form);
+     window.dispatchEvent(new Event("siteSettingsUpdated"));
+     toast("success", "تم حفظ الإعدادات بنجاح");
+     setSaved(true);
+     setTimeout(() => setSaved(false), 2000);
+   };
 
   const handleReset = () => {
     if (confirm("هل أنت متأكد من إعادة تعيين جميع البيانات؟ سيتم حذف جميع التعديلات!")) {

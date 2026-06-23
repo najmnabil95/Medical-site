@@ -127,8 +127,12 @@ export default function AdminLayout() {
         {/* Logo */}
         <div className="h-16 px-6 flex items-center justify-between border-b border-gray-100">
           <Link to="/admin" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-lg shadow-primary-500/20">
-              <span className="text-white text-base">🏥</span>
+            <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-lg shadow-primary-500/20 overflow-hidden">
+              {settings.logo && settings.logo.startsWith("data:") ? (
+                <img src={settings.logo} alt="Logo" className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-white text-base">{settings.logo || "🏥"}</span>
+              )}
             </div>
             <div>
               <h1 className="text-base font-bold text-primary-700 leading-tight">{settings.siteName}</h1>

@@ -4,12 +4,14 @@ import { FaFacebookF, FaTwitter, FaInstagram, FaYoutube, FaLinkedinIn, FaSnapcha
 import LegalModal from "./LegalModal";
 import { createScrollHandler } from "../utils/scroll";
 import { useApp } from "../context/AppContext";
+import useSiteSettings from "../hooks/useSiteSettings";
 
 const handleScrollToDepartments = createScrollHandler("departments");
 
 export default function Footer() {
   const { screens } = useApp();
   const [legalType, setLegalType] = useState<"privacy" | "terms" | null>(null);
+  const siteSettings = useSiteSettings();
 
   // تصفية الروابط السريعة بناءً على الشاشات المفعلة
   const quickLinks = [
@@ -68,17 +70,20 @@ export default function Footer() {
           {/* About */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-13 h-13 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-lg w-[52px] h-[52px]">
-                <span className="text-white text-xl">🏥</span>
+              <div className="w-[52px] h-[52px] bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-lg overflow-hidden">
+                {siteSettings.logo.startsWith("data:") ? (
+                  <img src={siteSettings.logo} alt="Logo" className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-white text-xl">{siteSettings.logo}</span>
+                )}
               </div>
               <div>
-                <h4 className="text-xl font-bold">مستشفى الشفاء</h4>
-                <p className="text-xs text-gray-500 tracking-wider">AL-SHIFA INTERNATIONAL</p>
+                <h4 className="text-xl font-bold">{siteSettings.siteName}</h4>
+                <p className="text-xs text-gray-500 tracking-wider uppercase">{siteSettings.siteNameEn}</p>
               </div>
             </div>
             <p className="text-gray-400 leading-relaxed text-sm mb-6">
-              مستشفى الشفاء الدولي هو صرح طبي متكامل يقدم خدمات الرعاية الصحية وفق أعلى المعايير
-              العالمية منذ أكثر من 25 عاماً من التميز والإبداع.
+              {siteSettings.description}
             </p>
             <div className="flex items-center gap-2">
               {[
@@ -168,24 +173,23 @@ export default function Footer() {
                   <MapPin className="text-primary-400" size={18} />
                 </div>
                 <div>
-                  <p className="text-gray-400 text-sm">طريق الملك فهد</p>
-                  <p className="text-gray-400 text-sm">الرياض، المملكة العربية السعودية</p>
+                  <p className="text-gray-400 text-sm">{siteSettings.address}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-white/[0.05] rounded-lg flex items-center justify-center shrink-0">
                   <Phone className="text-primary-400" size={18} />
                 </div>
-                <a href="tel:+966123456789" className="text-gray-400 text-sm hover:text-accent-400 transition-colors" dir="ltr">
-                  +966 12 345 6789
+                <a href={`tel:${siteSettings.phone}`} className="text-gray-400 text-sm hover:text-accent-400 transition-colors" dir="ltr">
+                  {siteSettings.phone}
                 </a>
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-white/[0.05] rounded-lg flex items-center justify-center shrink-0">
                   <Mail className="text-primary-400" size={18} />
                 </div>
-                <a href="mailto:info@alshifa-hospital.com" className="text-gray-400 text-sm hover:text-accent-400 transition-colors">
-                  info@alshifa-hospital.com
+                <a href={`mailto:${siteSettings.email}`} className="text-gray-400 text-sm hover:text-accent-400 transition-colors">
+                  {siteSettings.email}
                 </a>
               </div>
             </div>
@@ -212,7 +216,7 @@ export default function Footer() {
       <div className="border-t border-white/[0.05]">
         <div className="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-gray-500 text-sm flex items-center gap-1">
-            © 2024 مستشفى الشفاء الدولي. جميع الحقوق محفوظة. صنع بـ
+            © 2024 {siteSettings.siteName}. جميع الحقوق محفوظة. صنع بـ
             <Heart size={14} className="text-red-500 fill-red-500 mx-1" />
           </p>
           <div className="flex items-center gap-6 text-gray-500 text-sm">

@@ -128,6 +128,9 @@ export interface SiteSettings {
   youtube: string;
   linkedin: string;
   snapchat: string;
+  logo?: string;
+  favicon?: string;
+  description?: string;
 }
 
 import { User } from "../utils/roles";
@@ -266,6 +269,9 @@ const defaultSettings: SiteSettings = {
   youtube: "#",
   linkedin: "#",
   snapchat: "#",
+  logo: "🏥",
+  favicon: "🏥",
+  description: "مستشفى الشفاء الدولي - رعاية طبية متميزة",
 };
 
 // Helper: Load from localStorage

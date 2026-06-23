@@ -23,17 +23,47 @@ const defaultSettings: GeneralSettings = {
 };
 
 export function useSiteSettings() {
-  const [settings, setSettings] = useState<GeneralSettings>(defaultSettings);
+  const [settings, setSettings] = useState<GeneralSettings>(() => {
+    const saved = localStorage.getItem("settings");
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        return { ...defaultSettings, ...parsed };
+      } catch (e) {}
+    }
+    return defaultSettings;
+  });
 
   useEffect(() => {
-    const saved = localStorage.getItem("generalSettings");
-    if (saved) {
-      setSettings(JSON.parse(saved));
-    }
+    const updateSettings = () => {
+      const saved = localStorage.getItem("settings");
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          setSettings({ ...defaultSettings, ...parsed });
+        } catch (e) {}
+      }
+    };
 
-    // تحديث عنوان الصفحة
+    updateSettings();
+
+    // Listen to custom event for same-tab updates
+    window.addEventListener("siteSettingsUpdated", updateSettings);
+    // Listen to storage event for other-tab updates
+    window.addEventListener("storage", (e) => {
+      if (e.key === "settings") {
+        updateSettings();
+      }
+    });
+
+    // Update document title
+    const saved = localStorage.getItem("settings");
     const savedSettings = saved ? JSON.parse(saved) : defaultSettings;
-    document.title = savedSettings.siteName;
+    document.title = savedSettings.siteName || defaultSettings.siteName;
+
+    return () => {
+      window.removeEventListener("siteSettingsUpdated", updateSettings);
+    };
   }, []);
 
   return settings;

@@ -5,33 +5,7 @@ import { useScrollReveal } from "../hooks/useScrollReveal";
 import { useState } from "react";
 import { useApp } from "../context/AppContext";
 import { useToast } from "../admin/components/Toast";
-
-const contactInfo = [
-  {
-    icon: MapPin,
-    title: "العنوان",
-    details: ["طريق الملك فهد", "الرياض، المملكة العربية السعودية"],
-    color: "from-blue-500 to-indigo-600",
-  },
-  {
-    icon: Phone,
-    title: "الهاتف",
-    details: ["+966 12 345 6789", "+966 12 345 6780"],
-    color: "from-emerald-500 to-teal-600",
-  },
-  {
-    icon: Mail,
-    title: "البريد الإلكتروني",
-    details: ["info@alshifa-hospital.com", "appointments@alshifa-hospital.com"],
-    color: "from-purple-500 to-violet-600",
-  },
-  {
-    icon: Clock,
-    title: "ساعات العمل",
-    details: ["السبت - الخميس: 8 ص - 10 م", "الطوارئ: 24 ساعة / 7 أيام"],
-    color: "from-orange-500 to-amber-600",
-  },
-];
+import useSiteSettings from "../hooks/useSiteSettings";
 
 export default function Contact() {
   const { ref, isVisible } = useScrollReveal();
@@ -39,6 +13,34 @@ export default function Contact() {
   const { toast } = useToast();
   const [sent, setSent] = useState(false);
   const [msgForm, setMsgForm] = useState({ name: "", email: "", subject: "", message: "" });
+  const siteSettings = useSiteSettings();
+
+  const contactInfo = [
+    {
+      icon: MapPin,
+      title: "العنوان",
+      details: [siteSettings.address],
+      color: "from-blue-500 to-indigo-600",
+    },
+    {
+      icon: Phone,
+      title: "الهاتف",
+      details: [siteSettings.phone],
+      color: "from-emerald-500 to-teal-600",
+    },
+    {
+      icon: Mail,
+      title: "البريد الإلكتروني",
+      details: [siteSettings.email],
+      color: "from-purple-500 to-violet-600",
+    },
+    {
+      icon: Clock,
+      title: "ساعات العمل",
+      details: ["السبت - الخميس: 8 ص - 10 م", "الطوارئ: 24 ساعة / 7 أيام"],
+      color: "from-orange-500 to-amber-600",
+    },
+  ];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -108,13 +110,13 @@ export default function Contact() {
               referrerPolicy="no-referrer-when-downgrade"
               title="موقع المستشفى"
             ></iframe>
-            <div className="absolute bottom-6 right-6 bg-white rounded-2xl p-4 shadow-xl flex items-center gap-3">
+             <div className="absolute bottom-6 right-6 bg-white rounded-2xl p-4 shadow-xl flex items-center gap-3">
               <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center">
                 <MapPin className="text-white" size={20} />
               </div>
               <div>
-                <p className="font-bold text-gray-900 text-sm">مستشفى الشفاء الدولي</p>
-                <p className="text-gray-500 text-xs">طريق الملك فهد، الرياض</p>
+                <p className="font-bold text-gray-900 text-sm">{siteSettings.siteName}</p>
+                <p className="text-gray-500 text-xs">{siteSettings.address}</p>
               </div>
             </div>
           </div>
@@ -185,8 +187,8 @@ export default function Contact() {
                     <span className="text-gray-400 text-sm">أو تواصل معنا عبر</span>
                     <span className="flex-1 h-px bg-gray-200"></span>
                   </div>
-                  <a
-                    href="https://wa.me/966123456789?text=مرحباً، أريد الاستفسار عن خدمات المستشفى"
+                   <a
+                    href={`https://wa.me/${siteSettings.phone.replace(/[^0-9]/g, "")}?text=مرحباً، أريد الاستفسار عن خدمات المستشفى`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-3 bg-green-500 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-green-600 transition-all hover:shadow-lg hover:shadow-green-500/30 hover:-translate-y-0.5"

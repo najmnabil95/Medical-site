@@ -28,16 +28,26 @@ const defaultSettings: SiteSettings = {
 export default function GeneralSettingsPage() {
   const { toast } = useToast();
   const [settings, setSettings] = useState<SiteSettings>(() => {
-    const saved = localStorage.getItem("generalSettings");
-    if (saved) return JSON.parse(saved);
+    const saved = localStorage.getItem("settings");
+    if (saved) {
+      try {
+        return { ...defaultSettings, ...JSON.parse(saved) };
+      } catch (e) {}
+    }
     return defaultSettings;
   });
 
   const handleSave = () => {
-    localStorage.setItem("generalSettings", JSON.stringify(settings));
+    const existing = localStorage.getItem("settings");
+    const existingParsed = existing ? JSON.parse(existing) : {};
+    const updated = { ...existingParsed, ...settings };
+    localStorage.setItem("settings", JSON.stringify(updated));
     
     // تحديث عنوان الصفحة
     document.title = settings.siteName;
+    
+    // إرسال حدث التحديث لإعادة رسم الشاشات والـ Navbar
+    window.dispatchEvent(new Event("siteSettingsUpdated"));
     
     toast("success", "تم حفظ الإعدادات بنجاح");
   };
@@ -45,8 +55,12 @@ export default function GeneralSettingsPage() {
   const handleReset = () => {
     if (confirm("هل أنت متأكد من إعادة تعيين الإعدادات؟")) {
       setSettings(defaultSettings);
-      localStorage.removeItem("generalSettings");
+      const existing = localStorage.getItem("settings");
+      const existingParsed = existing ? JSON.parse(existing) : {};
+      const updated = { ...existingParsed, ...defaultSettings };
+      localStorage.setItem("settings", JSON.stringify(updated));
       document.title = defaultSettings.siteName;
+      window.dispatchEvent(new Event("siteSettingsUpdated"));
       toast("success", "تم إعادة تعيين الإعدادات");
     }
   };
