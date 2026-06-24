@@ -5,15 +5,15 @@ import { useScrollReveal } from "../hooks/useScrollReveal";
 import { useState } from "react";
 import { useApp } from "../context/AppContext";
 import { useToast } from "../admin/components/Toast";
-import useSiteSettings from "../hooks/useSiteSettings";
+import { useData } from "../context/DataContext";
 
 export default function Contact() {
   const { ref, isVisible } = useScrollReveal();
   const { messages, setMessages } = useApp();
   const { toast } = useToast();
+  const { settings: siteSettings } = useData();
   const [sent, setSent] = useState(false);
   const [msgForm, setMsgForm] = useState({ name: "", email: "", subject: "", message: "" });
-  const siteSettings = useSiteSettings();
 
   const contactInfo = [
     {

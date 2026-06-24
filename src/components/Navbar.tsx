@@ -13,11 +13,11 @@ import {
 } from "lucide-react";
 import { FaFacebookF, FaTwitter, FaInstagram, FaYoutube } from "react-icons/fa";
 import { useApp } from "../context/AppContext";
-import useSiteSettings from "../hooks/useSiteSettings";
+import { useData } from "../context/DataContext";
 
 export default function Navbar() {
   const { screens, publicSiteDarkMode, togglePublicSiteDarkMode, notifications } = useApp();
-  const siteSettings = useSiteSettings();
+  const { settings: siteSettings } = useData();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
@@ -139,10 +139,10 @@ export default function Navbar() {
             {/* Logo */}
                 <a href="#/" onClick={(e) => { e.preventDefault(); window.location.hash = '#/'; window.location.reload(); }} className="flex items-center gap-3 group cursor-pointer">
                   <div className="w-12 h-12 bg-primary-500 rounded-xl flex items-center justify-center overflow-hidden shadow-lg shadow-primary-500/20 group-hover:shadow-primary-500/40 transition-all group-hover:scale-105">
-                    {siteSettings.logo.startsWith("data:") ? (
+                    {(siteSettings.logo || "🏥").startsWith("data:") ? (
                       <img src={siteSettings.logo} alt="Logo" className="w-full h-full object-cover" />
                     ) : (
-                      <span className="text-2xl">{siteSettings.logo}</span>
+                      <span className="text-2xl">{siteSettings.logo || "🏥"}</span>
                     )}
                   </div>
                   <div>

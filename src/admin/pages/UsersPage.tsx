@@ -92,6 +92,12 @@ export default function UsersPage() {
 
   const handleDelete = () => {
     if (deleteId) {
+      const user = users.find((u: User) => u.id === deleteId);
+      if (user && user.role === "admin") {
+        toast("error", "لا يمكن حذف حساب مدير النظام");
+        setDeleteId(null);
+        return;
+      }
       setUsers(users.filter((u: User) => u.id !== deleteId));
       toast("success", "تم حذف المستخدم بنجاح");
       setDeleteId(null);
@@ -99,6 +105,11 @@ export default function UsersPage() {
   };
 
   const toggleActive = (id: string) => {
+    const user = users.find((u: User) => u.id === id);
+    if (user && user.role === "admin") {
+      toast("error", "لا يمكن إيقاف حساب مدير النظام");
+      return;
+    }
     setUsers(users.map((u: User) => u.id === id ? { ...u, active: !u.active } : u));
     toast("info", "تم تحديث حالة المستخدم");
   };
@@ -193,7 +204,12 @@ export default function UsersPage() {
                     <p className="text-xs text-gray-500">@{user.username}</p>
                   </div>
                 </div>
-                <button onClick={() => toggleActive(user.id)} className="shrink-0">
+                <button 
+                  onClick={() => toggleActive(user.id)} 
+                  className={`shrink-0 ${user.role === 'admin' ? "cursor-not-allowed opacity-50" : ""}`}
+                  disabled={user.role === 'admin'}
+                  title={user.role === 'admin' ? "لا يمكن إيقاف حساب مدير النظام" : ""}
+                >
                   {user.active ? (
                     <ToggleRight size={22} className="text-green-500" />
                   ) : (
@@ -228,7 +244,13 @@ export default function UsersPage() {
                 </button>
                 <button
                   onClick={() => setDeleteId(user.id)}
-                  className="flex-1 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-bold hover:bg-red-100 transition-colors flex items-center justify-center gap-1"
+                  disabled={user.role === 'admin'}
+                  className={`flex-1 py-2 rounded-lg text-sm font-bold transition-colors flex items-center justify-center gap-1 ${
+                    user.role === 'admin'
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "bg-red-50 text-red-600 hover:bg-red-100"
+                  }`}
+                  title={user.role === 'admin' ? "لا يمكن حذف حساب مدير النظام" : ""}
                 >
                   <Trash2 size={14} />
                   حذف
@@ -249,6 +271,11 @@ export default function UsersPage() {
       {/* Form Modal */}
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title={editingItem ? "تعديل المستخدم" : "إضافة مستخدم جديد"} size="md">
         <form onSubmit={handleSubmit} className="space-y-5">
+          {editingItem?.role === 'admin' && (
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-700 font-bold">
+              ⚠️ لا يمكن تعديل صلاحيات أو رقم هاتف مدير النظام لحماية الحساب من الإيقاف.
+            </div>
+          )}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-bold text-gray-700 mb-2">الاسم الكامل <span className="text-red-500">*</span></label>
@@ -294,7 +321,12 @@ export default function UsersPage() {
               value={form.role}
               onChange={(e) => setForm({ ...form, role: e.target.value as UserRole })}
               required
-              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500 appearance-none"
+              disabled={editingItem?.role === 'admin'}
+              className={`w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:border-primary-500 appearance-none ${
+                editingItem?.role === 'admin'
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed border-gray-200"
+                  : "bg-gray-50 border-gray-200"
+              }`}
             >
               {ROLES.map((role) => (
                 <option key={role} value={role}>{ROLE_LABELS[role]}</option>
@@ -321,8 +353,14 @@ export default function UsersPage() {
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 required
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500"
+                disabled={editingItem?.role === 'admin'}
+                className={`w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:border-primary-500 ${
+                  editingItem?.role === 'admin'
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed border-gray-200"
+                    : "bg-gray-50 border-gray-200"
+                }`}
                 placeholder="+966 5X XXX XXXX"
+                title={editingItem?.role === 'admin' ? "لا يمكن تغيير رقم هاتف مدير النظام" : ""}
               />
             </div>
           </div>

@@ -43,6 +43,19 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
+        // حماية حساب مدير النظام
+        if ($user->role === 'admin' || $user->username === 'admin') {
+            if ($request->has('active') && !$request->input('active')) {
+                return response()->json(['message' => 'لا يمكن إيقاف حساب مدير النظام'], 403);
+            }
+            if ($request->has('phone') && $request->input('phone') !== $user->phone) {
+                return response()->json(['message' => 'لا يمكن تغيير رقم هاتف مدير النظام'], 403);
+            }
+            if ($request->has('role') && $request->input('role') !== 'admin') {
+                return response()->json(['message' => 'لا يمكن تغيير صلاحيات مدير النظام'], 403);
+            }
+        }
+
         $validated = $request->validate([
             'username' => 'sometimes|unique:users,username,' . $id,
             'password' => 'sometimes|min:6',
@@ -65,7 +78,12 @@ class UserController extends Controller
 
     public function destroy($id)
     {
-        User::findOrFail($id)->delete();
+        $user = User::findOrFail($id);
+        if ($user->role === 'admin' || $user->username === 'admin') {
+            return response()->json(['message' => 'لا يمكن حذف حساب مدير النظام'], 403);
+        }
+        
+        $user->delete();
         return response()->json(['message' => 'تم الحذف بنجاح']);
     }
 }

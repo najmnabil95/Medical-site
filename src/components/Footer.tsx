@@ -4,14 +4,14 @@ import { FaFacebookF, FaTwitter, FaInstagram, FaYoutube, FaLinkedinIn, FaSnapcha
 import LegalModal from "./LegalModal";
 import { createScrollHandler } from "../utils/scroll";
 import { useApp } from "../context/AppContext";
-import useSiteSettings from "../hooks/useSiteSettings";
+import { useData } from "../context/DataContext";
 
 const handleScrollToDepartments = createScrollHandler("departments");
 
 export default function Footer() {
   const { screens } = useApp();
   const [legalType, setLegalType] = useState<"privacy" | "terms" | null>(null);
-  const siteSettings = useSiteSettings();
+  const { settings: siteSettings } = useData();
 
   // تصفية الروابط السريعة بناءً على الشاشات المفعلة
   const quickLinks = [
@@ -71,10 +71,10 @@ export default function Footer() {
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-[52px] h-[52px] bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-lg overflow-hidden">
-                {siteSettings.logo.startsWith("data:") ? (
+                {(siteSettings.logo || "🏥").startsWith("data:") ? (
                   <img src={siteSettings.logo} alt="Logo" className="w-full h-full object-cover" />
                 ) : (
-                  <span className="text-white text-xl">{siteSettings.logo}</span>
+                  <span className="text-white text-xl">{siteSettings.logo || "🏥"}</span>
                 )}
               </div>
               <div>
