@@ -32,6 +32,9 @@ class SettingsController extends Controller
             'youtube' => 'sometimes|string|max:500',
             'linkedin' => 'sometimes|string|max:500',
             'snapchat' => 'sometimes|string|max:500',
+            'logo' => 'sometimes|nullable|string',
+            'favicon' => 'sometimes|nullable|string',
+            'description' => 'sometimes|nullable|string|max:1000',
         ]);
 
         $settings = Setting::first();

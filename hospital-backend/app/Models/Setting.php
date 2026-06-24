@@ -22,6 +22,9 @@ class Setting extends Model
         'youtube',
         'linkedin',
         'snapchat',
+        'logo',
+        'favicon',
+        'description',
     ];
 
     public $timestamps = false;

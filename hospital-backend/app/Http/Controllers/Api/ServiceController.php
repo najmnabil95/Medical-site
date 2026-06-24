@@ -8,8 +8,11 @@ use Illuminate\Http\Request;
 
 class ServiceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->has('all') || $request->user('sanctum')) {
+            return response()->json(Service::all());
+        }
         return response()->json(Service::where('active', true)->get());
     }
 

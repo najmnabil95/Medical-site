@@ -8,8 +8,11 @@ use Illuminate\Http\Request;
 
 class PriceItemController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->has('all') || $request->user('sanctum')) {
+            return response()->json(PriceItem::all());
+        }
         return response()->json(PriceItem::where('active', true)->get());
     }
 

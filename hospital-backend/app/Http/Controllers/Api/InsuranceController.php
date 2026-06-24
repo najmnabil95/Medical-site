@@ -8,8 +8,11 @@ use Illuminate\Http\Request;
 
 class InsuranceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->has('all') || $request->user('sanctum')) {
+            return response()->json(Insurance::all());
+        }
         return response()->json(Insurance::where('active', true)->get());
     }
 

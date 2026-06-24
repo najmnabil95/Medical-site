@@ -8,8 +8,11 @@ use Illuminate\Http\Request;
 
 class DepartmentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->has('all') || $request->user('sanctum')) {
+            return response()->json(Department::all());
+        }
         return response()->json(Department::where('active', true)->get());
     }
 

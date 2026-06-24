@@ -48,6 +48,7 @@ Route::get('/prices', [PriceItemController::class, 'index']);
 Route::post('/appointments', [AppointmentController::class, 'store']);
 Route::post('/messages', [MessageController::class, 'store']);
 Route::get('/settings', [SettingsController::class, 'getPublic']);
+Route::get('/screens', [ScreenController::class, 'index']);
 
 /*
 |--------------------------------------------------------------------------

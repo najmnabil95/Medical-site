@@ -25,6 +25,9 @@ return new class extends Migration
             $table->string('youtube')->nullable();
             $table->string('linkedin')->nullable();
             $table->string('snapchat')->nullable();
+            $table->longText('logo')->nullable();
+            $table->longText('favicon')->nullable();
+            $table->string('description')->nullable();
         });
     }
 

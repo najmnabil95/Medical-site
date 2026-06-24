@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>@yield('title', 'لوحة التحكم - مستشفى الشفاء الدولي')</title>
+    
+    <!-- Google Fonts: Tajawal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Vite Assets -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+  </head>
+  <body class="min-h-screen bg-gray-50 font-tajawal antialiased text-gray-900">
+
+    <div class="min-h-screen flex" dir="rtl">
+      
+      <!-- Sidebar -->
+      <aside
+        id="admin-sidebar"
+        class="fixed top-0 right-0 h-screen w-72 bg-white border-l border-gray-200 shadow-xl z-40 transition-transform duration-300 lg:translate-x-0 translate-x-full lg:block"
+      >
+        <!-- Logo Header -->
+        <div class="h-16 px-6 flex items-center justify-between border-b border-gray-100">
+          <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-lg shadow-primary-500/20 overflow-hidden">
+              @if(!empty($settings->logo))
+                @if(str_starts_with($settings->logo, 'http') || str_starts_with($settings->logo, 'data:'))
+                  <img src="{{ $settings->logo }}" alt="Logo" class="w-full h-full object-cover" />
+                @else
+                  <span class="text-white text-base font-bold">{{ $settings->logo }}</span>
+                @endif
+              @else
+                <span class="text-white text-base font-bold">🏥</span>
+              @endif
+            </div>
+            <div class="text-right">
+              <h1 class="text-base font-bold text-primary-700 leading-tight">{{ $settings->site_name ?? 'مستشفى الشفاء' }}</h1>
+              <p class="text-[9px] text-gray-400 tracking-wider">لوحة التحكم</p>
+            </div>
+          </a>
+          <button onclick="toggleSidebar(false)" class="lg:hidden text-gray-500 hover:text-gray-700">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- Sidebar Navigation Menu -->
+        <nav class="p-4 overflow-y-auto h-[calc(100vh-8rem)]">
+          <p class="text-xs font-bold text-gray-400 mb-3 px-3 tracking-wider text-right">القائمة الرئيسية</p>
+          <div class="space-y-1">
+            
+            <a
+              href="{{ route('admin.dashboard') }}"
+              class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ Route::currentRouteName() === 'admin.dashboard' ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20' : 'text-gray-600 hover:bg-gray-100 hover:text-primary-600' }}"
+            >
+              <i data-lucide="layout-dashboard" class="w-4.5 h-4.5"></i>
+              <span class="flex-1 text-right">لوحة التحكم</span>
+            </a>
+
+            @if(Auth::user()->role === 'admin')
+              <a
+                href="{{ route('admin.users.index') }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ Route::currentRouteName() === 'admin.users.index' ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20' : 'text-gray-600 hover:bg-gray-100 hover:text-primary-600' }}"
+              >
+                <i data-lucide="users" class="w-4.5 h-4.5"></i>
+                <span class="flex-1 text-right">المستخدمون</span>
+              </a>
+            @endif
+
+            <a
+              href="{{ route('admin.settings.index') }}"
+              class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ Route::currentRouteName() === 'admin.settings.index' ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20' : 'text-gray-600 hover:bg-gray-100 hover:text-primary-600' }}"
+            >
+              <i data-lucide="settings" class="w-4.5 h-4.5"></i>
+              <span class="flex-1 text-right">إعدادات الموقع</span>
+            </a>
+            
+          </div>
+
+          <!-- Divider -->
+          <div class="h-px bg-gray-100 my-4 mx-3"></div>
+
+          <!-- Public site anchors -->
+          <div class="px-3 space-y-2">
+            <a
+              href="/"
+              class="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-l from-emerald-500 to-emerald-600 text-white rounded-xl text-sm font-bold hover:shadow-lg hover:shadow-emerald-500/20 transition-all hover:-translate-y-0.5"
+            >
+              <i data-lucide="home" class="w-4.5 h-4.5"></i>
+              <span>زيارة الموقع</span>
+            </a>
+          </div>
+        </nav>
+
+        <!-- Logout Panel -->
+        <div class="absolute bottom-0 right-0 left-0 p-4 border-t border-gray-100 bg-white">
+          <form action="{{ route('logout') }}" method="POST" id="logout-form">
+            @csrf
+            <button
+              type="submit"
+              class="flex items-center gap-3 w-full px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 rounded-xl transition-all cursor-pointer"
+            >
+              <i data-lucide="log-out" class="w-4.5 h-4.5"></i>
+              <span class="text-right flex-1">تسجيل الخروج</span>
+            </button>
+          </form>
+        </div>
+      </aside>
+
+      <!-- Sidebar Mobile Overlay -->
+      <div
+        id="admin-sidebar-overlay"
+        onclick="toggleSidebar(false)"
+        class="hidden fixed inset-0 bg-black/50 z-30 lg:hidden"
+      ></div>
+
+      <!-- Main Layout Body Container -->
+      <div class="flex-1 lg:mr-72">
+        <!-- Top bar header -->
+        <header class="h-16 bg-white border-b border-gray-100 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm">
+          <div class="flex items-center gap-4">
+            <button
+              onclick="toggleSidebar(true)"
+              class="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-xl"
+            >
+              <i data-lucide="menu" class="w-5 h-5"></i>
+            </button>
+            <div class="hidden md:flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-xl w-80 border border-gray-100">
+              <i data-lucide="search" class="text-gray-400 w-4 h-4"></i>
+              <input
+                type="text"
+                placeholder="بحث سريع..."
+                class="bg-transparent outline-none flex-1 text-sm text-right"
+              />
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <!-- Profile dropdown and info -->
+            <div class="relative">
+              <button
+                onclick="toggleProfileMenu()"
+                class="flex items-center gap-3 p-1.5 pr-4 hover:bg-gray-50 rounded-xl transition-colors cursor-pointer"
+              >
+                <div class="w-9 h-9 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                  {{ substr(Auth::user()->name, 0, 2) }}
+                </div>
+                <div class="hidden md:block text-right">
+                  <p class="text-sm font-bold text-gray-800">{{ Auth::user()->name }}</p>
+                  <p class="text-xs text-gray-500">{{ Auth::user()->email }}</p>
+                </div>
+                <i data-lucide="chevron-down" class="text-gray-400 w-4 h-4"></i>
+              </button>
+
+              <div id="profile-dropdown-menu" class="hidden absolute left-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-20">
+                <button
+                  onclick="document.getElementById('logout-form').submit()"
+                  class="flex items-center gap-2 w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 text-right cursor-pointer"
+                >
+                  <i data-lucide="log-out" class="w-4 h-4"></i>
+                  <span>تسجيل الخروج</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Main Page Layout Content Area -->
+        <main class="p-4 lg:p-8">
+          
+          <!-- Alert Success/Error Messages -->
+          @if(session('success'))
+            <div class="mb-6 bg-emerald-50 border-r-4 border-emerald-500 rounded-xl p-4 flex items-start gap-3">
+              <i data-lucide="check-circle" class="text-emerald-600 shrink-0 mt-0.5 w-[18px] h-[18px]"></i>
+              <span class="text-sm text-emerald-800">{{ session('success') }}</span>
+            </div>
+          @endif
+          @if(session('error'))
+            <div class="mb-6 bg-red-50 border-r-4 border-red-500 rounded-xl p-4 flex items-start gap-3">
+              <i data-lucide="alert-circle" class="text-red-600 shrink-0 mt-0.5 w-[18px] h-[18px]"></i>
+              <span class="text-sm text-red-800">{{ session('error') }}</span>
+            </div>
+          @endif
+
+          @yield('content')
+        </main>
+      </div>
+
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        lucide.createIcons();
+      });
+
+      function toggleSidebar(open) {
+        const sidebar = document.getElementById("admin-sidebar");
+        const overlay = document.getElementById("admin-sidebar-overlay");
+        if (open) {
+          sidebar.classList.remove("translate-x-full");
+          sidebar.classList.add("translate-x-0");
+          overlay.classList.remove("hidden");
+        } else {
+          sidebar.classList.remove("translate-x-0");
+          sidebar.classList.add("translate-x-full");
+          overlay.classList.add("hidden");
+        }
+      }
+
+      function toggleProfileMenu() {
+        const menu = document.getElementById("profile-dropdown-menu");
+        menu.classList.toggle("hidden");
+      }
+
+      // Close dropdowns if click is outside
+      window.addEventListener("click", (e) => {
+        const menu = document.getElementById("profile-dropdown-menu");
+        if (menu && !menu.classList.contains("hidden")) {
+          // If click not on dropdown trigger
+          const trigger = menu.previousElementSibling;
+          if (!trigger.contains(e.target) && !menu.contains(e.target)) {
+            menu.classList.add("hidden");
+          }
+        }
+      });
+    </script>
+    @yield('scripts')
+  </body>
+</html>

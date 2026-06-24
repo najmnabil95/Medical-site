@@ -8,8 +8,11 @@ use Illuminate\Http\Request;
 
 class DoctorController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->has('all') || $request->user('sanctum')) {
+            return response()->json(Doctor::all());
+        }
         return response()->json(Doctor::where('active', true)->get());
     }
 

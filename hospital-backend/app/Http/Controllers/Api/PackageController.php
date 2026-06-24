@@ -8,8 +8,11 @@ use Illuminate\Http\Request;
 
 class PackageController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->has('all') || $request->user('sanctum')) {
+            return response()->json(Package::all());
+        }
         return response()->json(Package::where('active', true)->get());
     }
 

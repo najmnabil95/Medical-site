@@ -1,0 +1,467 @@
+@import "tailwindcss";
+
+@source "../views/**/*.blade.php";
+@source "../../app/**/*.php";
+
+@theme {
+  --font-tajawal: "Tajawal", sans-serif;
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #0e7490;
+  --color-primary-600: #0369a1;
+  --color-primary-700: #0c4a6e;
+  --color-primary-800: #0a3d5c;
+  --color-primary-900: #082f49;
+  --color-accent-50: #ecfdf5;
+  --color-accent-100: #d1fae5;
+  --color-accent-200: #a7f3d0;
+  --color-accent-300: #6ee7b7;
+  --color-accent-400: #34d399;
+  --color-accent-500: #10b981;
+  --color-accent-600: #059669;
+  --color-accent-700: #047857;
+  --color-gold-400: #fbbf24;
+  --color-gold-500: #f59e0b;
+  --color-gold-600: #d97706;
+}
+
+* {
+  font-family: "Tajawal", sans-serif;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  direction: rtl;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ============================================
+   الوضع الليلي للموقع الرئيسي
+   ============================================ */
+
+body.dark-mode {
+  background-color: #0f172a !important;
+  color: #e2e8f0 !important;
+}
+
+/* الخلفيات */
+body.dark-mode .bg-white,
+body.dark-mode .bg-gray-50,
+body.dark-mode .bg-gray-100 {
+  background-color: #1e293b !important;
+}
+
+body.dark-mode section {
+  background-color: #0f172a !important;
+}
+
+body.dark-mode section.bg-gray-50,
+body.dark-mode section.bg-white {
+  background-color: #1e293b !important;
+}
+
+/* النصوص */
+body.dark-mode .text-gray-900,
+body.dark-mode .text-gray-800 {
+  color: #f1f5f9 !important;
+}
+
+body.dark-mode .text-gray-700 {
+  color: #e2e8f0 !important;
+}
+
+body.dark-mode .text-gray-600 {
+  color: #cbd5e1 !important;
+}
+
+body.dark-mode .text-gray-500 {
+  color: #94a3b8 !important;
+}
+
+body.dark-mode .text-gray-400 {
+  color: #64748b !important;
+}
+
+/* الحدود */
+body.dark-mode .border-gray-100,
+body.dark-mode .border-gray-200 {
+  border-color: #334155 !important;
+}
+
+/* الحقول */
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea {
+  background-color: #334155 !important;
+  color: #f1f5f9 !important;
+  border-color: #475569 !important;
+}
+
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* الظلال */
+body.dark-mode .shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark-mode .shadow-md {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4) !important;
+}
+
+body.dark-mode .shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5) !important;
+}
+
+body.dark-mode .shadow-xl {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.6) !important;
+}
+
+body.dark-mode .shadow-2xl {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* الأزرار */
+body.dark-mode .bg-gray-100:hover {
+  background-color: #334155 !important;
+}
+
+body.dark-mode .bg-gray-50:hover {
+  background-color: #334155 !important;
+}
+
+/* Navbar */
+body.dark-mode nav {
+  background-color: #1e293b !important;
+  border-bottom-color: #334155 !important;
+}
+
+body.dark-mode .bg-gradient-to-l.from-primary-800.to-primary-900 {
+  background: linear-gradient(to left, #1e293b, #0f172a) !important;
+}
+
+/* Footer */
+body.dark-mode footer {
+  background-color: #0f172a !important;
+  border-top-color: #334155 !important;
+}
+
+body.dark-mode footer .bg-gray-900 {
+  background-color: #0f172a !important;
+}
+
+/* بطاقات الخدمات والأقسام */
+body.dark-mode .group:hover .bg-white {
+  background-color: #334155 !important;
+}
+
+/* النماذج */
+body.dark-mode .bg-gradient-to-l.from-primary-500.to-primary-700,
+body.dark-mode button.bg-gradient-to-l.from-primary-500.to-primary-700 {
+  background: linear-gradient(to left, #3b82f6, #1d4ed8) !important;
+}
+
+/* Modal */
+body.dark-mode [role="dialog"],
+body.dark-mode .fixed.inset-0 {
+  background-color: rgba(0, 0, 0, 0.8) !important;
+}
+
+/* الروابط */
+body.dark-mode a {
+  color: #60a5fa !important;
+}
+
+body.dark-mode a:hover {
+  color: #93c5fd !important;
+}
+
+/* الألوان المتخصصة */
+body.dark-mode .bg-primary-50,
+body.dark-mode .bg-blue-50,
+body.dark-mode .bg-green-50,
+body.dark-mode .bg-red-50,
+body.dark-mode .bg-yellow-50,
+body.dark-mode .bg-purple-50 {
+  background-color: #1e293b !important;
+}
+
+body.dark-mode .text-primary-600,
+body.dark-mode .text-blue-600 {
+  color: #60a5fa !important;
+}
+
+body.dark-mode .text-green-600 {
+  color: #4ade80 !important;
+}
+
+body.dark-mode .text-red-600 {
+  color: #f87171 !important;
+}
+
+/* تأثيرات التمرير */
+body.dark-mode .hover\:bg-gray-100:hover,
+body.dark-mode .hover\:bg-gray-50:hover {
+  background-color: #334155 !important;
+}
+
+/* Scrollbar */
+body.dark-mode ::-webkit-scrollbar-track {
+  background: #1e293b !important;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #3b82f6, #1d4ed8) !important;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #0e7490, #0369a1);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #0369a1, #0c4a6e);
+}
+
+/* Selection */
+::selection {
+  background: #0e7490;
+  color: white;
+}
+
+/* Animations */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(60px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-60px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes rotate-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes bounce-gentle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(100%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ticker {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  15% { transform: scale(1.15); }
+  30% { transform: scale(1); }
+  45% { transform: scale(1.1); }
+  60% { transform: scale(1); }
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes ripple {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+@keyframes progress-bar {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(14, 116, 144, 0.3); }
+  50% { box-shadow: 0 0 25px rgba(14, 116, 144, 0.6); }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in 1s ease-out forwards;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.8s ease-out forwards;
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.8s ease-out forwards;
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 3s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite;
+}
+
+.animate-rotate-slow {
+  animation: rotate-slow 20s linear infinite;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.6s ease-out forwards;
+}
+
+.animate-bounce-gentle {
+  animation: bounce-gentle 2s ease-in-out infinite;
+}
+
+.animate-heartbeat {
+  animation: heartbeat 2s ease-in-out infinite;
+}
+
+.animate-ripple {
+  animation: ripple 1.5s ease-out infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+.animation-delay-100 { animation-delay: 0.1s; }
+.animation-delay-200 { animation-delay: 0.2s; }
+.animation-delay-300 { animation-delay: 0.3s; }
+.animation-delay-400 { animation-delay: 0.4s; }
+.animation-delay-500 { animation-delay: 0.5s; }
+.animation-delay-600 { animation-delay: 0.6s; }
+.animation-delay-700 { animation-delay: 0.7s; }
+.animation-delay-800 { animation-delay: 0.8s; }
+
+/* Line Clamp */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Glass Effect */
+.glass {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #0e7490, #10b981);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-gold {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Marquee */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+/* Loader */
+@keyframes loader-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes loader-fade {
+  0% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+.loader-container {
+  animation: loader-fade 0.6s ease-out 2s forwards;
+}
+
+/* Progress Circle */
+.progress-ring-circle {
+  transition: stroke-dashoffset 0.35s;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
