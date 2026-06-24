@@ -1,112 +1,229 @@
 @extends('layouts.admin')
 
-@section('title', 'لوحة التحكم - الرئيسية')
+@section('title', 'لوحة التحكم - مستشفى الشفاء الدولي')
 
 @section('content')
-  <!-- Dashboard Stats Header -->
-  <div class="mb-8 text-right">
-    <h1 class="text-2xl font-black text-gray-900">مرحباً بك في لوحة التحكم 👋</h1>
-    <p class="text-gray-500 text-sm mt-1">نظرة عامة على حالة تشغيل المستشفى والمؤشرات الحالية</p>
+
+{{-- ============================
+     PAGE HEADER
+============================== --}}
+<div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-right">
+  <div>
+    <h1 class="text-2xl font-black text-gray-900 leading-tight">
+      مرحباً،
+      <span class="text-primary-600">{{ Auth::user()->name }}</span> 👋
+    </h1>
+    <p class="text-gray-400 text-sm mt-1 font-medium">
+      {{ \Carbon\Carbon::now()->locale('ar')->isoFormat('dddd، D MMMM YYYY') }}
+      — نظرة عامة على أداء المستشفى
+    </p>
+  </div>
+  <a href="/" target="_blank"
+    class="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-700 hover:border-primary-400 hover:text-primary-600 hover:shadow-md transition-all">
+    <i data-lucide="external-link" class="w-4 h-4"></i>
+    <span>زيارة الموقع</span>
+  </a>
+</div>
+
+{{-- ============================
+     KPI CARDS ROW 1 (4 cards)
+============================== --}}
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-7">
+
+  {{-- Pending appointments --}}
+  <div class="group relative bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-amber-400/5 to-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+    <div class="flex items-start justify-between mb-4">
+      <div class="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center group-hover:bg-amber-100 transition-colors">
+        <i data-lucide="clock" class="w-6 h-6 text-amber-500"></i>
+      </div>
+      <span class="text-xs font-bold px-2 py-1 bg-amber-50 text-amber-600 rounded-lg">انتظار</span>
+    </div>
+    <p class="text-3xl font-black text-gray-900 tabular-nums leading-none mb-1">{{ $stats['pending_appointments'] }}</p>
+    <p class="text-xs text-gray-400 font-semibold">حجوزات قيد الانتظار</p>
   </div>
 
-  <!-- Metric Grid -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-    
-    <!-- Pending Reservations Card -->
-    <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex items-center justify-between group hover:shadow-lg transition-all duration-300">
-      <div class="text-right">
-        <p class="text-gray-400 text-xs font-bold uppercase tracking-wider">الحجوزات قيد الانتظار</p>
-        <h3 class="text-3xl font-black text-gray-800 mt-2 tabular-nums">{{ $stats['pending_appointments'] }}</h3>
+  {{-- Today's bookings --}}
+  <div class="group relative bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-primary-400/5 to-primary-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+    <div class="flex items-start justify-between mb-4">
+      <div class="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center group-hover:bg-primary-100 transition-colors">
+        <i data-lucide="calendar-check" class="w-6 h-6 text-primary-500"></i>
       </div>
-      <div class="w-14 h-14 bg-amber-50 text-amber-500 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
-        <i data-lucide="clock" class="w-7 h-7"></i>
-      </div>
+      <span class="text-xs font-bold px-2 py-1 bg-primary-50 text-primary-600 rounded-lg">اليوم</span>
     </div>
-
-    <!-- Today's Bookings Card -->
-    <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex items-center justify-between group hover:shadow-lg transition-all duration-300">
-      <div class="text-right">
-        <p class="text-gray-400 text-xs font-bold uppercase tracking-wider">حجوزات اليوم</p>
-        <h3 class="text-3xl font-black text-gray-800 mt-2 tabular-nums">{{ $stats['today_appointments'] }}</h3>
-      </div>
-      <div class="w-14 h-14 bg-primary-50 text-primary-500 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
-        <i data-lucide="calendar" class="w-7 h-7"></i>
-      </div>
-    </div>
-
-    <!-- Total Specialists Card -->
-    <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex items-center justify-between group hover:shadow-lg transition-all duration-300">
-      <div class="text-right">
-        <p class="text-gray-400 text-xs font-bold uppercase tracking-wider">الأطباء النشطون</p>
-        <h3 class="text-3xl font-black text-gray-800 mt-2 tabular-nums">{{ $stats['total_doctors'] }}</h3>
-      </div>
-      <div class="w-14 h-14 bg-emerald-50 text-emerald-500 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
-        <i data-lucide="users" class="w-7 h-7"></i>
-      </div>
-    </div>
-
-    <!-- Unread Messages Card -->
-    <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex items-center justify-between group hover:shadow-lg transition-all duration-300">
-      <div class="text-right">
-        <p class="text-gray-400 text-xs font-bold uppercase tracking-wider">الرسائل الجديدة</p>
-        <h3 class="text-3xl font-black text-gray-800 mt-2 tabular-nums">{{ $stats['unread_messages'] }}</h3>
-      </div>
-      <div class="w-14 h-14 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
-        <i data-lucide="mail" class="w-7 h-7"></i>
-      </div>
-    </div>
-
+    <p class="text-3xl font-black text-gray-900 tabular-nums leading-none mb-1">{{ $stats['today_appointments'] }}</p>
+    <p class="text-xs text-gray-400 font-semibold">حجوزات اليوم</p>
   </div>
 
-  <!-- Operational metrics details -->
-  <div class="grid lg:grid-cols-3 gap-8">
-    
-    <!-- Recent Reservations list -->
-    <div class="lg:col-span-2 bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
-      <div class="flex items-center justify-between mb-6">
-        <h3 class="font-bold text-gray-800 text-lg text-right">أحدث الحجوزات المستلمة</h3>
-        <span class="text-xs text-gray-400 font-medium">آخر 5 طلبات</span>
+  {{-- Active doctors --}}
+  <div class="group relative bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-emerald-400/5 to-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+    <div class="flex items-start justify-between mb-4">
+      <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center group-hover:bg-emerald-100 transition-colors">
+        <i data-lucide="stethoscope" class="w-6 h-6 text-emerald-500"></i>
       </div>
+      <span class="text-xs font-bold px-2 py-1 bg-emerald-50 text-emerald-600 rounded-lg">نشط</span>
+    </div>
+    <p class="text-3xl font-black text-gray-900 tabular-nums leading-none mb-1">{{ $stats['total_doctors'] }}</p>
+    <p class="text-xs text-gray-400 font-semibold">الأطباء النشطون</p>
+  </div>
 
+  {{-- Unread messages --}}
+  <div class="group relative bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-rose-400/5 to-rose-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+    <div class="flex items-start justify-between mb-4">
+      <div class="w-12 h-12 bg-rose-50 rounded-xl flex items-center justify-center group-hover:bg-rose-100 transition-colors">
+        <i data-lucide="mail-open" class="w-6 h-6 text-rose-500"></i>
+      </div>
+      @if($stats['unread_messages'] > 0)
+        <span class="text-xs font-bold px-2 py-1 bg-rose-500 text-white rounded-lg animate-pulse">جديد</span>
+      @endif
+    </div>
+    <p class="text-3xl font-black text-gray-900 tabular-nums leading-none mb-1">{{ $stats['unread_messages'] }}</p>
+    <p class="text-xs text-gray-400 font-semibold">رسائل لم تُقرأ</p>
+  </div>
+
+</div>
+
+{{-- ============================
+     KPI CARDS ROW 2 (3 wide cards with progress bars)
+============================== --}}
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-7">
+
+  {{-- Total appointments --}}
+  <div class="bg-gradient-to-br from-primary-600 via-primary-700 to-primary-900 rounded-2xl p-6 text-white shadow-lg shadow-primary-500/20 relative overflow-hidden">
+    <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-white/5 rounded-full"></div>
+    <div class="absolute -top-4 -right-4 w-20 h-20 bg-white/5 rounded-full"></div>
+    <div class="relative">
+      <div class="flex items-center justify-between mb-4">
+        <i data-lucide="trending-up" class="w-6 h-6 text-primary-200"></i>
+        <span class="text-xs font-bold bg-white/20 px-3 py-1 rounded-full">إجمالي</span>
+      </div>
+      <p class="text-4xl font-black tabular-nums mb-2">{{ $stats['total_appointments'] }}</p>
+      <p class="text-primary-200 text-sm font-medium">مجموع الحجوزات المسجلة</p>
+    </div>
+  </div>
+
+  {{-- Departments --}}
+  <div class="bg-gradient-to-br from-violet-600 via-violet-700 to-violet-900 rounded-2xl p-6 text-white shadow-lg shadow-violet-500/20 relative overflow-hidden">
+    <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-white/5 rounded-full"></div>
+    <div class="absolute -top-4 -right-4 w-20 h-20 bg-white/5 rounded-full"></div>
+    <div class="relative">
+      <div class="flex items-center justify-between mb-4">
+        <i data-lucide="grid-3x3" class="w-6 h-6 text-violet-200"></i>
+        <span class="text-xs font-bold bg-white/20 px-3 py-1 rounded-full">قسم</span>
+      </div>
+      <p class="text-4xl font-black tabular-nums mb-2">{{ $stats['total_departments'] }}</p>
+      <p class="text-violet-200 text-sm font-medium">الأقسام الطبية النشطة</p>
+    </div>
+  </div>
+
+  {{-- Users --}}
+  <div class="bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900 rounded-2xl p-6 text-white shadow-lg shadow-slate-700/20 relative overflow-hidden">
+    <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-white/5 rounded-full"></div>
+    <div class="absolute -top-4 -right-4 w-20 h-20 bg-white/5 rounded-full"></div>
+    <div class="relative">
+      <div class="flex items-center justify-between mb-4">
+        <i data-lucide="shield-check" class="w-6 h-6 text-slate-300"></i>
+        <span class="text-xs font-bold bg-white/20 px-3 py-1 rounded-full">مسؤول</span>
+      </div>
+      <p class="text-4xl font-black tabular-nums mb-2">{{ $stats['total_users'] }}</p>
+      <p class="text-slate-300 text-sm font-medium">مستخدمو النظام</p>
+    </div>
+  </div>
+
+</div>
+
+{{-- ============================
+     MAIN CONTENT GRID
+============================== --}}
+<div class="grid lg:grid-cols-3 gap-6">
+
+  {{-- LEFT: Chart + Recent Appointments --}}
+  <div class="lg:col-span-2 space-y-6">
+
+    {{-- Bookings Chart --}}
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6 text-right">
+        <div>
+          <h3 class="font-black text-gray-900 text-lg">مخطط الحجوزات</h3>
+          <p class="text-xs text-gray-400 mt-0.5">آخر 30 يوماً</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="flex items-center gap-1.5">
+            <span class="w-3 h-3 rounded-full bg-primary-500 inline-block"></span>
+            <span class="text-xs text-gray-500 font-medium">الحجوزات اليومية</span>
+          </div>
+        </div>
+      </div>
+      <div class="relative h-64">
+        <canvas id="bookingsChart"></canvas>
+        @if(empty($stats['chart_counts']))
+          <div class="absolute inset-0 flex flex-col items-center justify-center text-gray-300">
+            <i data-lucide="bar-chart-2" class="w-14 h-14 mb-3 opacity-40"></i>
+            <p class="text-sm font-medium text-gray-400">لا توجد بيانات حجوزات للفترة الحالية</p>
+          </div>
+        @endif
+      </div>
+    </div>
+
+    {{-- Recent Appointments Table --}}
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-gray-50">
+        <h3 class="font-black text-gray-900 text-base">أحدث الحجوزات</h3>
+        <span class="text-xs text-gray-400 font-medium bg-gray-50 px-3 py-1 rounded-full">آخر 5 طلبات</span>
+      </div>
       <div class="overflow-x-auto">
-        <table class="w-full text-right" dir="rtl">
+        <table class="w-full" dir="rtl">
           <thead>
-            <tr class="border-b border-gray-100 text-gray-400 text-xs font-bold uppercase">
-              <th class="pb-3 text-right">المريض</th>
-              <th class="pb-3 text-right">القسم</th>
-              <th class="pb-3 text-right">الموعد والتاريخ</th>
-              <th class="pb-3 text-right">الحالة</th>
+            <tr class="bg-gray-50/60 text-gray-400 text-xs font-bold uppercase tracking-wider">
+              <th class="px-6 py-3 text-right">المريض</th>
+              <th class="px-6 py-3 text-right">القسم</th>
+              <th class="px-6 py-3 text-right">الموعد</th>
+              <th class="px-6 py-3 text-right">الحالة</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-50 text-sm text-gray-700">
+          <tbody class="divide-y divide-gray-50">
             @forelse($stats['recent_appointments'] as $app)
-              <tr>
-                <td class="py-4">
-                  <div class="font-bold text-gray-900">{{ $app->patient_name }}</div>
-                  <div class="text-xs text-gray-400 mt-0.5" dir="ltr">{{ $app->phone }}</div>
+              <tr class="hover:bg-gray-50/50 transition-colors">
+                <td class="px-6 py-4">
+                  <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center text-primary-700 font-black text-sm shrink-0">
+                      {{ mb_substr($app->patient_name, 0, 1) }}
+                    </div>
+                    <div>
+                      <p class="font-bold text-gray-900 text-sm">{{ $app->patient_name }}</p>
+                      <p class="text-xs text-gray-400" dir="ltr">{{ $app->phone }}</p>
+                    </div>
+                  </div>
                 </td>
-                <td class="py-4">{{ $app->department }}</td>
-                <td class="py-4">
-                  <div class="font-medium text-gray-800">{{ $app->date }}</div>
-                  <div class="text-xs text-gray-400 mt-0.5">{{ $app->time }}</div>
+                <td class="px-6 py-4">
+                  <span class="text-sm text-gray-700 font-medium">{{ $app->department }}</span>
                 </td>
-                <td class="py-4">
-                  <span class="px-2.5 py-1 rounded-full text-xs font-bold {{ $app->status === 'pending' ? 'bg-amber-50 text-amber-600' : ($app->status === 'confirmed' ? 'bg-green-50 text-green-600' : 'bg-gray-50 text-gray-500') }}">
-                    @if($app->status === 'pending')
-                      قيد الانتظار
-                    @elseif($app->status === 'confirmed')
-                      مؤكد
-                    @else
-                      مكتمل
-                    @endif
+                <td class="px-6 py-4">
+                  <p class="text-sm font-semibold text-gray-800">{{ $app->date }}</p>
+                  <p class="text-xs text-gray-400 mt-0.5">{{ $app->time }}</p>
+                </td>
+                <td class="px-6 py-4">
+                  @php
+                    $statusConfig = match($app->status) {
+                      'pending'   => ['label' => 'انتظار',    'class' => 'bg-amber-50 text-amber-700 ring-1 ring-amber-200'],
+                      'confirmed' => ['label' => 'مؤكد',     'class' => 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200'],
+                      'cancelled' => ['label' => 'ملغي',     'class' => 'bg-red-50 text-red-700 ring-1 ring-red-200'],
+                      default     => ['label' => 'مكتمل',   'class' => 'bg-gray-100 text-gray-600 ring-1 ring-gray-200'],
+                    };
+                  @endphp
+                  <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold {{ $statusConfig['class'] }}">
+                    {{ $statusConfig['label'] }}
                   </span>
                 </td>
               </tr>
             @empty
               <tr>
-                <td colspan="4" class="text-center py-8 text-gray-400">
-                  <i data-lucide="calendar" class="mx-auto mb-2 opacity-30 w-12 h-12"></i>
-                  <p>لا توجد حجوزات مستلمة مؤخراً</p>
+                <td colspan="4" class="text-center py-12 text-gray-300">
+                  <i data-lucide="calendar-x" class="w-10 h-10 mx-auto mb-3 opacity-50"></i>
+                  <p class="text-sm text-gray-400">لا توجد حجوزات مستلمة مؤخراً</p>
                 </td>
               </tr>
             @endforelse
@@ -115,33 +232,229 @@
       </div>
     </div>
 
-    <!-- Quick info card sidebar -->
-    <div class="lg:col-span-1 space-y-6">
-      <div class="bg-gradient-to-br from-primary-600 to-primary-800 rounded-3xl p-6 text-white shadow-xl">
-        <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
-          <i data-lucide="info" class="w-5 h-5"></i>
-          <span>حالة التشغيل الطبية</span>
-        </h3>
-        <p class="text-white/70 text-sm leading-relaxed mb-6">
-          جميع البيانات الموضحة حية وتتحدث فورياً عند قيام المرضى بالحجز أو إرسال الرسائل عبر الواجهة العامة.
-        </p>
+  </div>
 
-        <div class="space-y-4">
-          <div class="flex justify-between items-center bg-white/10 p-3.5 rounded-xl text-sm">
-            <span>التخصصات الطبية النشطة</span>
-            <span class="font-bold">{{ $stats['total_departments'] }} أقسام</span>
+  {{-- RIGHT SIDEBAR --}}
+  <div class="lg:col-span-1 space-y-5">
+
+    {{-- System Status Card --}}
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+      <h3 class="font-black text-gray-900 text-base mb-4 flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse inline-block"></span>
+        حالة النظام
+      </h3>
+      <div class="space-y-3">
+        <div class="flex items-center justify-between p-3 bg-emerald-50 rounded-xl">
+          <div class="flex items-center gap-2">
+            <i data-lucide="server" class="w-4 h-4 text-emerald-600"></i>
+            <span class="text-xs font-semibold text-emerald-800">الخادم</span>
           </div>
-          <div class="flex justify-between items-center bg-white/10 p-3.5 rounded-xl text-sm">
-            <span>إجمالي مستخدمي النظام</span>
-            <span class="font-bold">{{ $stats['total_users'] }} مستخدمين</span>
+          <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-lg">يعمل</span>
+        </div>
+        <div class="flex items-center justify-between p-3 bg-emerald-50 rounded-xl">
+          <div class="flex items-center gap-2">
+            <i data-lucide="database" class="w-4 h-4 text-emerald-600"></i>
+            <span class="text-xs font-semibold text-emerald-800">قاعدة البيانات</span>
           </div>
-          <div class="flex justify-between items-center bg-white/10 p-3.5 rounded-xl text-sm">
-            <span>مجموع الحجوزات المسجلة</span>
-            <span class="font-bold">{{ $stats['total_appointments'] }} حجز</span>
+          <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-lg">متصل</span>
+        </div>
+        <div class="flex items-center justify-between p-3 bg-primary-50 rounded-xl">
+          <div class="flex items-center gap-2">
+            <i data-lucide="cpu" class="w-4 h-4 text-primary-600"></i>
+            <span class="text-xs font-semibold text-primary-800">Laravel</span>
+          </div>
+          <span class="text-xs font-bold text-primary-700 bg-primary-100 px-2 py-0.5 rounded-lg">v11</span>
+        </div>
+      </div>
+    </div>
+
+    {{-- Quick Stats --}}
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+      <h3 class="font-black text-gray-900 text-base mb-4">ملخص سريع</h3>
+      <div class="space-y-4">
+
+        {{-- Appointments progress --}}
+        @php
+          $confirmedRatio = $stats['total_appointments'] > 0
+            ? round((($stats['total_appointments'] - $stats['pending_appointments']) / $stats['total_appointments']) * 100)
+            : 0;
+        @endphp
+        <div>
+          <div class="flex justify-between items-center mb-1.5">
+            <span class="text-xs font-bold text-gray-700">نسبة الحجوزات المؤكدة</span>
+            <span class="text-xs font-black text-primary-600">{{ $confirmedRatio }}%</span>
+          </div>
+          <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+            <div class="h-full bg-gradient-to-l from-primary-400 to-primary-600 rounded-full transition-all duration-700"
+                 style="width: {{ $confirmedRatio }}%"></div>
+          </div>
+        </div>
+
+        {{-- Doctors --}}
+        <div>
+          <div class="flex justify-between items-center mb-1.5">
+            <span class="text-xs font-bold text-gray-700">الأطباء النشطون</span>
+            <span class="text-xs font-black text-emerald-600">{{ $stats['total_doctors'] }} طبيب</span>
+          </div>
+          <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+            <div class="h-full bg-gradient-to-l from-emerald-400 to-emerald-600 rounded-full"
+                 style="width: {{ min(($stats['total_doctors'] / max(20, $stats['total_doctors'])) * 100, 100) }}%"></div>
+          </div>
+        </div>
+
+        {{-- Messages --}}
+        <div>
+          <div class="flex justify-between items-center mb-1.5">
+            <span class="text-xs font-bold text-gray-700">الرسائل غير المقروءة</span>
+            <span class="text-xs font-black text-rose-600">{{ $stats['unread_messages'] }} رسالة</span>
+          </div>
+          <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+            <div class="h-full bg-gradient-to-l from-rose-400 to-rose-600 rounded-full"
+                 style="width: {{ min(($stats['unread_messages'] / max(10, $stats['unread_messages'])) * 100, 100) }}%"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    {{-- Quick Actions --}}
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+      <h3 class="font-black text-gray-900 text-base mb-4">إجراءات سريعة</h3>
+      <div class="grid grid-cols-2 gap-3">
+        <a href="{{ route('admin.users.index') }}"
+          class="flex flex-col items-center gap-2 p-4 bg-gray-50 hover:bg-primary-50 rounded-xl transition-colors group text-center border border-transparent hover:border-primary-100">
+          <div class="w-10 h-10 bg-white group-hover:bg-primary-100 rounded-xl flex items-center justify-center shadow-sm transition-colors">
+            <i data-lucide="users" class="w-5 h-5 text-gray-600 group-hover:text-primary-600"></i>
+          </div>
+          <span class="text-xs font-bold text-gray-600 group-hover:text-primary-700">المستخدمون</span>
+        </a>
+        <a href="{{ route('admin.settings.index') }}"
+          class="flex flex-col items-center gap-2 p-4 bg-gray-50 hover:bg-violet-50 rounded-xl transition-colors group text-center border border-transparent hover:border-violet-100">
+          <div class="w-10 h-10 bg-white group-hover:bg-violet-100 rounded-xl flex items-center justify-center shadow-sm transition-colors">
+            <i data-lucide="settings" class="w-5 h-5 text-gray-600 group-hover:text-violet-600"></i>
+          </div>
+          <span class="text-xs font-bold text-gray-600 group-hover:text-violet-700">الإعدادات</span>
+        </a>
+        <a href="/"
+          class="flex flex-col items-center gap-2 p-4 bg-gray-50 hover:bg-emerald-50 rounded-xl transition-colors group text-center border border-transparent hover:border-emerald-100">
+          <div class="w-10 h-10 bg-white group-hover:bg-emerald-100 rounded-xl flex items-center justify-center shadow-sm transition-colors">
+            <i data-lucide="home" class="w-5 h-5 text-gray-600 group-hover:text-emerald-600"></i>
+          </div>
+          <span class="text-xs font-bold text-gray-600 group-hover:text-emerald-700">الموقع</span>
+        </a>
+        <button onclick="document.getElementById('logout-form').submit()"
+          class="flex flex-col items-center gap-2 p-4 bg-gray-50 hover:bg-red-50 rounded-xl transition-colors group text-center border border-transparent hover:border-red-100 cursor-pointer">
+          <div class="w-10 h-10 bg-white group-hover:bg-red-100 rounded-xl flex items-center justify-center shadow-sm transition-colors">
+            <i data-lucide="log-out" class="w-5 h-5 text-gray-600 group-hover:text-red-600"></i>
+          </div>
+          <span class="text-xs font-bold text-gray-600 group-hover:text-red-700">خروج</span>
+        </button>
+      </div>
+    </div>
+
+    {{-- Today's date info card --}}
+    <div class="bg-gradient-to-br from-primary-600 to-primary-800 rounded-2xl p-5 text-white shadow-lg shadow-primary-500/20 relative overflow-hidden">
+      <div class="absolute -bottom-8 -left-8 w-36 h-36 bg-white/5 rounded-full"></div>
+      <div class="absolute -top-5 -right-5 w-24 h-24 bg-white/5 rounded-full"></div>
+      <div class="relative">
+        <div class="flex items-center gap-2 mb-3">
+          <i data-lucide="calendar-days" class="w-5 h-5 text-primary-200"></i>
+          <span class="text-sm font-bold text-primary-200">اليوم</span>
+        </div>
+        <p class="text-2xl font-black mb-1">{{ \Carbon\Carbon::now()->locale('ar')->isoFormat('D MMMM') }}</p>
+        <p class="text-primary-200 text-xs">{{ \Carbon\Carbon::now()->locale('ar')->isoFormat('dddd — YYYY') }}</p>
+        <div class="mt-4 pt-4 border-t border-white/10 flex justify-between text-xs">
+          <div class="text-center">
+            <p class="font-black text-xl">{{ $stats['today_appointments'] }}</p>
+            <p class="text-primary-200">حجز اليوم</p>
+          </div>
+          <div class="w-px bg-white/10"></div>
+          <div class="text-center">
+            <p class="font-black text-xl">{{ $stats['pending_appointments'] }}</p>
+            <p class="text-primary-200">قيد الانتظار</p>
+          </div>
+          <div class="w-px bg-white/10"></div>
+          <div class="text-center">
+            <p class="font-black text-xl">{{ $stats['unread_messages'] }}</p>
+            <p class="text-primary-200">رسالة</p>
           </div>
         </div>
       </div>
     </div>
 
   </div>
+</div>
+
+@endsection
+
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+(function() {
+  const labels = @json($stats['chart_labels'] ?? []);
+  const counts = @json($stats['chart_counts'] ?? []);
+
+  if (!labels.length) return;
+
+  const ctx = document.getElementById('bookingsChart');
+  if (!ctx) return;
+
+  // Build gradient fill
+  const gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 256);
+  gradient.addColorStop(0,   'rgba(14, 165, 233, 0.25)');
+  gradient.addColorStop(1,   'rgba(14, 165, 233, 0.01)');
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'حجوزات',
+        data: counts,
+        borderColor: '#0ea5e9',
+        backgroundColor: gradient,
+        borderWidth: 2.5,
+        pointBackgroundColor: '#0ea5e9',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        pointRadius: 4,
+        pointHoverRadius: 7,
+        fill: true,
+        tension: 0.45,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { intersect: false, mode: 'index' },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#0f172a',
+          titleFont: { size: 12, weight: 'bold' },
+          bodyFont: { size: 13, weight: 'bold' },
+          padding: 12,
+          cornerRadius: 10,
+          callbacks: {
+            title: (items) => items[0].label,
+            label: (item) => `  ${item.raw} حجز`,
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { color: '#94a3b8', font: { size: 11 }, maxRotation: 45 },
+        },
+        y: {
+          beginAtZero: true,
+          grid: { color: '#f1f5f9', lineWidth: 1 },
+          ticks: { color: '#94a3b8', font: { size: 11 }, precision: 0 },
+          border: { display: false },
+        }
+      }
+    }
+  });
+})();
+</script>
 @endsection

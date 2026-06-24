@@ -3,7 +3,7 @@
         'name' => 'hospital/al-shifa-backend',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'c741cd46aea0bdd84eeb9f28d29eeeee70a3ab7a',
+        'reference' => 'ca1b3d7b7964ad7036f85553361a7fcd2b4f9f5e',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -139,7 +139,7 @@
         'hospital/al-shifa-backend' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'c741cd46aea0bdd84eeb9f28d29eeeee70a3ab7a',
+            'reference' => 'ca1b3d7b7964ad7036f85553361a7fcd2b4f9f5e',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
