@@ -8,19 +8,15 @@
     $doctorsList = \App\Models\Doctor::where('active', true)->get();
 
     $roleLabels = [
-      'admin' => 'مدير النظام',
-      'doctor' => 'طبيب استشاري',
-      'nurse' => 'ممرض/ة',
-      'reception' => 'موظف استقبال',
-      'accountant' => 'محاسب',
+      'Super Admin' => 'مدير النظام (Super Admin)',
+      'Manager' => 'مدير عام',
+      'Editor' => 'محرر محتوى',
     ];
 
     $roleColors = [
-      'admin' => 'from-red-500 to-rose-600',
-      'doctor' => 'from-blue-500 to-indigo-600',
-      'nurse' => 'from-emerald-500 to-teal-600',
-      'reception' => 'from-amber-500 to-orange-600',
-      'accountant' => 'from-purple-500 to-violet-600',
+      'Super Admin' => 'from-red-500 to-rose-600',
+      'Manager' => 'from-blue-500 to-indigo-600',
+      'Editor' => 'from-emerald-500 to-teal-600',
     ];
   @endphp
 
@@ -76,8 +72,9 @@
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="users-cards-grid">
     @forelse($users as $user)
       @php
-        $roleColor = $roleColors[$user->role] ?? 'from-gray-500 to-gray-700';
-        $roleLabel = $roleLabels[$user->role] ?? 'مستخدم';
+        $userRoleName = $user->roles->first()?->name ?? $user->role ?? 'مستخدم';
+        $roleColor = $roleColors[$userRoleName] ?? 'from-gray-500 to-gray-700';
+        $roleLabel = $roleLabels[$userRoleName] ?? $userRoleName;
       @endphp
       <div
         class="user-card bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl transition-all {{ !$user->active ? 'opacity-60' : '' }}"
@@ -106,10 +103,10 @@
               @method('PUT')
               <input type="hidden" name="name" value="{{ $user->name }}" />
               <input type="hidden" name="username" value="{{ $user->username }}" />
-              <input type="hidden" name="role" value="{{ $user->role }}" />
+              <input type="hidden" name="role" value="{{ $userRoleName }}" />
               <input type="hidden" name="email" value="{{ $user->email }}" />
               <input type="hidden" name="phone" value="{{ $user->phone }}" />
-              @if($user->role !== 'admin')
+              @if($userRoleName !== 'Super Admin' && $user->username !== 'admin')
                 @if($user->active)
                   <button type="submit" class="text-green-500 hover:scale-110 transition-transform cursor-pointer">
                     <i data-lucide="toggle-right" class="w-8 h-8"></i>
@@ -148,14 +145,14 @@
           <!-- Card Actions (Edit, Delete) -->
           <div class="flex items-center gap-2 pt-2 border-t border-gray-50">
             <button
-              onclick="openEditUserModal({{ $user->id }}, '{{ addslashes($user->name) }}', '{{ addslashes($user->username) }}', '{{ $user->role }}', '{{ $user->email }}', '{{ $user->phone }}', {{ $user->active ? 'true' : 'false' }}, {{ json_encode($user->assigned_departments ?? []) }}, {{ json_encode($user->assigned_doctors ?? []) }})"
+              onclick="openEditUserModal({{ $user->id }}, '{{ addslashes($user->name) }}', '{{ addslashes($user->username) }}', '{{ $userRoleName }}', '{{ $user->email }}', '{{ $user->phone }}', {{ $user->active ? 'true' : 'false' }}, {{ json_encode($user->assigned_departments ?? []) }}, {{ json_encode($user->assigned_doctors ?? []) }})"
               class="flex-1 py-2 bg-blue-50 text-blue-600 rounded-lg text-xs font-bold hover:bg-blue-100 transition-colors flex items-center justify-center gap-1 cursor-pointer"
             >
               <i data-lucide="edit" class="w-3.5 h-3.5"></i>
               <span>تعديل</span>
             </button>
 
-            @if($user->role !== 'admin')
+            @if($userRoleName !== 'Super Admin' && $user->username !== 'admin')
               <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="flex-1" onsubmit="return confirm('هل أنت متأكد من رغبتك في حذف هذا المستخدم نهائياً؟');">
                 @csrf
                 @method('DELETE')
@@ -223,8 +220,8 @@
         <div>
           <label class="block text-xs font-bold text-gray-500 mb-2">الدور</label>
           <select name="role" id="create-user-role-select" onchange="toggleRoleAssignedFields('create')" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500">
-            @foreach($roleLabels as $role => $label)
-              <option value="{{ $role }}">{{ $label }}</option>
+            @foreach($roles as $roleObj)
+              <option value="{{ $roleObj->name }}">{{ $roleLabels[$roleObj->name] ?? $roleObj->name }}</option>
             @endforeach
           </select>
         </div>
@@ -326,8 +323,8 @@
         <div>
           <label class="block text-xs font-bold text-gray-500 mb-2">الدور</label>
           <select name="role" id="edit-user-role-select" onchange="toggleRoleAssignedFields('edit')" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none">
-            @foreach($roleLabels as $role => $label)
-              <option value="{{ $role }}">{{ $label }}</option>
+            @foreach($roles as $roleObj)
+              <option value="{{ $roleObj->name }}">{{ $roleLabels[$roleObj->name] ?? $roleObj->name }}</option>
             @endforeach
           </select>
         </div>
@@ -460,7 +457,7 @@
       roleSelect.value = role;
 
       // Lock parameters for admin role editing safety
-      if (role === 'admin' || username === 'admin') {
+      if (role === 'Super Admin' || username === 'admin') {
         roleSelect.disabled = true;
         document.getElementById('edit-user-phone').disabled = true;
       } else {

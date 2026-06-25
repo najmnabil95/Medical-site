@@ -57,14 +57,19 @@
             @csrf
             <div>
               <label class="block text-sm font-bold text-gray-700 mb-2">اسم المستخدم</label>
-              <input
-                type="text"
-                name="username"
-                value="{{ old('username') }}"
-                required
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all text-sm text-right"
-                placeholder="admin"
-              />
+              <div class="relative">
+                <input
+                  type="text"
+                  name="username"
+                  value="{{ old('username') }}"
+                  required
+                  class="w-full px-4 py-3 pr-10 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all text-sm text-right"
+                  placeholder="admin"
+                />
+                <div class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+                  <i data-lucide="user" class="w-[18px] h-[18px]"></i>
+                </div>
+              </div>
             </div>
 
             <div>

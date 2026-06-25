@@ -148,12 +148,10 @@
                 <select
                   name="doctor"
                   id="appointment-doctor-select"
-                  class="w-full pr-12 pl-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:bg-white transition-all text-sm appearance-none text-gray-600 text-right"
+                  disabled
+                  class="w-full pr-12 pl-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:bg-white transition-all text-sm appearance-none text-gray-600 text-right disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <option value="">اختر الطبيب (اختياري)</option>
-                  @foreach($doctors as $doc)
-                    <option value="{{ $doc->name }}" data-department="{{ $doc->department }}">{{ $doc->name }}</option>
-                  @endforeach
+                  <option value="">يرجى اختيار القسم أولاً</option>
                 </select>
               </div>
             </div>
@@ -223,11 +221,24 @@
     const docSelect = document.getElementById('appointment-doctor-select');
     const selectedDept = deptSelect.value;
 
-    // Reset doctor dropdown
+    if (!selectedDept) {
+      docSelect.disabled = true;
+      docSelect.innerHTML = '<option value="">يرجى اختيار القسم أولاً</option>';
+      return;
+    }
+
+    docSelect.disabled = false;
     docSelect.innerHTML = '<option value="">اختر الطبيب (اختياري)</option>';
 
     // Filter and add doctors
-    const filteredDocs = allDoctorsList.filter(d => !selectedDept || d.department === selectedDept);
+    const filteredDocs = allDoctorsList.filter(d => d.department === selectedDept);
+    
+    if (filteredDocs.length === 0) {
+      docSelect.innerHTML = '<option value="">لا يوجد أطباء حالياً في هذا القسم</option>';
+      docSelect.disabled = true;
+      return;
+    }
+
     filteredDocs.forEach(doc => {
       const opt = document.createElement('option');
       opt.value = doc.name;
@@ -257,7 +268,13 @@
         document.getElementById('booking-success-state').classList.remove('hidden');
         form.reset();
       } else {
-        alert(result.message || 'حدث خطأ غير متوقع، يرجى المحاولة لاحقاً.');
+        if (response.status === 422 && result.errors) {
+            // It's a validation error, extract the messages
+            const errorMessages = Object.values(result.errors).flat().join('\n');
+            alert('يوجد خطأ في البيانات المدخلة:\n' + errorMessages);
+        } else {
+            alert(result.message || 'حدث خطأ غير متوقع، يرجى المحاولة لاحقاً.');
+        }
       }
     } catch (error) {
       console.error(error);

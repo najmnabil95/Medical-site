@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --config vite.config.ts",
-    "build": "vite --config vite.config.ts"
+    "build": "vite build --config vite.config.ts"
   },
   "dependencies": {
     "clsx": "2.1.1",

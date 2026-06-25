@@ -3,7 +3,7 @@
         'name' => 'hospital/al-shifa-backend',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'ca1b3d7b7964ad7036f85553361a7fcd2b4f9f5e',
+        'reference' => '7ef6b9a96e7216b9edcb89e6f49a4e1e98096a19',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -139,7 +139,7 @@
         'hospital/al-shifa-backend' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'ca1b3d7b7964ad7036f85553361a7fcd2b4f9f5e',
+            'reference' => '7ef6b9a96e7216b9edcb89e6f49a4e1e98096a19',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -661,6 +661,15 @@
             'replaced' => array(
                 0 => '4.9.3',
             ),
+        ),
+        'spatie/laravel-permission' => array(
+            'pretty_version' => '6.25.0',
+            'version' => '6.25.0.0',
+            'reference' => 'd7d4cb0d58616722f1afc90e0484e4825155b9b3',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../spatie/laravel-permission',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'spatie/once' => array(
             'dev_requirement' => false,

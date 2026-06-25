@@ -16,5 +16,12 @@ class AppServiceProvider extends ServiceProvider
         if (env('APP_ENV') !== 'production') {
             $this->app->make('config')->set('cors.supports_credentials', true);
         }
+
+        try {
+            $settings = \App\Models\Setting::first();
+            \Illuminate\Support\Facades\View::share('settings', $settings);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\View::share('settings', null);
+        }
     }
 }

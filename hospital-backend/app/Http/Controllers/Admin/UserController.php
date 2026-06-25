@@ -6,13 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
     public function index()
     {
         $users = User::orderBy('id', 'desc')->get();
-        return view('admin.users.index', compact('users'));
+        $roles = Role::all();
+        return view('admin.users.index', compact('users', 'roles'));
     }
 
     public function store(Request $request)
@@ -20,7 +22,7 @@ class UserController extends Controller
         $validated = $request->validate([
             'username' => 'required|string|unique:users',
             'password' => 'required|string|min:6',
-            'role' => 'required|in:admin,doctor,nurse,reception,accountant',
+            'role' => 'required|exists:roles,name',
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:50',
@@ -32,7 +34,8 @@ class UserController extends Controller
         $validated['active'] = $request->has('active');
         $validated['password'] = Hash::make($validated['password']);
         
-        User::create($validated);
+        $user = User::create($validated);
+        $user->assignRole($validated['role']);
 
         return redirect()->route('admin.users.index')->with('success', 'تم إنشاء المستخدم بنجاح.');
     }
@@ -42,14 +45,14 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         // Protect admin account from critical modifications
-        if ($user->role === 'admin' || $user->username === 'admin') {
+        if ($user->hasRole('Super Admin') || $user->username === 'admin') {
             if ($request->has('active') && !$request->boolean('active')) {
                 return back()->with('error', 'لا يمكن إيقاف حساب مدير النظام.');
             }
             if ($request->filled('phone') && $request->input('phone') !== $user->phone) {
                 return back()->with('error', 'لا يمكن تغيير رقم هاتف مدير النظام.');
             }
-            if ($request->filled('role') && $request->input('role') !== 'admin') {
+            if ($request->filled('role') && $request->input('role') !== 'Super Admin') {
                 return back()->with('error', 'لا يمكن تغيير صلاحيات مدير النظام.');
             }
         }
@@ -57,7 +60,7 @@ class UserController extends Controller
         $validated = $request->validate([
             'username' => 'required|string|unique:users,username,' . $id,
             'password' => 'nullable|string|min:6',
-            'role' => 'required|in:admin,doctor,nurse,reception,accountant',
+            'role' => 'required|exists:roles,name',
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:50',
@@ -75,6 +78,7 @@ class UserController extends Controller
         }
 
         $user->update($validated);
+        $user->syncRoles([$validated['role']]);
 
         return redirect()->route('admin.users.index')->with('success', 'تم تحديث بيانات المستخدم بنجاح.');
     }
@@ -83,7 +87,7 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         
-        if ($user->role === 'admin' || $user->username === 'admin') {
+        if ($user->hasRole('Super Admin') || $user->username === 'admin') {
             return redirect()->route('admin.users.index')->with('error', 'لا يمكن حذف حساب مدير النظام.');
         }
 

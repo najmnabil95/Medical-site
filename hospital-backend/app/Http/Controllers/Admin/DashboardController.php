@@ -25,16 +25,20 @@ class DashboardController extends Controller
             'recent_appointments' => Appointment::orderBy('created_at', 'desc')->limit(5)->get(),
         ];
 
-        // Prepare data for bookings chart (last 30 days)
-        $chartData = Appointment::where('created_at', '>=', now()->subDays(30))
-            ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
-            ->groupByRaw('DATE(created_at)')
-            ->orderByRaw('DATE(created_at)')
-            ->get();
-        $chartLabels = $chartData->pluck('date')->map(function($date) {
+        // Prepare data for bookings chart (last 30 days) using Collection grouping to avoid ONLY_FULL_GROUP_BY errors
+        $appointmentsLast30Days = Appointment::where('created_at', '>=', now()->subDays(30))->get();
+        
+        $chartData = $appointmentsLast30Days->groupBy(function($date) {
+            return Carbon::parse($date->created_at)->format('Y-m-d');
+        })->map(function ($group) {
+            return $group->count();
+        })->sortKeys();
+
+        $chartLabels = $chartData->keys()->map(function($date) {
             return Carbon::parse($date)->format('M d');
         })->toArray();
-        $chartCounts = $chartData->pluck('count')->toArray();
+        $chartCounts = $chartData->values()->toArray();
+        
         $stats['chart_labels'] = $chartLabels;
         $stats['chart_counts'] = $chartCounts;
 

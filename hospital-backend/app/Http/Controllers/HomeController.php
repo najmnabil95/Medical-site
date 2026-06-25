@@ -59,15 +59,22 @@ class HomeController extends Controller
     public function storeAppointment(Request $request)
     {
         $validated = $request->validate([
-            'patient_name' => 'required|string|max:255',
-            'phone' => 'required|string|max:50',
+            'patient_name' => ['required', 'string', 'min:3', 'max:255', 'regex:/^[\pL\s]+$/u'],
+            'phone' => ['required', 'string', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:9', 'max:15'],
             'department' => 'required|string|max:255',
             'doctor' => 'nullable|string|max:255',
-            'date' => 'required|date',
+            'date' => 'required|date|after_or_equal:today',
             'time' => 'required|string',
             'type' => 'sometimes|in:normal,offer,consultation',
             'offer_id' => 'nullable',
-            'notes' => 'nullable|string',
+            'notes' => 'nullable|string|max:1000',
+        ], [
+            'patient_name.regex' => 'يرجى إدخال اسم حقيقي (حروف فقط).',
+            'patient_name.min' => 'الاسم يجب أن يكون 3 أحرف على الأقل.',
+            'phone.regex' => 'يرجى إدخال رقم هاتف صحيح.',
+            'phone.min' => 'رقم الهاتف يجب أن لا يقل عن 9 أرقام.',
+            'phone.max' => 'رقم الهاتف يجب أن لا يزيد عن 15 رقم.',
+            'date.after_or_equal' => 'تاريخ الحجز يجب أن يكون اليوم أو في المستقبل.',
         ]);
 
         $validated['status'] = 'pending';

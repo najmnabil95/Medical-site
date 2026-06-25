@@ -51,52 +51,200 @@
         </div>
 
         <!-- Sidebar Navigation Menu -->
-        <nav class="p-4 overflow-y-auto h-[calc(100vh-8rem)]">
-          <p class="text-xs font-bold text-gray-400 mb-3 px-3 tracking-wider text-right">القائمة الرئيسية</p>
-          <div class="space-y-1">
-            
+        <nav class="p-4 overflow-y-auto h-[calc(100vh-8rem)] space-y-4">
+          
+          <!-- لوحة التحكم -->
+          <div>
             <a
               href="{{ route('admin.dashboard') }}"
-              class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ Route::currentRouteName() === 'admin.dashboard' ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20' : 'text-gray-600 hover:bg-gray-100 hover:text-primary-600' }}"
+              class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ Route::currentRouteName() === 'admin.dashboard' ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
             >
               <i data-lucide="layout-dashboard" class="w-4.5 h-4.5"></i>
-              <span class="flex-1 text-right">لوحة التحكم</span>
+              <span class="flex-1 text-right">لوحة القيادة</span>
             </a>
+          </div>
 
-            @if(Auth::user()->role === 'admin')
+          @if(auth()->user()->hasRole('Doctor'))
+          <!-- قسم الطبيب -->
+          <div>
+            <p class="text-[10px] font-bold text-gray-400 mb-2 px-3 tracking-wider text-right uppercase">منطقة الطبيب</p>
+            <div class="space-y-1">
               <a
-                href="{{ route('admin.users.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ Route::currentRouteName() === 'admin.users.index' ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20' : 'text-gray-600 hover:bg-gray-100 hover:text-primary-600' }}"
+                href="{{ route('doctor.appointments.index') }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'doctor.appointments') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
               >
-                <i data-lucide="users" class="w-4.5 h-4.5"></i>
-                <span class="flex-1 text-right">المستخدمون</span>
+                <i data-lucide="stethoscope" class="w-4.5 h-4.5"></i>
+                <span class="flex-1 text-right">مواعيدي</span>
               </a>
-            @endif
+            </div>
+          </div>
+          @endif
 
-            <a
-              href="{{ route('admin.settings.index') }}"
-              class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ Route::currentRouteName() === 'admin.settings.index' ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20' : 'text-gray-600 hover:bg-gray-100 hover:text-primary-600' }}"
-            >
-              <i data-lucide="settings" class="w-4.5 h-4.5"></i>
-              <span class="flex-1 text-right">إعدادات الموقع</span>
-            </a>
-            
+          <!-- قسم العمليات -->
+          <div>
+            <p class="text-[10px] font-bold text-gray-400 mb-2 px-3 tracking-wider text-right uppercase">العمليات والطلبات</p>
+            <div class="space-y-1">
+              <a
+                href="{{ route('admin.appointments.index') }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.appointments') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+              >
+                <i data-lucide="calendar" class="w-4.5 h-4.5"></i>
+                <span class="flex-1 text-right">الحجوزات</span>
+              </a>
+              <a
+                href="{{ route('admin.messages.index') }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.messages') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+              >
+                <i data-lucide="mail" class="w-4.5 h-4.5"></i>
+                <span class="flex-1 text-right">رسائل التواصل</span>
+              </a>
+            </div>
           </div>
 
-          <!-- Divider -->
-          <div class="h-px bg-gray-100 my-4 mx-3"></div>
-
-          <!-- Public site anchors -->
-          <div class="px-3 space-y-2">
-            <a
-              href="/"
-              class="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-l from-emerald-500 to-emerald-600 text-white rounded-xl text-sm font-bold hover:shadow-lg hover:shadow-emerald-500/20 transition-all hover:-translate-y-0.5"
-            >
-              <i data-lucide="home" class="w-4.5 h-4.5"></i>
-              <span>زيارة الموقع</span>
-            </a>
+          <!-- قسم الإدارة الطبية -->
+          <div>
+            <p class="text-[10px] font-bold text-gray-400 mb-2 px-3 tracking-wider text-right uppercase">الإدارة الطبية</p>
+            <div class="space-y-1">
+              <a
+                href="{{ route('admin.doctors.index') }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.doctors') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+              >
+                <i data-lucide="user-cog" class="w-4.5 h-4.5"></i>
+                <span class="flex-1 text-right">الأطباء</span>
+              </a>
+              <a
+                href="{{ route('admin.departments.index') }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.departments') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+              >
+                <i data-lucide="hospital" class="w-4.5 h-4.5"></i>
+                <span class="flex-1 text-right">الأقسام الطبية</span>
+              </a>
+              <a
+                href="{{ route('admin.services.index') }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.services') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+              >
+                <i data-lucide="activity" class="w-4.5 h-4.5"></i>
+                <span class="flex-1 text-right">الخدمات</span>
+              </a>
+            </div>
           </div>
+
+          <!-- الخدمات والأسعار -->
+          <div>
+            <p class="text-[10px] font-bold text-gray-400 mb-2 px-3 tracking-wider text-right uppercase">الخدمات والأسعار</p>
+            <div class="space-y-1">
+              <a
+                href="{{ route('admin.packages.index') }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.packages') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+              >
+                <i data-lucide="package" class="w-4.5 h-4.5"></i>
+                <span class="flex-1 text-right">باقات الكشف</span>
+              </a>
+              <a
+                href="{{ route('admin.prices.index') }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.prices') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+              >
+                <i data-lucide="dollar-sign" class="w-4.5 h-4.5"></i>
+                <span class="flex-1 text-right">قائمة الأسعار</span>
+              </a>
+              <a
+                href="{{ route('admin.insurances.index') }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.insurances') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+              >
+                <i data-lucide="shield-check" class="w-4.5 h-4.5"></i>
+                <span class="flex-1 text-right">شركات التأمين</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- الإعلام والمحتوى -->
+          <div>
+            <p class="text-[10px] font-bold text-gray-400 mb-2 px-3 tracking-wider text-right uppercase">المحتوى والشهادات</p>
+            <div class="space-y-1">
+              <a
+                href="{{ route('admin.news.index') }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.news') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+              >
+                <i data-lucide="newspaper" class="w-4.5 h-4.5"></i>
+                <span class="flex-1 text-right">المقالات والأخبار</span>
+              </a>
+              <a
+                href="{{ route('admin.faqs.index') }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.faqs') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+              >
+                <i data-lucide="help-circle" class="w-4.5 h-4.5"></i>
+                <span class="flex-1 text-right">الأسئلة الشائعة</span>
+              </a>
+              <a
+                href="{{ route('admin.testimonials.index') }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.testimonials') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+              >
+                <i data-lucide="message-square" class="w-4.5 h-4.5"></i>
+                <span class="flex-1 text-right">آراء المرضى</span>
+              </a>
+              <a
+                href="{{ route('admin.partners.index') }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.partners') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+              >
+                <i data-lucide="handshake" class="w-4.5 h-4.5"></i>
+                <span class="flex-1 text-right">شركاء النجاح</span>
+              </a>
+              <a
+                href="{{ route('admin.certifications.index') }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.certifications') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+              >
+                <i data-lucide="award" class="w-4.5 h-4.5"></i>
+                <span class="flex-1 text-right">شهادات الاعتماد</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- إدارة النظام -->
+          <div>
+            <p class="text-[10px] font-bold text-gray-400 mb-2 px-3 tracking-wider text-right uppercase">إدارة النظام</p>
+            <div class="space-y-1">
+              @if(Auth::user()->hasRole('Super Admin'))
+                <a
+                  href="{{ route('admin.users.index') }}"
+                  class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.users') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                >
+                  <i data-lucide="users" class="w-4.5 h-4.5"></i>
+                  <span class="flex-1 text-right">المستخدمون</span>
+                </a>
+              @endif
+              <a
+                href="{{ route('admin.screens.index') }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.screens') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+              >
+                <i data-lucide="monitor" class="w-4.5 h-4.5"></i>
+                <span class="flex-1 text-right">أقسام العرض (Screens)</span>
+              </a>
+              @if(Auth::user()->hasRole('Super Admin'))
+                <a
+                  href="{{ route('admin.settings.index') }}"
+                  class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.settings') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                >
+                  <i data-lucide="settings" class="w-4.5 h-4.5"></i>
+                  <span class="flex-1 text-right">إعدادات الموقع</span>
+                </a>
+              @endif
+            </div>
+          </div>
+          
         </nav>
+
+        <!-- Divider -->
+        <div class="h-px bg-gray-100 my-2 mx-3"></div>
+
+        <div class="px-3 py-2 space-y-2">
+          <a
+            href="/"
+            class="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-l from-emerald-500 to-emerald-600 text-white rounded-xl text-sm font-bold hover:shadow-lg hover:shadow-emerald-500/20 transition-all hover:-translate-y-0.5"
+          >
+            <i data-lucide="home" class="w-4.5 h-4.5"></i>
+            <span>زيارة الموقع</span>
+          </a>
+        </div>
 
         <!-- Logout Panel -->
         <div class="absolute bottom-0 right-0 left-0 p-4 border-t border-gray-100 bg-white">

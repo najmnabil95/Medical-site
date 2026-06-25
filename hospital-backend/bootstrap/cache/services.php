@@ -26,7 +26,8 @@
     22 => 'Laravel\\Sanctum\\SanctumServiceProvider',
     23 => 'Carbon\\Laravel\\ServiceProvider',
     24 => 'Termwind\\Laravel\\TermwindServiceProvider',
-    25 => 'App\\Providers\\AppServiceProvider',
+    25 => 'Spatie\\Permission\\PermissionServiceProvider',
+    26 => 'App\\Providers\\AppServiceProvider',
   ),
   'eager' => 
   array (
@@ -43,7 +44,8 @@
     10 => 'Laravel\\Sanctum\\SanctumServiceProvider',
     11 => 'Carbon\\Laravel\\ServiceProvider',
     12 => 'Termwind\\Laravel\\TermwindServiceProvider',
-    13 => 'App\\Providers\\AppServiceProvider',
+    13 => 'Spatie\\Permission\\PermissionServiceProvider',
+    14 => 'App\\Providers\\AppServiceProvider',
   ),
   'deferred' => 
   array (
