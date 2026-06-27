@@ -1,15 +1,15 @@
 # Laravel
-/hospital-backend/.env
-/hospital-backend/vendor/
-/hospital-backend/node_modules/
-/hospital-backend/public/build/
-/hospital-backend/public/hot
-/hospital-backend/storage/*.key
-/hospital-backend/storage/framework/cache/
-/hospital-backend/storage/framework/sessions/
-/hospital-backend/storage/framework/views/
-/hospital-backend/storage/logs/
-/hospital-backend/storage/app/public/
+/.env
+/vendor/
+/node_modules/
+/public/build/
+/public/hot
+//storage/*.key
+//storage/framework/cache/
+//storage/framework/sessions/
+//storage/framework/views/
+//storage/logs/
+/storage/app/public/
 
 # OS
 .DS_Store
@@ -22,3 +22,4 @@ Thumbs.db
 *.ntvs*
 *.njsproj
 *.sln
+node_modules
