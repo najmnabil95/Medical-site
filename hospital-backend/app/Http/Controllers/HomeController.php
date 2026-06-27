@@ -78,6 +78,27 @@ class HomeController extends Controller
         ]);
 
         $validated['status'] = 'pending';
+
+        // Check for double booking conflict
+        if ($request->filled('doctor')) {
+            $conflictExists = Appointment::where('doctor', $request->doctor)
+                ->whereDate('date', $request->date)
+                ->where('time', $request->time)
+                ->where('status', '!=', 'cancelled')
+                ->exists();
+
+            if ($conflictExists) {
+                if ($request->wantsJson()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'عذراً، هذا الطبيب لديه حجز آخر في نفس التاريخ والوقت المحددين. يرجى اختيار وقت آخر.',
+                        'errors' => ['time' => ['هذا الوقت محجوز مسبقاً لدى هذا الطبيب.']]
+                    ], 422);
+                }
+                return back()->withInput()->withErrors(['time' => 'هذا الوقت محجوز مسبقاً لدى هذا الطبيب.']);
+            }
+        }
+
         $appointment = Appointment::create($validated);
 
         if ($request->wantsJson()) {
