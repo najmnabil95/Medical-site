@@ -61,15 +61,15 @@
           <div>
             <label class="block text-sm font-bold text-gray-700 mb-2">شعار المستشفى (Logo)</label>
             <div class="flex items-center gap-4 justify-start">
-              <div class="w-18 h-18 border border-gray-200 rounded-xl flex items-center justify-center overflow-hidden bg-gray-50 shrink-0">
+              <div id="logo-preview-container" class="w-18 h-18 border border-gray-200 rounded-xl flex items-center justify-center overflow-hidden bg-gray-50 shrink-0">
                 <?php if(!empty($settings->logo)): ?>
                   <?php if(str_starts_with($settings->logo, 'http') || str_starts_with($settings->logo, 'data:')): ?>
-                    <img src="<?php echo e($settings->logo); ?>" alt="Logo" class="w-full h-full object-cover" />
+                    <img id="logo-preview" src="<?php echo e($settings->logo); ?>" alt="Logo" class="w-full h-full object-cover" />
                   <?php else: ?>
                     <span class="text-3xl font-bold text-gray-400"><?php echo e($settings->logo); ?></span>
                   <?php endif; ?>
                 <?php else: ?>
-                  <i data-lucide="image" class="text-gray-300 w-8 h-8"></i>
+                  <i id="logo-preview-icon" data-lucide="image" class="text-gray-300 w-8 h-8"></i>
                 <?php endif; ?>
               </div>
               <div class="flex-1 space-y-2">
@@ -87,15 +87,15 @@
           <div>
             <label class="block text-sm font-bold text-gray-700 mb-2">أيقونة المتصفح (Favicon)</label>
             <div class="flex items-center gap-4 justify-start">
-              <div class="w-12 h-12 border border-gray-200 rounded-xl flex items-center justify-center overflow-hidden bg-gray-50 shrink-0">
+              <div id="favicon-preview-container" class="w-12 h-12 border border-gray-200 rounded-xl flex items-center justify-center overflow-hidden bg-gray-50 shrink-0">
                 <?php if(!empty($settings->favicon)): ?>
-                  <img src="<?php echo e($settings->favicon); ?>" alt="Favicon" class="w-full h-full object-cover" />
+                  <img id="favicon-preview" src="<?php echo e($settings->favicon); ?>" alt="Favicon" class="w-full h-full object-cover" />
                 <?php else: ?>
-                  <i data-lucide="image" class="text-gray-300 w-6 h-6"></i>
+                  <i id="favicon-preview-icon" data-lucide="image" class="text-gray-300 w-6 h-6"></i>
                 <?php endif; ?>
               </div>
               <div class="flex-1 space-y-2">
-                <input type="file" name="favicon" id="favicon-file-input" accept="image/*" class="hidden" />
+                <input type="file" name="favicon" id="favicon-file-input" accept="image/*" class="hidden" onchange="previewSelectedImage(event, 'favicon-preview')" />
                 <label for="favicon-file-input" class="inline-flex items-center gap-2 px-4 py-2 bg-primary-50 text-primary-600 rounded-xl text-sm font-bold hover:bg-primary-100 transition-all cursor-pointer">
                   <i data-lucide="upload" class="w-4 h-4"></i>
                   <span>رفع أيقونة جديدة</span>
@@ -153,6 +153,12 @@
               <input type="text" name="city" value="<?php echo e(old('city', $settings->city)); ?>" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" />
             </div>
           </div>
+
+          <div>
+            <label class="block text-sm font-bold text-gray-700 mb-2">رابط الخريطة الجغرافية (جوجل ماب Embed) - اختياري</label>
+            <input type="text" name="map_link" value="<?php echo e(old('map_link', $settings->map_link)); ?>" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" placeholder="https://www.google.com/maps/embed?pb=..." />
+            <p class="text-xs text-gray-400 mt-1">إذا لم تقم بوضع رابط مخصص، فسيقوم النظام بتوليد خريطة تلقائية بناءً على العنوان والمدينة أعلاه.</p>
+          </div>
         </div>
       </div>
 
@@ -205,4 +211,22 @@
   </form>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\laravel-hospital-website-development\hospital-backend\resources\views/admin/settings/index.blade.php ENDPATH**/ ?>
+<?php $__env->startSection('scripts'); ?>
+<script>
+  function previewSelectedImage(event, previewId) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const container = document.getElementById(previewId + '-container');
+        if (container) {
+          container.innerHTML = `<img id="${previewId}" src="${e.target.result}" alt="Preview" class="w-full h-full object-cover" />`;
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+</script>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\laravel-hospital-website-development\resources\views/admin/settings/index.blade.php ENDPATH**/ ?>

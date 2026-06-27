@@ -14,15 +14,13 @@ class RolesAndPermissionsSeeder extends Seeder
         // Reset cached roles and permissions
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // Create basic roles
-        $superAdminRole = Role::firstOrCreate(['name' => 'Super Admin']);
-        $managerRole = Role::firstOrCreate(['name' => 'Manager']);
-        $editorRole = Role::firstOrCreate(['name' => 'Editor']);
-        
-        // Assign 'Super Admin' to all existing users for now so no one is locked out
-        $users = User::all();
-        foreach ($users as $user) {
-            $user->assignRole($superAdminRole);
-        }
+        // Create official roles
+        Role::firstOrCreate(['name' => 'Super Admin']);
+        Role::firstOrCreate(['name' => 'Manager']);
+        Role::firstOrCreate(['name' => 'Doctor']);
+        Role::firstOrCreate(['name' => 'Nurse']);
+        Role::firstOrCreate(['name' => 'Reception']);
+        Role::firstOrCreate(['name' => 'Accountant']);
+        Role::firstOrCreate(['name' => 'Editor']);
     }
 }

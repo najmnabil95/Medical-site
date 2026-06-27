@@ -6,19 +6,23 @@
     $doctorsList = \App\Models\Doctor::where('active', true)->get();
 
     $roleLabels = [
-      'admin' => 'مدير النظام',
-      'doctor' => 'طبيب استشاري',
-      'nurse' => 'ممرض/ة',
-      'reception' => 'موظف استقبال',
-      'accountant' => 'محاسب',
+      'Super Admin' => 'مدير النظام (Super Admin)',
+      'Manager' => 'مدير عام',
+      'Doctor' => 'طبيب',
+      'Nurse' => 'ممرض/ممرضة',
+      'Reception' => 'موظف استقبال',
+      'Accountant' => 'محاسب',
+      'Editor' => 'محرر محتوى',
     ];
 
     $roleColors = [
-      'admin' => 'from-red-500 to-rose-600',
-      'doctor' => 'from-blue-500 to-indigo-600',
-      'nurse' => 'from-emerald-500 to-teal-600',
-      'reception' => 'from-amber-500 to-orange-600',
-      'accountant' => 'from-purple-500 to-violet-600',
+      'Super Admin' => 'from-red-500 to-rose-600',
+      'Manager' => 'from-blue-500 to-indigo-600',
+      'Doctor' => 'from-purple-500 to-violet-600',
+      'Nurse' => 'from-pink-500 to-rose-600',
+      'Reception' => 'from-cyan-500 to-teal-600',
+      'Accountant' => 'from-amber-500 to-orange-600',
+      'Editor' => 'from-emerald-500 to-teal-600',
     ];
   ?>
 
@@ -75,8 +79,9 @@
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="users-cards-grid">
     <?php $__empty_1 = true; $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
       <?php
-        $roleColor = $roleColors[$user->role] ?? 'from-gray-500 to-gray-700';
-        $roleLabel = $roleLabels[$user->role] ?? 'مستخدم';
+        $userRoleName = $user->roles->first()?->name ?? $user->role ?? 'مستخدم';
+        $roleColor = $roleColors[$userRoleName] ?? 'from-gray-500 to-gray-700';
+        $roleLabel = $roleLabels[$userRoleName] ?? $userRoleName;
       ?>
       <div
         class="user-card bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl transition-all <?php echo e(!$user->active ? 'opacity-60' : ''); ?>"
@@ -106,10 +111,10 @@
               <?php echo method_field('PUT'); ?>
               <input type="hidden" name="name" value="<?php echo e($user->name); ?>" />
               <input type="hidden" name="username" value="<?php echo e($user->username); ?>" />
-              <input type="hidden" name="role" value="<?php echo e($user->role); ?>" />
+              <input type="hidden" name="role" value="<?php echo e($userRoleName); ?>" />
               <input type="hidden" name="email" value="<?php echo e($user->email); ?>" />
               <input type="hidden" name="phone" value="<?php echo e($user->phone); ?>" />
-              <?php if($user->role !== 'admin'): ?>
+              <?php if($userRoleName !== 'Super Admin' && $user->username !== 'admin' && Auth::user()->id !== $user->id): ?>
                 <?php if($user->active): ?>
                   <button type="submit" class="text-green-500 hover:scale-110 transition-transform cursor-pointer">
                     <i data-lucide="toggle-right" class="w-8 h-8"></i>
@@ -120,7 +125,7 @@
                   </button>
                 <?php endif; ?>
               <?php else: ?>
-                <span class="text-red-500 opacity-50" title="لا يمكن إيقاف حساب مدير النظام">
+                <span class="text-red-500 opacity-50" title="<?php echo e(Auth::user()->id === $user->id ? 'لا يمكنك تعديل حسابك الشخصي' : 'لا يمكن إيقاف حساب مدير النظام'); ?>">
                   <i data-lucide="toggle-right" class="w-8 h-8"></i>
                 </span>
               <?php endif; ?>
@@ -148,15 +153,26 @@
 
           <!-- Card Actions (Edit, Delete) -->
           <div class="flex items-center gap-2 pt-2 border-t border-gray-50">
-            <button
-              onclick="openEditUserModal(<?php echo e($user->id); ?>, '<?php echo e(addslashes($user->name)); ?>', '<?php echo e(addslashes($user->username)); ?>', '<?php echo e($user->role); ?>', '<?php echo e($user->email); ?>', '<?php echo e($user->phone); ?>', <?php echo e($user->active ? 'true' : 'false'); ?>, <?php echo e(json_encode($user->assigned_departments ?? [])); ?>, <?php echo e(json_encode($user->assigned_doctors ?? [])); ?>)"
-              class="flex-1 py-2 bg-blue-50 text-blue-600 rounded-lg text-xs font-bold hover:bg-blue-100 transition-colors flex items-center justify-center gap-1 cursor-pointer"
-            >
-              <i data-lucide="edit" class="w-3.5 h-3.5"></i>
-              <span>تعديل</span>
-            </button>
+            <?php if(($userRoleName !== 'Super Admin' && $user->username !== 'admin' || Auth::user()->hasRole('Super Admin')) && Auth::user()->id !== $user->id): ?>
+              <button
+                onclick="openEditUserModal(<?php echo e($user->id); ?>, '<?php echo e(addslashes($user->name)); ?>', '<?php echo e(addslashes($user->username)); ?>', '<?php echo e($userRoleName); ?>', '<?php echo e($user->email); ?>', '<?php echo e($user->phone); ?>', <?php echo e($user->active ? 'true' : 'false'); ?>, <?php echo e(json_encode($user->assigned_departments ?? [])); ?>, <?php echo e(json_encode($user->assigned_doctors ?? [])); ?>)"
+                class="flex-1 py-2 bg-blue-50 text-blue-600 rounded-lg text-xs font-bold hover:bg-blue-100 transition-colors flex items-center justify-center gap-1 cursor-pointer"
+              >
+                <i data-lucide="edit" class="w-3.5 h-3.5"></i>
+                <span>تعديل</span>
+              </button>
+            <?php else: ?>
+              <button
+                disabled
+                class="flex-1 py-2 bg-gray-100 text-gray-400 rounded-lg text-xs font-bold cursor-not-allowed flex items-center justify-center gap-1"
+                title="<?php echo e(Auth::user()->id === $user->id ? 'لا يمكنك تعديل حسابك الشخصي' : 'لا يمكنك تعديل حساب مدير النظام'); ?>"
+              >
+                <i data-lucide="edit" class="w-3.5 h-3.5"></i>
+                <span>تعديل</span>
+              </button>
+            <?php endif; ?>
 
-            <?php if($user->role !== 'admin'): ?>
+            <?php if($userRoleName !== 'Super Admin' && $user->username !== 'admin' && Auth::user()->id !== $user->id): ?>
               <form action="<?php echo e(route('admin.users.destroy', $user->id)); ?>" method="POST" class="flex-1" onsubmit="return confirm('هل أنت متأكد من رغبتك في حذف هذا المستخدم نهائياً؟');">
                 <?php echo csrf_field(); ?>
                 <?php echo method_field('DELETE'); ?>
@@ -172,7 +188,7 @@
               <button
                 disabled
                 class="flex-1 py-2 bg-gray-100 text-gray-400 rounded-lg text-xs font-bold cursor-not-allowed flex items-center justify-center gap-1"
-                title="لا يمكن حذف حساب مدير النظام"
+                title="<?php echo e(Auth::user()->id === $user->id ? 'لا يمكنك حذف حسابك الشخصي' : 'لا يمكن حذف حساب مدير النظام'); ?>"
               >
                 <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                 <span>حذف</span>
@@ -224,8 +240,8 @@
         <div>
           <label class="block text-xs font-bold text-gray-500 mb-2">الدور</label>
           <select name="role" id="create-user-role-select" onchange="toggleRoleAssignedFields('create')" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500">
-            <?php $__currentLoopData = $roleLabels; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role => $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-              <option value="<?php echo e($role); ?>"><?php echo e($label); ?></option>
+            <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $roleObj): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <option value="<?php echo e($roleObj->name); ?>"><?php echo e($roleLabels[$roleObj->name] ?? $roleObj->name); ?></option>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
           </select>
         </div>
@@ -327,8 +343,8 @@
         <div>
           <label class="block text-xs font-bold text-gray-500 mb-2">الدور</label>
           <select name="role" id="edit-user-role-select" onchange="toggleRoleAssignedFields('edit')" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none">
-            <?php $__currentLoopData = $roleLabels; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role => $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-              <option value="<?php echo e($role); ?>"><?php echo e($label); ?></option>
+            <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $roleObj): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <option value="<?php echo e($roleObj->name); ?>"><?php echo e($roleLabels[$roleObj->name] ?? $roleObj->name); ?></option>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
           </select>
         </div>
@@ -417,14 +433,15 @@
     function toggleRoleAssignedFields(type) {
       const roleSelect = document.getElementById(type + '-user-role-select');
       const role = roleSelect.value;
+      const roleLower = role ? role.toLowerCase() : '';
 
       const docFields = document.getElementById(type + '-doctor-fields');
       const nurseFields = document.getElementById(type + '-nurse-fields');
 
-      if (role === 'doctor') {
+      if (roleLower === 'doctor') {
         docFields.classList.remove('hidden');
         nurseFields.classList.add('hidden');
-      } else if (role === 'nurse') {
+      } else if (roleLower === 'nurse') {
         docFields.classList.add('hidden');
         nurseFields.classList.remove('hidden');
       } else {
@@ -461,27 +478,36 @@
       roleSelect.value = role;
 
       // Lock parameters for admin role editing safety
-      if (role === 'admin' || username === 'admin') {
-        roleSelect.disabled = true;
+      if (role === 'Super Admin' || username === 'admin') {
+        document.getElementById('edit-user-name').disabled = true;
+        document.getElementById('edit-user-username').disabled = true;
+        document.getElementById('edit-user-email').disabled = true;
         document.getElementById('edit-user-phone').disabled = true;
+        document.getElementById('edit-user-active').disabled = true;
+        roleSelect.disabled = true;
       } else {
-        roleSelect.disabled = false;
+        document.getElementById('edit-user-name').disabled = false;
+        document.getElementById('edit-user-username').disabled = false;
+        document.getElementById('edit-user-email').disabled = false;
         document.getElementById('edit-user-phone').disabled = false;
+        document.getElementById('edit-user-active').disabled = false;
+        roleSelect.disabled = false;
       }
 
       // Reset and fill Doctor department option
       const docDeptSelect = document.getElementById('edit-doctor-dept-select');
-      docDeptSelect.value = (role === 'doctor' && assignedDepts.length > 0) ? assignedDepts[0] : '';
+      const roleLower = role ? role.toLowerCase() : '';
+      docDeptSelect.value = (roleLower === 'doctor' && assignedDepts.length > 0) ? assignedDepts[0] : '';
 
       // Reset and fill Nurse checkbox arrays
       const nurseDeptCbs = document.querySelectorAll('.edit-nurse-dept-cb');
       nurseDeptCbs.forEach(cb => {
-        cb.checked = (role === 'nurse' && assignedDepts.includes(cb.value));
+        cb.checked = (roleLower === 'nurse' && assignedDepts.includes(cb.value));
       });
 
       const nurseDocCbs = document.querySelectorAll('.edit-nurse-doc-cb');
       nurseDocCbs.forEach(cb => {
-        cb.checked = (role === 'nurse' && assignedDocs.includes(cb.value));
+        cb.checked = (roleLower === 'nurse' && assignedDocs.includes(cb.value));
       });
 
       toggleRoleAssignedFields('edit');
@@ -494,4 +520,4 @@
   </script>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\laravel-hospital-website-development\hospital-backend\resources\views/admin/users/index.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\laravel-hospital-website-development\resources\views/admin/users/index.blade.php ENDPATH**/ ?>

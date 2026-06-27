@@ -27,6 +27,7 @@ class ScreenController extends Controller
         $validated['enabled'] = $request->has('enabled');
 
         Screen::create($validated);
+        $this->reorderAll();
 
         return redirect()->route('admin.screens.index')->with('success', 'تم إضافة قسم العرض بنجاح.');
     }
@@ -54,7 +55,52 @@ class ScreenController extends Controller
     {
         $screen = Screen::findOrFail($id);
         $screen->delete();
+        $this->reorderAll();
 
         return redirect()->route('admin.screens.index')->with('success', 'تم حذف قسم العرض بنجاح.');
+    }
+
+    public function moveUp($id)
+    {
+        $this->reorderAll();
+        
+        $screen = Screen::findOrFail($id);
+        if ($screen->order > 1) {
+            $previousScreen = Screen::where('order', $screen->order - 1)->first();
+            if ($previousScreen) {
+                $previousScreen->order = $screen->order;
+                $previousScreen->save();
+            }
+            $screen->order = $screen->order - 1;
+            $screen->save();
+        }
+        return redirect()->route('admin.screens.index')->with('success', 'تم تعديل ترتيب القسم للأعلى بنجاح.');
+    }
+
+    public function moveDown($id)
+    {
+        $this->reorderAll();
+        
+        $screen = Screen::findOrFail($id);
+        $totalScreens = Screen::count();
+        if ($screen->order < $totalScreens) {
+            $nextScreen = Screen::where('order', $screen->order + 1)->first();
+            if ($nextScreen) {
+                $nextScreen->order = $screen->order;
+                $nextScreen->save();
+            }
+            $screen->order = $screen->order + 1;
+            $screen->save();
+        }
+        return redirect()->route('admin.screens.index')->with('success', 'تم تعديل ترتيب القسم للأسفل بنجاح.');
+    }
+
+    private function reorderAll()
+    {
+        $screens = Screen::orderBy('order', 'asc')->get();
+        foreach ($screens as $index => $screen) {
+            $screen->order = $index + 1;
+            $screen->save();
+        }
     }
 }

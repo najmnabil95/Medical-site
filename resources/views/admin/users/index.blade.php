@@ -10,12 +10,20 @@
     $roleLabels = [
       'Super Admin' => 'مدير النظام (Super Admin)',
       'Manager' => 'مدير عام',
+      'Doctor' => 'طبيب',
+      'Nurse' => 'ممرض/ممرضة',
+      'Reception' => 'موظف استقبال',
+      'Accountant' => 'محاسب',
       'Editor' => 'محرر محتوى',
     ];
 
     $roleColors = [
       'Super Admin' => 'from-red-500 to-rose-600',
       'Manager' => 'from-blue-500 to-indigo-600',
+      'Doctor' => 'from-purple-500 to-violet-600',
+      'Nurse' => 'from-pink-500 to-rose-600',
+      'Reception' => 'from-cyan-500 to-teal-600',
+      'Accountant' => 'from-amber-500 to-orange-600',
       'Editor' => 'from-emerald-500 to-teal-600',
     ];
   @endphp
@@ -106,7 +114,7 @@
               <input type="hidden" name="role" value="{{ $userRoleName }}" />
               <input type="hidden" name="email" value="{{ $user->email }}" />
               <input type="hidden" name="phone" value="{{ $user->phone }}" />
-              @if($userRoleName !== 'Super Admin' && $user->username !== 'admin')
+              @if($userRoleName !== 'Super Admin' && $user->username !== 'admin' && Auth::user()->id !== $user->id)
                 @if($user->active)
                   <button type="submit" class="text-green-500 hover:scale-110 transition-transform cursor-pointer">
                     <i data-lucide="toggle-right" class="w-8 h-8"></i>
@@ -117,7 +125,7 @@
                   </button>
                 @endif
               @else
-                <span class="text-red-500 opacity-50" title="لا يمكن إيقاف حساب مدير النظام">
+                <span class="text-red-500 opacity-50" title="{{ Auth::user()->id === $user->id ? 'لا يمكنك تعديل حسابك الشخصي' : 'لا يمكن إيقاف حساب مدير النظام' }}">
                   <i data-lucide="toggle-right" class="w-8 h-8"></i>
                 </span>
               @endif
@@ -144,15 +152,26 @@
 
           <!-- Card Actions (Edit, Delete) -->
           <div class="flex items-center gap-2 pt-2 border-t border-gray-50">
-            <button
-              onclick="openEditUserModal({{ $user->id }}, '{{ addslashes($user->name) }}', '{{ addslashes($user->username) }}', '{{ $userRoleName }}', '{{ $user->email }}', '{{ $user->phone }}', {{ $user->active ? 'true' : 'false' }}, {{ json_encode($user->assigned_departments ?? []) }}, {{ json_encode($user->assigned_doctors ?? []) }})"
-              class="flex-1 py-2 bg-blue-50 text-blue-600 rounded-lg text-xs font-bold hover:bg-blue-100 transition-colors flex items-center justify-center gap-1 cursor-pointer"
-            >
-              <i data-lucide="edit" class="w-3.5 h-3.5"></i>
-              <span>تعديل</span>
-            </button>
+            @if(($userRoleName !== 'Super Admin' && $user->username !== 'admin' || Auth::user()->hasRole('Super Admin')) && Auth::user()->id !== $user->id)
+              <button
+                onclick="openEditUserModal({{ $user->id }}, '{{ addslashes($user->name) }}', '{{ addslashes($user->username) }}', '{{ $userRoleName }}', '{{ $user->email }}', '{{ $user->phone }}', {{ $user->active ? 'true' : 'false' }}, {{ json_encode($user->assigned_departments ?? []) }}, {{ json_encode($user->assigned_doctors ?? []) }})"
+                class="flex-1 py-2 bg-blue-50 text-blue-600 rounded-lg text-xs font-bold hover:bg-blue-100 transition-colors flex items-center justify-center gap-1 cursor-pointer"
+              >
+                <i data-lucide="edit" class="w-3.5 h-3.5"></i>
+                <span>تعديل</span>
+              </button>
+            @else
+              <button
+                disabled
+                class="flex-1 py-2 bg-gray-100 text-gray-400 rounded-lg text-xs font-bold cursor-not-allowed flex items-center justify-center gap-1"
+                title="{{ Auth::user()->id === $user->id ? 'لا يمكنك تعديل حسابك الشخصي' : 'لا يمكنك تعديل حساب مدير النظام' }}"
+              >
+                <i data-lucide="edit" class="w-3.5 h-3.5"></i>
+                <span>تعديل</span>
+              </button>
+            @endif
 
-            @if($userRoleName !== 'Super Admin' && $user->username !== 'admin')
+            @if($userRoleName !== 'Super Admin' && $user->username !== 'admin' && Auth::user()->id !== $user->id)
               <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="flex-1" onsubmit="return confirm('هل أنت متأكد من رغبتك في حذف هذا المستخدم نهائياً؟');">
                 @csrf
                 @method('DELETE')
@@ -168,7 +187,7 @@
               <button
                 disabled
                 class="flex-1 py-2 bg-gray-100 text-gray-400 rounded-lg text-xs font-bold cursor-not-allowed flex items-center justify-center gap-1"
-                title="لا يمكن حذف حساب مدير النظام"
+                title="{{ Auth::user()->id === $user->id ? 'لا يمكنك حذف حسابك الشخصي' : 'لا يمكن حذف حساب مدير النظام' }}"
               >
                 <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                 <span>حذف</span>
@@ -413,14 +432,15 @@
     function toggleRoleAssignedFields(type) {
       const roleSelect = document.getElementById(type + '-user-role-select');
       const role = roleSelect.value;
+      const roleLower = role ? role.toLowerCase() : '';
 
       const docFields = document.getElementById(type + '-doctor-fields');
       const nurseFields = document.getElementById(type + '-nurse-fields');
 
-      if (role === 'doctor') {
+      if (roleLower === 'doctor') {
         docFields.classList.remove('hidden');
         nurseFields.classList.add('hidden');
-      } else if (role === 'nurse') {
+      } else if (roleLower === 'nurse') {
         docFields.classList.add('hidden');
         nurseFields.classList.remove('hidden');
       } else {
@@ -458,26 +478,35 @@
 
       // Lock parameters for admin role editing safety
       if (role === 'Super Admin' || username === 'admin') {
-        roleSelect.disabled = true;
+        document.getElementById('edit-user-name').disabled = true;
+        document.getElementById('edit-user-username').disabled = true;
+        document.getElementById('edit-user-email').disabled = true;
         document.getElementById('edit-user-phone').disabled = true;
+        document.getElementById('edit-user-active').disabled = true;
+        roleSelect.disabled = true;
       } else {
-        roleSelect.disabled = false;
+        document.getElementById('edit-user-name').disabled = false;
+        document.getElementById('edit-user-username').disabled = false;
+        document.getElementById('edit-user-email').disabled = false;
         document.getElementById('edit-user-phone').disabled = false;
+        document.getElementById('edit-user-active').disabled = false;
+        roleSelect.disabled = false;
       }
 
       // Reset and fill Doctor department option
       const docDeptSelect = document.getElementById('edit-doctor-dept-select');
-      docDeptSelect.value = (role === 'doctor' && assignedDepts.length > 0) ? assignedDepts[0] : '';
+      const roleLower = role ? role.toLowerCase() : '';
+      docDeptSelect.value = (roleLower === 'doctor' && assignedDepts.length > 0) ? assignedDepts[0] : '';
 
       // Reset and fill Nurse checkbox arrays
       const nurseDeptCbs = document.querySelectorAll('.edit-nurse-dept-cb');
       nurseDeptCbs.forEach(cb => {
-        cb.checked = (role === 'nurse' && assignedDepts.includes(cb.value));
+        cb.checked = (roleLower === 'nurse' && assignedDepts.includes(cb.value));
       });
 
       const nurseDocCbs = document.querySelectorAll('.edit-nurse-doc-cb');
       nurseDocCbs.forEach(cb => {
-        cb.checked = (role === 'nurse' && assignedDocs.includes(cb.value));
+        cb.checked = (roleLower === 'nurse' && assignedDocs.includes(cb.value));
       });
 
       toggleRoleAssignedFields('edit');

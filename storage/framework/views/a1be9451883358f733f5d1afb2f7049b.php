@@ -210,7 +210,7 @@
           <div>
             <p class="text-[10px] font-bold text-gray-400 mb-2 px-3 tracking-wider text-right uppercase">إدارة النظام</p>
             <div class="space-y-1">
-              <?php if(Auth::user()->hasRole('Super Admin')): ?>
+              <?php if(Auth::user()->hasRole('Super Admin') || Auth::user()->hasRole('Manager')): ?>
                 <a
                   href="<?php echo e(route('admin.users.index')); ?>"
                   class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 <?php echo e(str_starts_with(Route::currentRouteName(), 'admin.users') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600'); ?>"

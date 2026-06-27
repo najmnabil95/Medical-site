@@ -70,12 +70,26 @@
         <tbody class="divide-y divide-gray-50 text-sm">
           @forelse($screens as $screen)
             <tr
-              class="screen-row hover:bg-gray-50 transition-colors {{ !$screen.enabled ? 'opacity-60 bg-gray-50/40' : '' }}"
+              class="screen-row hover:bg-gray-50 transition-colors {{ !$screen->enabled ? 'opacity-60 bg-gray-50/40' : '' }}"
               data-name="{{ $screen->name }}"
               data-component="{{ $screen->component }}"
             >
               <td class="p-4 text-center font-bold text-primary-700 font-mono tabular-nums">
-                {{ $screen->order }}
+                <div class="flex items-center justify-center gap-1.5">
+                  <form action="{{ route('admin.screens.up', $screen->id) }}" method="POST" class="inline">
+                    @csrf
+                    <button type="submit" class="p-1 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-all cursor-pointer" title="نقل للأعلى">
+                      <i data-lucide="chevron-up" class="w-4 h-4"></i>
+                    </button>
+                  </form>
+                  <span class="w-6 text-center text-sm font-bold text-gray-700">{{ $screen->order }}</span>
+                  <form action="{{ route('admin.screens.down', $screen->id) }}" method="POST" class="inline">
+                    @csrf
+                    <button type="submit" class="p-1 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-all cursor-pointer" title="نقل للأسفل">
+                      <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </button>
+                  </form>
+                </div>
               </td>
               <td class="p-4 font-bold text-gray-800">{{ $screen->name }}</td>
               <td class="p-4 text-gray-500 font-mono">{{ $screen->component }}</td>

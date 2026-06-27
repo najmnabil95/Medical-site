@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('username')->unique();
             $table->string('password');
-            $table->enum('role', ['admin', 'doctor', 'nurse', 'reception', 'accountant'])->default('admin');
+            $table->string('role')->default('Super Admin');
             $table->string('name');
             $table->string('email')->nullable();
             $table->string('phone')->nullable();

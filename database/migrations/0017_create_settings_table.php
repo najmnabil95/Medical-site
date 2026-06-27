@@ -28,6 +28,7 @@ return new class extends Migration
             $table->longText('logo')->nullable();
             $table->longText('favicon')->nullable();
             $table->string('description')->nullable();
+            $table->text('map_link')->nullable();
         });
     }
 

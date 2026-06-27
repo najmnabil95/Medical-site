@@ -23,14 +23,32 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        User::create(['username' => 'admin', 'password' => Hash::make('admin123'), 'role' => 'admin', 'name' => 'مدير النظام', 'email' => 'admin@alshifa-hospital.com', 'phone' => '+966 50 123 4567', 'active' => true]);
-        User::create(['username' => 'ahmed.rashed', 'password' => Hash::make('doctor123'), 'role' => 'doctor', 'name' => 'د. أحمد الراشد', 'email' => 'ahmed.rashed@alshifa-hospital.com', 'phone' => '+966 50 111 2222', 'active' => true, 'assigned_departments' => ['أمراض القلب']]);
-        User::create(['username' => 'sara.mansour', 'password' => Hash::make('doctor123'), 'role' => 'doctor', 'name' => 'د. سارة المنصور', 'email' => 'sara.mansour@alshifa-hospital.com', 'phone' => '+966 50 222 3333', 'active' => true, 'assigned_departments' => ['طب الأطفال']]);
-        User::create(['username' => 'khalid.omari', 'password' => Hash::make('doctor123'), 'role' => 'doctor', 'name' => 'د. خالد العمري', 'email' => 'khalid.omari@alshifa-hospital.com', 'phone' => '+966 50 333 4444', 'active' => true, 'assigned_departments' => ['جراحة المخ والأعصاب']]);
-        User::create(['username' => 'nurse.fatima', 'password' => Hash::make('nurse123'), 'role' => 'nurse', 'name' => 'فاطمة الزهراء', 'email' => 'fatima@alshifa-hospital.com', 'phone' => '+966 50 444 5555', 'active' => true, 'assigned_departments' => ['أمراض القلب', 'طب الأطفال'], 'assigned_doctors' => ['د. أحمد الراشد', 'د. سارة المنصور']]);
-        User::create(['username' => 'nurse.mohammed', 'password' => Hash::make('nurse123'), 'role' => 'nurse', 'name' => 'محمد السعيد', 'email' => 'mohammed@alshifa-hospital.com', 'phone' => '+966 50 555 6666', 'active' => true, 'assigned_departments' => ['جراحة المخ والأعصاب'], 'assigned_doctors' => ['د. خالد العمري']]);
-        User::create(['username' => 'reception.noura', 'password' => Hash::make('reception123'), 'role' => 'reception', 'name' => 'نورة القحطاني', 'email' => 'noura@alshifa-hospital.com', 'phone' => '+966 50 666 7777', 'active' => true]);
-        User::create(['username' => 'accountant.fahad', 'password' => Hash::make('accountant123'), 'role' => 'accountant', 'name' => 'فهد العتيبي', 'email' => 'fahad@alshifa-hospital.com', 'phone' => '+966 50 777 8888', 'active' => true]);
+        // Seed official roles and permissions first
+        $this->call(RolesAndPermissionsSeeder::class);
+
+        $admin = User::create(['username' => 'admin', 'password' => Hash::make('admin123'), 'role' => 'Super Admin', 'name' => 'مدير النظام', 'email' => 'admin@alshifa-hospital.com', 'phone' => '+966 50 123 4567', 'active' => true]);
+        $admin->assignRole('Super Admin');
+
+        $doc1 = User::create(['username' => 'ahmed.rashed', 'password' => Hash::make('doctor123'), 'role' => 'Doctor', 'name' => 'د. أحمد الراشد', 'email' => 'ahmed.rashed@alshifa-hospital.com', 'phone' => '+966 50 111 2222', 'active' => true, 'assigned_departments' => ['أمراض القلب']]);
+        $doc1->assignRole('Doctor');
+
+        $doc2 = User::create(['username' => 'sara.mansour', 'password' => Hash::make('doctor123'), 'role' => 'Doctor', 'name' => 'د. سارة المنصور', 'email' => 'sara.mansour@alshifa-hospital.com', 'phone' => '+966 50 222 3333', 'active' => true, 'assigned_departments' => ['طب الأطفال']]);
+        $doc2->assignRole('Doctor');
+
+        $doc3 = User::create(['username' => 'khalid.omari', 'password' => Hash::make('doctor123'), 'role' => 'Doctor', 'name' => 'د. خالد العمري', 'email' => 'khalid.omari@alshifa-hospital.com', 'phone' => '+966 50 333 4444', 'active' => true, 'assigned_departments' => ['جراحة المخ والأعصاب']]);
+        $doc3->assignRole('Doctor');
+
+        $nurse1 = User::create(['username' => 'nurse.fatima', 'password' => Hash::make('nurse123'), 'role' => 'Nurse', 'name' => 'فاطمة الزهراء', 'email' => 'fatima@alshifa-hospital.com', 'phone' => '+966 50 444 5555', 'active' => true, 'assigned_departments' => ['أمراض القلب', 'طب الأطفال'], 'assigned_doctors' => ['د. أحمد الراشد', 'د. سارة المنصور']]);
+        $nurse1->assignRole('Nurse');
+
+        $nurse2 = User::create(['username' => 'nurse.mohammed', 'password' => Hash::make('nurse123'), 'role' => 'Nurse', 'name' => 'محمد السعيد', 'email' => 'mohammed@alshifa-hospital.com', 'phone' => '+966 50 555 6666', 'active' => true, 'assigned_departments' => ['جراحة المخ والأعصاب'], 'assigned_doctors' => ['د. خالد العمري']]);
+        $nurse2->assignRole('Nurse');
+
+        $reception = User::create(['username' => 'reception.noura', 'password' => Hash::make('reception123'), 'role' => 'Reception', 'name' => 'نورة القحطاني', 'email' => 'noura@alshifa-hospital.com', 'phone' => '+966 50 666 7777', 'active' => true]);
+        $reception->assignRole('Reception');
+
+        $accountant = User::create(['username' => 'accountant.fahad', 'password' => Hash::make('accountant123'), 'role' => 'Accountant', 'name' => 'فهد العتيبي', 'email' => 'fahad@alshifa-hospital.com', 'phone' => '+966 50 777 8888', 'active' => true]);
+        $accountant->assignRole('Accountant');
 
         Department::create(['icon' => 'Heart', 'name' => 'أمراض القلب', 'desc' => 'تشخيص وعلاج أمراض القلب والأوعية الدموية بأحدث التقنيات وقسطرة القلب', 'color' => 'from-red-500 to-rose-600', 'active' => true]);
         Department::create(['icon' => 'Brain', 'name' => 'جراحة المخ والأعصاب', 'desc' => 'علاج أمراض الدماغ والجهاز العصبي المركزي والطرفي بدقة متناهية', 'color' => 'from-purple-500 to-violet-600', 'active' => true]);

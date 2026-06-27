@@ -43,17 +43,18 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
+        $currentUser = auth()->user();
 
-        // Protect admin account from critical modifications
+        // 1. Prevent users from editing their own accounts
+        if ($currentUser->id === $user->id) {
+            return back()->with('error', 'لا يمكنك تعديل حسابك الشخصي من هنا.');
+        }
+
+        // 2. Protect Super Admin account from modifications
         if ($user->hasRole('Super Admin') || $user->username === 'admin') {
-            if ($request->has('active') && !$request->boolean('active')) {
-                return back()->with('error', 'لا يمكن إيقاف حساب مدير النظام.');
-            }
-            if ($request->filled('phone') && $request->input('phone') !== $user->phone) {
-                return back()->with('error', 'لا يمكن تغيير رقم هاتف مدير النظام.');
-            }
-            if ($request->filled('role') && $request->input('role') !== 'Super Admin') {
-                return back()->with('error', 'لا يمكن تغيير صلاحيات مدير النظام.');
+            // Only another Super Admin can edit a Super Admin account
+            if (!$currentUser->hasRole('Super Admin')) {
+                return back()->with('error', 'لا يمكنك تعديل بيانات مدير النظام.');
             }
         }
 
@@ -86,6 +87,12 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
+        $currentUser = auth()->user();
+
+        // Prevent users from deleting their own accounts
+        if ($currentUser->id === $user->id) {
+            return redirect()->route('admin.users.index')->with('error', 'لا يمكنك حذف حسابك الشخصي.');
+        }
         
         if ($user->hasRole('Super Admin') || $user->username === 'admin') {
             return redirect()->route('admin.users.index')->with('error', 'لا يمكن حذف حساب مدير النظام.');

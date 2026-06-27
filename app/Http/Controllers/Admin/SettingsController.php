@@ -34,6 +34,7 @@ class SettingsController extends Controller
             'linkedin' => 'nullable|string|max:500',
             'snapchat' => 'nullable|string|max:500',
             'description' => 'nullable|string|max:1000',
+            'map_link' => 'nullable|string|max:1000',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
             'favicon' => 'nullable|image|mimes:jpeg,png,jpg,gif,ico,svg,webp|max:2048',
         ]);
@@ -46,22 +47,28 @@ class SettingsController extends Controller
         // Handle file uploads
         if ($request->hasFile('logo')) {
             // Delete old logo if exists
-            if ($settings->logo && str_contains($settings->logo, 'storage/uploads')) {
-                $oldPath = str_replace(asset('storage/'), '', $settings->logo);
+            if ($settings->logo && (str_contains($settings->logo, 'storage/uploads') || str_contains($settings->logo, 'uploads/'))) {
+                $rawLogo = $settings->getRawOriginal('logo') ?: $settings->logo;
+                $oldPath = str_replace(asset('storage/'), '', $rawLogo);
+                $oldPath = str_replace('storage/', '', $oldPath);
+                $oldPath = ltrim($oldPath, '/');
                 Storage::disk('public')->delete($oldPath);
             }
             $logoPath = $request->file('logo')->store('uploads', 'public');
-            $validated['logo'] = asset('storage/' . $logoPath);
+            $validated['logo'] = 'storage/' . $logoPath;
         }
 
         if ($request->hasFile('favicon')) {
             // Delete old favicon if exists
-            if ($settings->favicon && str_contains($settings->favicon, 'storage/uploads')) {
-                $oldPath = str_replace(asset('storage/'), '', $settings->favicon);
+            if ($settings->favicon && (str_contains($settings->favicon, 'storage/uploads') || str_contains($settings->favicon, 'uploads/'))) {
+                $rawFavicon = $settings->getRawOriginal('favicon') ?: $settings->favicon;
+                $oldPath = str_replace(asset('storage/'), '', $rawFavicon);
+                $oldPath = str_replace('storage/', '', $oldPath);
+                $oldPath = ltrim($oldPath, '/');
                 Storage::disk('public')->delete($oldPath);
             }
             $faviconPath = $request->file('favicon')->store('uploads', 'public');
-            $validated['favicon'] = asset('storage/' . $faviconPath);
+            $validated['favicon'] = 'storage/' . $faviconPath;
         }
 
         $settings->fill($validated);
