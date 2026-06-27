@@ -172,7 +172,7 @@
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="block text-xs font-bold text-gray-500 mb-2">اسم المكون البرمجي (Blade Component)</label>
-            <input type="text" name="component" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500 font-mono" placeholder="home.Services" />
+            <input type="text" name="component" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500 font-mono" placeholder="Hero" />
           </div>
           <div>
             <label class="block text-xs font-bold text-gray-500 mb-2">الأيقونة</label>

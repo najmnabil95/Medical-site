@@ -26,41 +26,41 @@ class DatabaseSeeder extends Seeder
         // Seed official roles and permissions first
         $this->call(RolesAndPermissionsSeeder::class);
 
-        $admin = User::create(['username' => 'admin', 'password' => Hash::make('admin123'), 'role' => 'Super Admin', 'name' => 'مدير النظام', 'email' => 'admin@alshifa-hospital.com', 'phone' => '+966 50 123 4567', 'active' => true]);
+        $admin = $this->firstOrCreateUser('admin', 'admin123', 'Super Admin', 'مدير النظام', 'admin@alshifa-hospital.com', '+966 50 123 4567');
         $admin->assignRole('Super Admin');
 
-        $doc1 = User::create(['username' => 'ahmed.rashed', 'password' => Hash::make('doctor123'), 'role' => 'Doctor', 'name' => 'د. أحمد الراشد', 'email' => 'ahmed.rashed@alshifa-hospital.com', 'phone' => '+966 50 111 2222', 'active' => true, 'assigned_departments' => ['أمراض القلب']]);
+        $doc1 = $this->firstOrCreateUser('ahmed.rashed', 'doctor123', 'Doctor', 'د. أحمد الراشد', 'ahmed.rashed@alshifa-hospital.com', '+966 50 111 2222', ['أمراض القلب']);
         $doc1->assignRole('Doctor');
 
-        $doc2 = User::create(['username' => 'sara.mansour', 'password' => Hash::make('doctor123'), 'role' => 'Doctor', 'name' => 'د. سارة المنصور', 'email' => 'sara.mansour@alshifa-hospital.com', 'phone' => '+966 50 222 3333', 'active' => true, 'assigned_departments' => ['طب الأطفال']]);
+        $doc2 = $this->firstOrCreateUser('sara.mansour', 'doctor123', 'Doctor', 'د. سارة المنصور', 'sara.mansour@alshifa-hospital.com', '+966 50 222 3333', ['طب الأطفال']);
         $doc2->assignRole('Doctor');
 
-        $doc3 = User::create(['username' => 'khalid.omari', 'password' => Hash::make('doctor123'), 'role' => 'Doctor', 'name' => 'د. خالد العمري', 'email' => 'khalid.omari@alshifa-hospital.com', 'phone' => '+966 50 333 4444', 'active' => true, 'assigned_departments' => ['جراحة المخ والأعصاب']]);
+        $doc3 = $this->firstOrCreateUser('khalid.omari', 'doctor123', 'Doctor', 'د. خالد العمري', 'khalid.omari@alshifa-hospital.com', '+966 50 333 4444', ['جراحة المخ والأعصاب']);
         $doc3->assignRole('Doctor');
 
-        $nurse1 = User::create(['username' => 'nurse.fatima', 'password' => Hash::make('nurse123'), 'role' => 'Nurse', 'name' => 'فاطمة الزهراء', 'email' => 'fatima@alshifa-hospital.com', 'phone' => '+966 50 444 5555', 'active' => true, 'assigned_departments' => ['أمراض القلب', 'طب الأطفال'], 'assigned_doctors' => ['د. أحمد الراشد', 'د. سارة المنصور']]);
+        $nurse1 = $this->firstOrCreateUser('nurse.fatima', 'nurse123', 'Nurse', 'فاطمة الزهراء', 'fatima@alshifa-hospital.com', '+966 50 444 5555', ['أمراض القلب', 'طب الأطفال'], ['د. أحمد الراشد', 'د. سارة المنصور']);
         $nurse1->assignRole('Nurse');
 
-        $nurse2 = User::create(['username' => 'nurse.mohammed', 'password' => Hash::make('nurse123'), 'role' => 'Nurse', 'name' => 'محمد السعيد', 'email' => 'mohammed@alshifa-hospital.com', 'phone' => '+966 50 555 6666', 'active' => true, 'assigned_departments' => ['جراحة المخ والأعصاب'], 'assigned_doctors' => ['د. خالد العمري']]);
+        $nurse2 = $this->firstOrCreateUser('nurse.mohammed', 'nurse123', 'Nurse', 'محمد السعيد', 'mohammed@alshifa-hospital.com', '+966 50 555 6666', ['جراحة المخ والأعصاب'], ['د. خالد العمري']);
         $nurse2->assignRole('Nurse');
 
-        $reception = User::create(['username' => 'reception.noura', 'password' => Hash::make('reception123'), 'role' => 'Reception', 'name' => 'نورة القحطاني', 'email' => 'noura@alshifa-hospital.com', 'phone' => '+966 50 666 7777', 'active' => true]);
+        $reception = $this->firstOrCreateUser('reception.noura', 'reception123', 'Reception', 'نورة القحطاني', 'noura@alshifa-hospital.com', '+966 50 666 7777');
         $reception->assignRole('Reception');
 
-        $accountant = User::create(['username' => 'accountant.fahad', 'password' => Hash::make('accountant123'), 'role' => 'Accountant', 'name' => 'فهد العتيبي', 'email' => 'fahad@alshifa-hospital.com', 'phone' => '+966 50 777 8888', 'active' => true]);
+        $accountant = $this->firstOrCreateUser('accountant.fahad', 'accountant123', 'Accountant', 'فهد العتيبي', 'fahad@alshifa-hospital.com', '+966 50 777 8888');
         $accountant->assignRole('Accountant');
 
-        Department::create(['icon' => 'Heart', 'name' => 'أمراض القلب', 'desc' => 'تشخيص وعلاج أمراض القلب والأوعية الدموية بأحدث التقنيات وقسطرة القلب', 'color' => 'from-red-500 to-rose-600', 'active' => true]);
-        Department::create(['icon' => 'Brain', 'name' => 'جراحة المخ والأعصاب', 'desc' => 'علاج أمراض الدماغ والجهاز العصبي المركزي والطرفي بدقة متناهية', 'color' => 'from-purple-500 to-violet-600', 'active' => true]);
-        Department::create(['icon' => 'Bone', 'name' => 'جراحة العظام', 'desc' => 'علاج الإصابات والكسور وتبديل المفاصل وجراحات العمود الفقري', 'color' => 'from-amber-500 to-orange-600', 'active' => true]);
-        Department::create(['icon' => 'Baby', 'name' => 'طب الأطفال', 'desc' => 'رعاية صحية متكاملة للأطفال وحديثي الولادة والخدج بأحدث الحضانات', 'color' => 'from-pink-500 to-rose-600', 'active' => true]);
-        Department::create(['icon' => 'Eye', 'name' => 'طب العيون', 'desc' => 'تصحيح النظر بالليزك وعلاج أمراض العيون وزراعة القرنية', 'color' => 'from-cyan-500 to-teal-600', 'active' => true]);
-        Department::create(['icon' => 'Stethoscope', 'name' => 'الطب الباطني', 'desc' => 'تشخيص وعلاج أمراض الجهاز الهضمي والكبد والغدد الصماء', 'color' => 'from-blue-500 to-indigo-600', 'active' => true]);
+        $this->firstOrCreateDepartment('أمراض القلب', 'Heart', 'تشخيص وعلاج أمراض القلب والأوعية الدموية بأحدث التقنيات وقسطرة القلب', 'from-red-500 to-rose-600');
+        $this->firstOrCreateDepartment('جراحة المخ والأعصاب', 'Brain', 'علاج أمراض الدماغ والجهاز العصبي المركزي والطرفي بدقة متناهية', 'from-purple-500 to-violet-600');
+        $this->firstOrCreateDepartment('جراحة العظام', 'Bone', 'علاج الإصابات والكسور وتبديل المفاصل وجراحات العمود الفقري', 'from-amber-500 to-orange-600');
+        $this->firstOrCreateDepartment('طب الأطفال', 'Baby', 'رعاية صحية متكاملة للأطفال وحديثي الولادة والخدج بأحدث الحضانات', 'from-pink-500 to-rose-600');
+        $this->firstOrCreateDepartment('طب العيون', 'Eye', 'تصحيح النظر بالليزك وعلاج أمراض العيون وزراعة القرنية', 'from-cyan-500 to-teal-600');
+        $this->firstOrCreateDepartment('الطب الباطني', 'Stethoscope', 'تشخيص وعلاج أمراض الجهاز الهضمي والكبد والغدد الصماء', 'from-blue-500 to-indigo-600');
 
-        Doctor::create(['name' => 'د. أحمد الراشد', 'specialty' => 'استشاري جراحة القلب والأوعية الدموية', 'department' => 'أمراض القلب', 'image' => 'https://images.pexels.com/photos/5452224/pexels-photo-5452224.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=400', 'rating' => 4.9, 'experience' => '20 سنة', 'patients' => '+5000', 'gradient' => 'from-red-500 to-rose-600', 'active' => true]);
-        Doctor::create(['name' => 'د. سارة المنصور', 'specialty' => 'استشارية طب الأطفال وحديثي الولادة', 'department' => 'طب الأطفال', 'image' => 'https://images.pexels.com/photos/33032998/pexels-photo-33032998.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=400', 'rating' => 4.8, 'experience' => '15 سنة', 'patients' => '+3500', 'gradient' => 'from-pink-500 to-rose-600', 'active' => true]);
-        Doctor::create(['name' => 'د. خالد العمري', 'specialty' => 'استشاري جراحة المخ والأعصاب', 'department' => 'جراحة المخ والأعصاب', 'image' => 'https://images.pexels.com/photos/14438786/pexels-photo-14438786.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=400', 'rating' => 4.9, 'experience' => '18 سنة', 'patients' => '+4200', 'gradient' => 'from-purple-500 to-violet-600', 'active' => true]);
-        Doctor::create(['name' => 'د. نورة الحربي', 'specialty' => 'استشارية طب العيون وجراحة الليزر', 'department' => 'طب العيون', 'image' => 'https://images.pexels.com/photos/19260195/pexels-photo-19260195.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=400', 'rating' => 4.7, 'experience' => '12 سنة', 'patients' => '+2800', 'gradient' => 'from-cyan-500 to-teal-600', 'active' => true]);
+        $this->firstOrCreateDoctor('د. أحمد الراشد', 'استشاري جراحة القلب والأوعية الدموية', 'أمراض القلب', 'https://images.pexels.com/photos/5452224/pexels-photo-5452224.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=400', 4.9, '20 سنة', '+5000', 'from-red-500 to-rose-600');
+        $this->firstOrCreateDoctor('د. سارة المنصور', 'استشارية طب الأطفال وحديثي الولادة', 'طب الأطفال', 'https://images.pexels.com/photos/33032998/pexels-photo-33032998.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=400', 4.8, '15 سنة', '+3500', 'from-pink-500 to-rose-600');
+        $this->firstOrCreateDoctor('د. خالد العمري', 'استشاري جراحة المخ والأعصاب', 'جراحة المخ والأعصاب', 'https://images.pexels.com/photos/14438786/pexels-photo-14438786.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=400', 4.9, '18 سنة', '+4200', 'from-purple-500 to-violet-600');
+        $this->firstOrCreateDoctor('د. نورة الحربي', 'استشارية طب العيون وجراحة الليزر', 'طب العيون', 'https://images.pexels.com/photos/19260195/pexels-photo-19260195.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=400', 4.7, '12 سنة', '+2800', 'from-cyan-500 to-teal-600');
 
         Service::create(['icon' => 'Ambulance', 'title' => 'خدمة الإسعاف', 'desc' => 'سيارات إسعاف مجهزة بأحدث المعدات الطبية للنقل الآمن والسريع', 'color' => 'from-red-500 to-rose-600', 'number' => '01', 'active' => true]);
         Service::create(['icon' => 'Clock', 'title' => 'طوارئ 24/7', 'desc' => 'قسم طوارئ يعمل على مدار الساعة بفريق طبي متخصص ومؤهل', 'color' => 'from-orange-500 to-amber-600', 'number' => '02', 'active' => true]);
@@ -105,48 +105,105 @@ class DatabaseSeeder extends Seeder
         PriceItem::create(['service' => 'عملية جراحية بسيطة', 'category' => 'جراحة', 'price' => 5000, 'currency' => 'ر.س', 'active' => true]);
         PriceItem::create(['service' => 'عملية جراحية معقدة', 'category' => 'جراحة', 'price' => 15000, 'currency' => 'ر.س', 'active' => true]);
 
-        Setting::create([
-            'site_name' => 'مستشفى الشفاء',
-            'site_name_en' => 'AL-SHIFA INTERNATIONAL HOSPITAL',
-            'phone' => '+966 12 345 6789',
-            'phone_en' => '920012345',
-            'email' => 'info@alshifa-hospital.com',
-            'address' => 'طريق الملك فهد',
-            'city' => 'الرياض، المملكة العربية السعودية',
-            'emergency' => '920012345',
-            'whatsapp' => '966123456789',
-            'facebook' => '#',
-            'twitter' => '#',
-            'instagram' => '#',
-            'youtube' => '#',
-            'linkedin' => '#',
-            'snapchat' => '#',
-        ]);
+        Setting::firstOrCreate(
+            ['site_name' => 'مستشفى الشفاء'],
+            [
+                'site_name_en' => 'AL-SHIFA INTERNATIONAL HOSPITAL',
+                'phone' => '+966 12 345 6789',
+                'phone_en' => '920012345',
+                'email' => 'info@alshifa-hospital.com',
+                'address' => 'طريق الملك فهد',
+                'city' => 'الرياض، المملكة العربية السعودية',
+                'emergency' => '920012345',
+                'whatsapp' => '966123456789',
+                'facebook' => '#',
+                'twitter' => '#',
+                'instagram' => '#',
+                'youtube' => '#',
+                'linkedin' => '#',
+                'snapchat' => '#',
+            ]
+        );
 
-        Screen::create(['name' => 'الرئيسية', 'component' => 'Hero', 'enabled' => true, 'order' => 1, 'icon' => '🏠']);
-        Screen::create(['name' => 'من نحن', 'component' => 'About', 'enabled' => true, 'order' => 2, 'icon' => '📖']);
-        Screen::create(['name' => 'لماذا تختارنا', 'component' => 'WhyChooseUs', 'enabled' => true, 'order' => 3, 'icon' => '⭐']);
-        Screen::create(['name' => 'الإحصائيات', 'component' => 'Stats', 'enabled' => true, 'order' => 4, 'icon' => '📊']);
-        Screen::create(['name' => 'الأقسام الطبية', 'component' => 'Departments', 'enabled' => true, 'order' => 5, 'icon' => '🏥']);
-        Screen::create(['name' => 'الأطباء', 'component' => 'Doctors', 'enabled' => true, 'order' => 6, 'icon' => '👨‍⚕️']);
-        Screen::create(['name' => 'الخدمات', 'component' => 'Services', 'enabled' => true, 'order' => 7, 'icon' => '💼']);
-        Screen::create(['name' => 'الاستشارات عن بُعد', 'component' => 'Telemedicine', 'enabled' => true, 'order' => 8, 'icon' => '📹']);
-        Screen::create(['name' => 'الفيديو التعريفي', 'component' => 'VideoSection', 'enabled' => true, 'order' => 9, 'icon' => '🎬']);
-        Screen::create(['name' => 'معرض الصور', 'component' => 'Gallery', 'enabled' => true, 'order' => 10, 'icon' => '🖼️']);
-        Screen::create(['name' => 'آراء المرضى', 'component' => 'Testimonials', 'enabled' => true, 'order' => 11, 'icon' => '💬']);
-        Screen::create(['name' => 'العروض والخصومات', 'component' => 'Offers', 'enabled' => true, 'order' => 12, 'icon' => '🎁']);
-        Screen::create(['name' => 'الباقات المميزة', 'component' => 'PremiumPackages', 'enabled' => true, 'order' => 13, 'icon' => '💎']);
-        Screen::create(['name' => 'حاسبة التكلفة', 'component' => 'CostCalculator', 'enabled' => true, 'order' => 14, 'icon' => '🧮']);
-        Screen::create(['name' => 'الرعاية المنزلية', 'component' => 'HomeCare', 'enabled' => true, 'order' => 15, 'icon' => '🏠']);
-        Screen::create(['name' => 'السياحة العلاجية', 'component' => 'MedicalTourism', 'enabled' => true, 'order' => 16, 'icon' => '✈️']);
-        Screen::create(['name' => 'حجز موعد', 'component' => 'Appointment', 'enabled' => true, 'order' => 17, 'icon' => '📅']);
-        Screen::create(['name' => 'المسيرة الزمنية', 'component' => 'Timeline', 'enabled' => true, 'order' => 18, 'icon' => '⏳']);
-        Screen::create(['name' => 'الشهادات والاعتمادات', 'component' => 'Certifications', 'enabled' => true, 'order' => 19, 'icon' => '🏆']);
-        Screen::create(['name' => 'التأمين الطبي', 'component' => 'Insurance', 'enabled' => true, 'order' => 20, 'icon' => '🛡️']);
-        Screen::create(['name' => 'تطبيق الجوال', 'component' => 'MobileApp', 'enabled' => true, 'order' => 21, 'icon' => '📱']);
-        Screen::create(['name' => 'الأخبار', 'component' => 'News', 'enabled' => true, 'order' => 22, 'icon' => '📰']);
-        Screen::create(['name' => 'الأسئلة الشائعة', 'component' => 'FAQ', 'enabled' => true, 'order' => 23, 'icon' => '❓']);
-        Screen::create(['name' => 'الشركاء', 'component' => 'Partners', 'enabled' => true, 'order' => 24, 'icon' => '🤝']);
-        Screen::create(['name' => 'تواصل معنا', 'component' => 'Contact', 'enabled' => true, 'order' => 25, 'icon' => '📞']);
+        $screenDefinitions = [
+            ['name' => 'الرئيسية', 'component' => 'Hero', 'order' => 1, 'icon' => '🏠'],
+            ['name' => 'من نحن', 'component' => 'About', 'order' => 2, 'icon' => '📖'],
+            ['name' => 'لماذا تختارنا', 'component' => 'WhyChooseUs', 'order' => 3, 'icon' => '⭐'],
+            ['name' => 'الإحصائيات', 'component' => 'Stats', 'order' => 4, 'icon' => '📊'],
+            ['name' => 'الأقسام الطبية', 'component' => 'Departments', 'order' => 5, 'icon' => '🏥'],
+            ['name' => 'الأطباء', 'component' => 'Doctors', 'order' => 6, 'icon' => '👨‍⚕️'],
+            ['name' => 'الخدمات', 'component' => 'Services', 'order' => 7, 'icon' => '💼'],
+            ['name' => 'حجز موعد', 'component' => 'Appointment', 'order' => 8, 'icon' => '📅'],
+            ['name' => 'حاسبة التكلفة', 'component' => 'CostCalculator', 'order' => 9, 'icon' => '🧮'],
+            ['name' => 'الأخبار', 'component' => 'NewsTicker', 'order' => 10, 'icon' => '📰'],
+            ['name' => 'الأسئلة الشائعة', 'component' => 'FAQ', 'order' => 11, 'icon' => '❓'],
+            ['name' => 'تواصل معنا', 'component' => 'Contact', 'order' => 12, 'icon' => '📞'],
+        ];
+
+        Screen::query()->whereNotIn('name', array_column($screenDefinitions, 'name'))->update(['enabled' => false]);
+
+        foreach ($screenDefinitions as $screenData) {
+            $this->firstOrCreateScreen($screenData['name'], $screenData['component'], $screenData['order'], $screenData['icon']);
+        }
+    }
+
+    private function firstOrCreateUser(string $username, string $password, string $role, string $name, string $email, string $phone, array $departments = [], array $doctors = []): User
+    {
+        return User::updateOrCreate(
+            ['username' => $username],
+            [
+                'password' => Hash::make($password),
+                'role' => $role,
+                'name' => $name,
+                'email' => $email,
+                'phone' => $phone,
+                'active' => true,
+                'assigned_departments' => $departments,
+                'assigned_doctors' => $doctors,
+            ]
+        );
+    }
+
+    private function firstOrCreateDepartment(string $name, string $icon, string $description, string $color): Department
+    {
+        return Department::updateOrCreate(
+            ['name' => $name],
+            [
+                'icon' => $icon,
+                'desc' => $description,
+                'color' => $color,
+                'active' => true,
+            ]
+        );
+    }
+
+    private function firstOrCreateDoctor(string $name, string $specialty, string $department, string $image, float $rating, string $experience, string $patients, string $gradient): Doctor
+    {
+        return Doctor::updateOrCreate(
+            ['name' => $name],
+            [
+                'specialty' => $specialty,
+                'department' => $department,
+                'image' => $image,
+                'rating' => $rating,
+                'experience' => $experience,
+                'patients' => $patients,
+                'gradient' => $gradient,
+                'active' => true,
+            ]
+        );
+    }
+
+    private function firstOrCreateScreen(string $name, string $component, int $order, string $icon): Screen
+    {
+        return Screen::updateOrCreate(
+            ['name' => $name],
+            [
+                'component' => $component,
+                'enabled' => true,
+                'order' => $order,
+                'icon' => $icon,
+            ]
+        );
     }
 }
