@@ -18,7 +18,7 @@
     @if(!empty($settings->favicon))
         <link rel="icon" type="image/png" href="{{ $settings->favicon }}">
     @else
-        <link rel="icon" type="image/png" href="/favicon.png">
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     @endif
 
     <!-- Vite Assets -->

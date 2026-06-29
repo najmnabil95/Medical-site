@@ -64,7 +64,7 @@ class DatabaseSeeder extends Seeder
 
         Service::create(['icon' => 'Ambulance', 'title' => 'خدمة الإسعاف', 'desc' => 'سيارات إسعاف مجهزة بأحدث المعدات الطبية للنقل الآمن والسريع', 'color' => 'from-red-500 to-rose-600', 'number' => '01', 'active' => true]);
         Service::create(['icon' => 'Clock', 'title' => 'طوارئ 24/7', 'desc' => 'قسم طوارئ يعمل على مدار الساعة بفريق طبي متخصص ومؤهل', 'color' => 'from-orange-500 to-amber-600', 'number' => '02', 'active' => true]);
-        Service::create(['icon' => 'FlaskConical', 'title' => 'مختبرات متقدمة', 'desc' => 'تحاليل طبية شاملة بأحدث الأجهزة ونتائج دقيقة وسريعة', 'color' => 'from-blue-500 to-indigo-600', 'number' => '03', 'active' => true]);
+        Service::create(['icon' => 'flask-conical', 'title' => 'مختبرات متقدمة', 'desc' => 'تحاليل طبية شاملة بأحدث الأجهزة ونتائج دقيقة وسريعة', 'color' => 'from-blue-500 to-indigo-600', 'number' => '03', 'active' => true]);
         Service::create(['icon' => 'Scan', 'title' => 'الأشعة والتصوير', 'desc' => 'أجهزة تصوير متطورة تشمل الرنين المغناطيسي والأشعة المقطعية', 'color' => 'from-purple-500 to-violet-600', 'number' => '04', 'active' => true]);
 
         Package::create(['name' => 'الباقة الأساسية', 'name_en' => 'Basic', 'price' => '500', 'period' => 'سنوياً', 'icon' => '🩺', 'popular' => false, 'gradient' => 'from-gray-600 to-gray-800', 'features' => ['كشف طبي شامل سنوي', 'تحاليل دم أساسية', 'أشعة صدر'], 'active' => true]);
