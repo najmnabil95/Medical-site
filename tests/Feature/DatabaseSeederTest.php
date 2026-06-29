@@ -16,7 +16,7 @@ class DatabaseSeederTest extends TestCase
         $this->seed();
         $this->seed();
 
-        $this->assertDatabaseCount('users', 7);
+        $this->assertDatabaseCount('users', 8);
     }
 
     public function test_seeded_screen_components_match_existing_home_blade_components(): void

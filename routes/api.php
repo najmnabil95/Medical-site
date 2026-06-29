@@ -60,93 +60,104 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::get('/auth/me', [AuthController::class, 'me']);
 
-    // Users
-    Route::apiResource('users', UserController::class)->except(['edit', 'create']);
+    // 1. Users & Screens (Super Admin | Manager)
+    Route::middleware('role:Super Admin|Manager')->group(function () {
+        Route::apiResource('users', UserController::class)->except(['edit', 'create']);
+        Route::apiResource('screens', ScreenController::class)->except(['index', 'edit', 'create']);
+    });
 
-    // Doctors
-    Route::post('/doctors', [DoctorController::class, 'store']);
-    Route::put('/doctors/{id}', [DoctorController::class, 'update']);
-    Route::delete('/doctors/{id}', [DoctorController::class, 'destroy']);
+    // 2. Settings & Activity Logs (Super Admin Only)
+    Route::middleware('role:Super Admin')->group(function () {
+        Route::put('/settings', [SettingsController::class, 'update']);
+        Route::get('/activity-logs', [ActivityLogController::class, 'index']);
+    });
 
-    // Departments
-    Route::post('/departments', [DepartmentController::class, 'store']);
-    Route::put('/departments/{id}', [DepartmentController::class, 'update']);
-    Route::delete('/departments/{id}', [DepartmentController::class, 'destroy']);
+    // 3. Content & Medical Admin (Super Admin | Manager | Editor)
+    Route::middleware('role:Super Admin|Manager|Editor')->group(function () {
+        // Doctors
+        Route::post('/doctors', [DoctorController::class, 'store']);
+        Route::put('/doctors/{id}', [DoctorController::class, 'update']);
+        Route::delete('/doctors/{id}', [DoctorController::class, 'destroy']);
 
-    // Appointments
-    Route::get('/appointments', [AppointmentController::class, 'index']);
-    Route::get('/appointments/{id}', [AppointmentController::class, 'show']);
-    Route::put('/appointments/{id}', [AppointmentController::class, 'update']);
-    Route::delete('/appointments/{id}', [AppointmentController::class, 'destroy']);
+        // Departments
+        Route::post('/departments', [DepartmentController::class, 'store']);
+        Route::put('/departments/{id}', [DepartmentController::class, 'update']);
+        Route::delete('/departments/{id}', [DepartmentController::class, 'destroy']);
 
-    // Services
-    Route::post('/services', [ServiceController::class, 'store']);
-    Route::put('/services/{id}', [ServiceController::class, 'update']);
-    Route::delete('/services/{id}', [ServiceController::class, 'destroy']);
+        // Services
+        Route::post('/services', [ServiceController::class, 'store']);
+        Route::put('/services/{id}', [ServiceController::class, 'update']);
+        Route::delete('/services/{id}', [ServiceController::class, 'destroy']);
 
-    // Packages
-    Route::post('/packages', [PackageController::class, 'store']);
-    Route::put('/packages/{id}', [PackageController::class, 'update']);
-    Route::delete('/packages/{id}', [PackageController::class, 'destroy']);
+        // Testimonials
+        Route::post('/testimonials', [TestimonialController::class, 'store']);
+        Route::put('/testimonials/{id}', [TestimonialController::class, 'update']);
+        Route::delete('/testimonials/{id}', [TestimonialController::class, 'destroy']);
 
-    // Testimonials
-    Route::post('/testimonials', [TestimonialController::class, 'store']);
-    Route::put('/testimonials/{id}', [TestimonialController::class, 'update']);
-    Route::delete('/testimonials/{id}', [TestimonialController::class, 'destroy']);
+        // News
+        Route::post('/news', [NewsController::class, 'store']);
+        Route::put('/news/{id}', [NewsController::class, 'update']);
+        Route::delete('/news/{id}', [NewsController::class, 'destroy']);
 
-    // News
-    Route::post('/news', [NewsController::class, 'store']);
-    Route::put('/news/{id}', [NewsController::class, 'update']);
-    Route::delete('/news/{id}', [NewsController::class, 'destroy']);
+        // FAQs
+        Route::post('/faqs', [FaqController::class, 'store']);
+        Route::put('/faqs/{id}', [FaqController::class, 'update']);
+        Route::delete('/faqs/{id}', [FaqController::class, 'destroy']);
 
-    // FAQs
-    Route::post('/faqs', [FaqController::class, 'store']);
-    Route::put('/faqs/{id}', [FaqController::class, 'update']);
-    Route::delete('/faqs/{id}', [FaqController::class, 'destroy']);
+        // Partners
+        Route::post('/partners', [PartnerController::class, 'store']);
+        Route::put('/partners/{id}', [PartnerController::class, 'update']);
+        Route::delete('/partners/{id}', [PartnerController::class, 'destroy']);
 
-    // Insurances
-    Route::post('/insurances', [InsuranceController::class, 'store']);
-    Route::put('/insurances/{id}', [InsuranceController::class, 'update']);
-    Route::delete('/insurances/{id}', [InsuranceController::class, 'destroy']);
+        // Certifications
+        Route::post('/certifications', [CertificationController::class, 'store']);
+        Route::put('/certifications/{id}', [CertificationController::class, 'update']);
+        Route::delete('/certifications/{id}', [CertificationController::class, 'destroy']);
 
-    // Partners
-    Route::post('/partners', [PartnerController::class, 'store']);
-    Route::put('/partners/{id}', [PartnerController::class, 'update']);
-    Route::delete('/partners/{id}', [PartnerController::class, 'destroy']);
+        // Image upload
+        Route::post('/upload/image', [UploadController::class, 'uploadImage']);
+    });
 
-    // Certifications
-    Route::post('/certifications', [CertificationController::class, 'store']);
-    Route::put('/certifications/{id}', [CertificationController::class, 'update']);
-    Route::delete('/certifications/{id}', [CertificationController::class, 'destroy']);
+    // 4. Financial Management (Super Admin | Manager | Accountant)
+    Route::middleware('role:Super Admin|Manager|Accountant')->group(function () {
+        // Packages
+        Route::post('/packages', [PackageController::class, 'store']);
+        Route::put('/packages/{id}', [PackageController::class, 'update']);
+        Route::delete('/packages/{id}', [PackageController::class, 'destroy']);
 
-    // Prices
-    Route::post('/prices', [PriceItemController::class, 'store']);
-    Route::put('/prices/{id}', [PriceItemController::class, 'update']);
-    Route::delete('/prices/{id}', [PriceItemController::class, 'destroy']);
+        // Insurances
+        Route::post('/insurances', [InsuranceController::class, 'store']);
+        Route::put('/insurances/{id}', [InsuranceController::class, 'update']);
+        Route::delete('/insurances/{id}', [InsuranceController::class, 'destroy']);
 
-    // Messages
-    Route::get('/messages', [MessageController::class, 'index']);
-    Route::get('/messages/{id}', [MessageController::class, 'show']);
-    Route::put('/messages/{id}', [MessageController::class, 'update']);
-    Route::delete('/messages/{id}', [MessageController::class, 'destroy']);
+        // Prices
+        Route::post('/prices', [PriceItemController::class, 'store']);
+        Route::put('/prices/{id}', [PriceItemController::class, 'update']);
+        Route::delete('/prices/{id}', [PriceItemController::class, 'destroy']);
+    });
 
-    // Activity Logs
-    Route::get('/activity-logs', [ActivityLogController::class, 'index']);
+    // 5. Operations Management (Super Admin | Manager | Reception)
+    Route::middleware('role:Super Admin|Manager|Reception')->group(function () {
+        // Appointments
+        Route::get('/appointments', [AppointmentController::class, 'index']);
+        Route::get('/appointments/{id}', [AppointmentController::class, 'show']);
+        Route::put('/appointments/{id}', [AppointmentController::class, 'update']);
+        Route::delete('/appointments/{id}', [AppointmentController::class, 'destroy']);
 
-    // Screens
-    Route::apiResource('screens', ScreenController::class)->except(['edit', 'create']);
+        // Messages
+        Route::get('/messages', [MessageController::class, 'index']);
+        Route::get('/messages/{id}', [MessageController::class, 'show']);
+        Route::put('/messages/{id}', [MessageController::class, 'update']);
+        Route::delete('/messages/{id}', [MessageController::class, 'destroy']);
 
-    // Settings
-    Route::put('/settings', [SettingsController::class, 'update']);
+        // Notifications logs
+        Route::get('/notifications', [ApiNotificationController::class, 'index']);
+        Route::post('/notifications', [ApiNotificationController::class, 'store']);
+        Route::delete('/notifications/{id}', [ApiNotificationController::class, 'destroy']);
+    });
 
-    // Notifications
-    Route::get('/notifications', [ApiNotificationController::class, 'index']);
-    Route::post('/notifications', [ApiNotificationController::class, 'store']);
-    Route::delete('/notifications/{id}', [ApiNotificationController::class, 'destroy']);
-
-    // Upload
-    Route::post('/upload/image', [UploadController::class, 'uploadImage']);
-
-    // Dashboard
-    Route::get('/dashboard/stats', [DashboardController::class, 'stats']);
+    // 6. Dashboard (Super Admin | Manager | Reception | Accountant | Editor)
+    Route::middleware('role:Super Admin|Manager|Reception|Accountant|Editor')->group(function () {
+        Route::get('/dashboard/stats', [DashboardController::class, 'stats']);
+    });
 });
