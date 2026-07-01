@@ -37,6 +37,10 @@ class SettingsController extends Controller
             'map_link' => 'nullable|string|max:1000',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
             'favicon' => 'nullable|image|mimes:jpeg,png,jpg,gif,ico,svg,webp|max:2048',
+            'hero_image_1' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:10240',
+            'hero_image_2' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:10240',
+            'hero_image_3' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:10240',
+            'hero_overlay_opacity' => 'nullable|integer|min:0|max:100',
         ]);
 
         $settings = Setting::first();
@@ -69,6 +73,22 @@ class SettingsController extends Controller
             }
             $faviconPath = $request->file('favicon')->store('uploads', 'public');
             $validated['favicon'] = 'storage/' . $faviconPath;
+        }
+
+        for ($i = 1; $i <= 3; $i++) {
+            $fieldName = 'hero_image_' . $i;
+            if ($request->hasFile($fieldName)) {
+                // Delete old image if exists
+                if ($settings->$fieldName && (str_contains($settings->$fieldName, 'storage/uploads') || str_contains($settings->$fieldName, 'uploads/'))) {
+                    $rawImg = $settings->getRawOriginal($fieldName) ?: $settings->$fieldName;
+                    $oldPath = str_replace(asset('storage/'), '', $rawImg);
+                    $oldPath = str_replace('storage/', '', $oldPath);
+                    $oldPath = ltrim($oldPath, '/');
+                    Storage::disk('public')->delete($oldPath);
+                }
+                $imgPath = $request->file($fieldName)->store('uploads', 'public');
+                $validated[$fieldName] = 'storage/' . $imgPath;
+            }
         }
 
         $settings->fill($validated);

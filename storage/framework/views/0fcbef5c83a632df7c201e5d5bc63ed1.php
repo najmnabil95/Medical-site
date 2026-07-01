@@ -104,6 +104,46 @@
               </div>
             </div>
           </div>
+
+          <!-- Hero Images Upload -->
+          <div class="border-t border-gray-100 pt-4 mt-4 space-y-4">
+            <h4 class="font-bold text-gray-800 text-sm">صور واجهة الموقع الرئيسية (Slider Images)</h4>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <?php for($i = 1; $i <= 3; $i++): ?>
+                <?php $fieldName = 'hero_image_' . $i; ?>
+                <div class="space-y-2">
+                  <label class="block text-xs font-bold text-gray-500">الصورة <?php echo e($i); ?></label>
+                  <div class="flex flex-col items-center gap-3">
+                    <div id="hero_image_<?php echo e($i); ?>-preview-container" class="w-full h-32 border border-gray-200 rounded-xl flex items-center justify-center overflow-hidden bg-gray-50 shadow-sm shrink-0">
+                      <?php if(!empty($settings->$fieldName)): ?>
+                        <img id="hero_image_<?php echo e($i); ?>-preview" src="<?php echo e($settings->$fieldName); ?>" alt="Hero Image <?php echo e($i); ?>" class="w-full h-full object-cover" />
+                      <?php else: ?>
+                        <i id="hero_image_<?php echo e($i); ?>-preview-icon" data-lucide="image" class="text-gray-300 w-8 h-8"></i>
+                      <?php endif; ?>
+                    </div>
+                    <div class="w-full text-center">
+                      <input type="file" name="hero_image_<?php echo e($i); ?>" id="hero_image_<?php echo e($i); ?>-file-input" accept="image/*" class="hidden" onchange="previewSelectedImage(event, 'hero_image_<?php echo e($i); ?>-preview')" />
+                      <label for="hero_image_<?php echo e($i); ?>-file-input" class="w-full inline-flex items-center justify-center gap-2 px-3 py-2 bg-primary-50 text-primary-600 rounded-xl text-xs font-bold hover:bg-primary-100 transition-all cursor-pointer">
+                        <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+                        <span>اختر صورة <?php echo e($i); ?></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              <?php endfor; ?>
+            </div>
+          </div>
+          
+          <!-- Hero Overlay Opacity -->
+          <div class="border-t border-gray-100 pt-4 mt-4 space-y-2">
+            <label class="block text-sm font-bold text-gray-700 mb-1">شفافية غطاء الصورة الخلفية للواجهة (Background Overlay Opacity)</label>
+            <div class="flex items-center gap-4">
+              <input type="range" name="hero_overlay_opacity" min="0" max="100" value="<?php echo e(old('hero_overlay_opacity', $settings->hero_overlay_opacity ?? 80)); ?>" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600" oninput="updateOpacityLabel(this.value)" />
+              <span id="opacity-label" class="text-sm font-bold text-gray-700 shrink-0"><?php echo e(old('hero_overlay_opacity', $settings->hero_overlay_opacity ?? 80)); ?>%</span>
+            </div>
+            <p class="text-xs text-gray-400">تتحكم هذه القيمة في مدى وضوح النص فوق الصورة الخلفية (0% شفاف تماماً، 100% غطاء صلب بلون الخلفية).</p>
+          </div>
         </div>
       </div>
 
@@ -224,6 +264,13 @@
         }
       };
       reader.readAsDataURL(file);
+    }
+  }
+
+  function updateOpacityLabel(val) {
+    const label = document.getElementById('opacity-label');
+    if (label) {
+      label.textContent = val + '%';
     }
   }
 </script>
