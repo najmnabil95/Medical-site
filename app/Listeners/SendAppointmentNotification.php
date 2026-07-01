@@ -23,6 +23,12 @@ class SendAppointmentNotification
     {
         $appointment = $event->appointment;
         $status = $appointment->status;
+        
+        // ONLY send notification when booking is confirmed
+        if ($status !== 'confirmed') {
+            return;
+        }
+
         $phone = $appointment->phone;
         $name = $appointment->patient_name;
         $doctor = $appointment->doctor ?? 'الطبيب المختص';
@@ -36,55 +42,38 @@ class SendAppointmentNotification
         }
         $timeStr = $appointment->time;
 
-        $msg = '';
+        $msg = "عزيزي {$name}، يسعدنا إبلاغك بأنه تم تأكيد حجزك لعيادة {$department} مع الدكتور {$doctor} بتاريخ {$dateStr} الساعة {$timeStr}. ننتظر حضورك ونتمنى لك الشفاء العاجل.";
 
-        if ($event->oldStatus === null && $status === 'pending') {
-            // New booking request from website
-            $msg = "مرحباً {$name}، تم استلام طلب حجزك لعيادة {$department} مع الدكتور {$doctor} بتاريخ {$dateStr} الساعة {$timeStr}. طلبك قيد المراجعة وسنتصل بك قريباً لتأكيده.";
-        } else {
-            switch ($status) {
-                case 'confirmed':
-                    $msg = "عزيزي {$name}، يسعدنا إبلاغك بأنه تم تأكيد حجزك لعيادة {$department} مع الدكتور {$doctor} بتاريخ {$dateStr} الساعة {$timeStr}. ننتظر حضورك ونتمنى لك الشفاء العاجل.";
-                    break;
-                case 'cancelled':
-                    $msg = "عزيزي {$name}، نود إعلامك بأنه تم إلغاء حجزك لعيادة {$department} مع الدكتور {$doctor} بتاريخ {$dateStr} الساعة {$timeStr}. نتمنى لك دوام الصحة والعافية.";
-                    break;
-                case 'completed':
-                    $msg = "عزيزي {$name}، شكراً لزيارتك لعيادة {$department} مع الدكتور {$doctor}. نتمنى أن نكون قد قدمنا لك الخدمة المرجوة ونسأل الله لك دوام الشفاء.";
-                    break;
-                case 'pending':
-                    $msg = "عزيزي {$name}، تم إعادة حجزك لعيادة {$department} مع الدكتور {$doctor} بتاريخ {$dateStr} الساعة {$timeStr} إلى حالة قيد الانتظار.";
-                    break;
-            }
+        $settings = \App\Models\Setting::first() ?? new \App\Models\Setting();
+        $channel = $settings->notification_channel ?? 'whatsapp';
+
+        // Save simulated SMS notification to DB if channel is sms or both
+        if ($channel === 'sms' || $channel === 'both') {
+            \App\Models\Notification::create([
+                'type' => 'sms',
+                'recipient' => $phone,
+                'message' => $msg,
+                'status' => 'sent',
+                'reservation_id' => (string)$appointment->id,
+                'patient_name' => $name,
+                'sent_at' => now(),
+            ]);
         }
 
-        if (empty($msg)) {
-            return;
+        // Save simulated WhatsApp notification to DB if channel is whatsapp or both
+        if ($channel === 'whatsapp' || $channel === 'both') {
+            \App\Models\Notification::create([
+                'type' => 'whatsapp',
+                'recipient' => $phone,
+                'message' => $msg,
+                'status' => 'delivered', // simulated delivery status
+                'reservation_id' => (string)$appointment->id,
+                'patient_name' => $name,
+                'sent_at' => now(),
+            ]);
         }
-
-        // Save simulated SMS notification to DB
-        \App\Models\Notification::create([
-            'type' => 'sms',
-            'recipient' => $phone,
-            'message' => $msg,
-            'status' => 'sent',
-            'reservation_id' => (string)$appointment->id,
-            'patient_name' => $name,
-            'sent_at' => now(),
-        ]);
-
-        // Save simulated WhatsApp notification to DB
-        \App\Models\Notification::create([
-            'type' => 'whatsapp',
-            'recipient' => $phone,
-            'message' => $msg,
-            'status' => 'delivered', // simulated delivery status
-            'reservation_id' => (string)$appointment->id,
-            'patient_name' => $name,
-            'sent_at' => now(),
-        ]);
 
         // Also log for system file logs
-        \Log::info("SMS and WhatsApp notification logs generated for Appointment ID: {$appointment->id}");
+        \Log::info("Notification logs generated for Appointment ID: {$appointment->id} via channel: {$channel}");
     }
 }

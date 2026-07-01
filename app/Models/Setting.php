@@ -30,6 +30,7 @@ class Setting extends Model
         'hero_image_2',
         'hero_image_3',
         'hero_overlay_opacity',
+        'notification_channel',
     ];
 
     public $timestamps = false;

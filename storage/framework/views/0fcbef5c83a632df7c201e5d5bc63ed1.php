@@ -144,6 +144,17 @@
             </div>
             <p class="text-xs text-gray-400">تتحكم هذه القيمة في مدى وضوح النص فوق الصورة الخلفية (0% شفاف تماماً، 100% غطاء صلب بلون الخلفية).</p>
           </div>
+
+          <!-- Notification Channel Option -->
+          <div class="border-t border-gray-100 pt-4 mt-4 space-y-2">
+            <label class="block text-sm font-bold text-gray-700 mb-1">قناة الإشعارات المفضلة (Notification Channel)</label>
+            <select name="notification_channel" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500">
+              <option value="whatsapp" <?php echo e(old('notification_channel', $settings->notification_channel ?? 'whatsapp') === 'whatsapp' ? 'selected' : ''); ?>>واتساب فقط (WhatsApp Only)</option>
+              <option value="sms" <?php echo e(old('notification_channel', $settings->notification_channel ?? 'whatsapp') === 'sms' ? 'selected' : ''); ?>>رسائل نصية فقط (SMS Only)</option>
+              <option value="both" <?php echo e(old('notification_channel', $settings->notification_channel ?? 'whatsapp') === 'both' ? 'selected' : ''); ?>>كلاهما (Both WhatsApp & SMS)</option>
+            </select>
+            <p class="text-xs text-gray-400">القناة الافتراضية لإرسال إشعارات الحجز للمرضى عند تأكيد الموعد.</p>
+          </div>
         </div>
       </div>
 

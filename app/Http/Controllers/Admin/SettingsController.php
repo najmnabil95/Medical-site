@@ -41,6 +41,7 @@ class SettingsController extends Controller
             'hero_image_2' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:10240',
             'hero_image_3' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:10240',
             'hero_overlay_opacity' => 'nullable|integer|min:0|max:100',
+            'notification_channel' => 'nullable|string|in:whatsapp,sms,both',
         ]);
 
         $settings = Setting::first();

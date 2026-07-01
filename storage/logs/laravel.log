@@ -180,3 +180,5 @@
 [2026-07-01 12:23:06] testing.INFO: SMS and WhatsApp notification logs generated for Appointment ID: 1  
 [2026-07-01 12:45:34] testing.INFO: SMS and WhatsApp notification logs generated for Appointment ID: 1  
 [2026-07-01 12:49:15] production.INFO: SMS and WhatsApp notification logs generated for Appointment ID: 2  
+[2026-07-01 15:05:23] testing.INFO: Notification logs generated for Appointment ID: 1 via channel: whatsapp  
+[2026-07-01 15:05:23] testing.INFO: Notification logs generated for Appointment ID: 1 via channel: sms  
