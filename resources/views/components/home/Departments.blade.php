@@ -1,16 +1,10 @@
 @php
   $defaultColors = [
-    ['color' => 'from-red-500 to-rose-600', 'lightColor' => 'bg-red-50 text-red-600'],
-    ['color' => 'from-purple-500 to-violet-600', 'lightColor' => 'bg-purple-50 text-purple-600'],
-    ['color' => 'from-amber-500 to-orange-600', 'lightColor' => 'bg-amber-50 text-amber-600'],
-    ['color' => 'from-pink-500 to-rose-600', 'lightColor' => 'bg-pink-50 text-pink-600'],
-    ['color' => 'from-cyan-500 to-teal-600', 'lightColor' => 'bg-cyan-50 text-cyan-600'],
-    ['color' => 'from-blue-500 to-indigo-600', 'lightColor' => 'bg-blue-50 text-blue-600'],
     ['color' => 'from-emerald-500 to-teal-600', 'lightColor' => 'bg-emerald-50 text-emerald-600'],
-    ['color' => 'from-indigo-500 to-blue-600', 'lightColor' => 'bg-indigo-50 text-indigo-600'],
     ['color' => 'from-teal-500 to-cyan-600', 'lightColor' => 'bg-teal-50 text-teal-600'],
+    ['color' => 'from-cyan-500 to-sky-600', 'lightColor' => 'bg-cyan-50 text-cyan-600'],
     ['color' => 'from-sky-500 to-blue-600', 'lightColor' => 'bg-sky-50 text-sky-600'],
-    ['color' => 'from-lime-500 to-green-600', 'lightColor' => 'bg-lime-50 text-lime-600'],
+    ['color' => 'from-blue-500 to-indigo-600', 'lightColor' => 'bg-blue-50 text-blue-600'],
   ];
 
   $dummyServices = [
@@ -36,15 +30,15 @@
       </span>
       <h2 class="text-3xl md:text-4xl lg:text-5xl font-black mt-5 leading-tight text-gray-900">
         تخصصات طبية
-        <span class="text-primary-600"> متكاملة</span>
+        <span class="text-emerald-600"> متكاملة</span>
       </h2>
       <p class="mt-5 max-w-2xl mx-auto text-lg leading-relaxed text-gray-500">
         نقدم مجموعة شاملة من التخصصات الطبية لتلبية جميع احتياجاتكم الصحية تحت سقف واحد
       </p>
       <div class="flex items-center justify-center gap-2 mt-6">
-        <span class="w-12 h-1 bg-primary-500 rounded-full"></span>
+        <span class="w-12 h-1 bg-slate-300 rounded-full"></span>
         <span class="w-3 h-3 bg-emerald-500 rounded-full"></span>
-        <span class="w-12 h-1 bg-primary-500 rounded-full"></span>
+        <span class="w-12 h-1 bg-slate-300 rounded-full"></span>
       </div>
     </div>
 
@@ -133,19 +127,19 @@
 
                 <!-- Department Stats -->
                 <div class="grid grid-cols-3 gap-3">
-                  <div class="bg-primary-50 rounded-2xl p-4 text-center">
-                    <i data-lucide="users" class="text-primary-600 mx-auto mb-2 w-5.5 h-5.5"></i>
-                    <div class="text-xl font-black text-primary-700">+2K</div>
+                  <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-center">
+                    <i data-lucide="users" class="text-emerald-500 mx-auto mb-2 w-5.5 h-5.5"></i>
+                    <div class="text-xl font-black text-slate-800">+2K</div>
                     <div class="text-xs text-gray-500">مريض/سنة</div>
                   </div>
-                  <div class="bg-emerald-50 rounded-2xl p-4 text-center">
-                    <i data-lucide="award" class="text-emerald-600 mx-auto mb-2 w-5.5 h-5.5"></i>
-                    <div class="text-xl font-black text-emerald-700">98%</div>
+                  <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-center">
+                    <i data-lucide="award" class="text-emerald-500 mx-auto mb-2 w-5.5 h-5.5"></i>
+                    <div class="text-xl font-black text-slate-800">98%</div>
                     <div class="text-xs text-gray-500">نسبة النجاح</div>
                   </div>
-                  <div class="bg-purple-50 rounded-2xl p-4 text-center">
-                    <i data-lucide="activity" class="text-purple-600 mx-auto mb-2 w-5.5 h-5.5"></i>
-                    <div class="text-xl font-black text-purple-700">24/7</div>
+                  <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-center">
+                    <i data-lucide="activity" class="text-emerald-500 mx-auto mb-2 w-5.5 h-5.5"></i>
+                    <div class="text-xl font-black text-slate-800">24/7</div>
                     <div class="text-xs text-gray-500">خدمة مستمرة</div>
                   </div>
                 </div>
@@ -179,7 +173,7 @@
                         <p class="text-xs text-gray-500 truncate mb-2">{{ $doc->specialty }}</p>
                         <button
                           onclick="prefillAppointment('{{ $dept->name }}', '{{ $doc->name }}')"
-                          class="w-full bg-primary-50 text-primary-600 py-2 rounded-lg text-xs font-bold hover:bg-primary-100 transition-colors flex items-center justify-center gap-1"
+                          class="w-full bg-emerald-50 text-emerald-600 py-2 rounded-lg text-xs font-bold hover:bg-emerald-100 transition-colors flex items-center justify-center gap-1"
                         >
                           <i data-lucide="clock" class="w-3.5 h-3.5"></i>
                           <span>احجز موعداً</span>
@@ -197,7 +191,7 @@
 
                 <button
                   onclick="prefillAppointment('{{ $dept->name }}', '')"
-                  class="w-full bg-gradient-to-l from-primary-500 to-primary-700 text-white py-4 rounded-2xl font-bold hover:shadow-xl hover:shadow-primary-500/30 transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                  class="w-full bg-emerald-600 text-white py-4 rounded-2xl font-bold hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2"
                 >
                   <span>احجز موعد الآن</span>
                   <i data-lucide="arrow-left" class="w-4 h-4"></i>
@@ -205,7 +199,7 @@
 
                 <a
                   href="tel:{{ $settings->emergency ?? '920012345' }}"
-                  class="w-full bg-red-50 text-red-600 py-3 rounded-2xl font-bold hover:bg-red-100 transition-colors flex items-center justify-center gap-2 text-sm"
+                  class="w-full bg-slate-100 text-slate-700 py-3 rounded-2xl font-bold hover:bg-slate-200 transition-colors flex items-center justify-center gap-2 text-sm"
                 >
                   <span>📞 للاستفسار: {{ $settings->emergency ?? '920012345' }}</span>
                 </a>

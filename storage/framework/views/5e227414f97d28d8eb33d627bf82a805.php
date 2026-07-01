@@ -40,7 +40,7 @@
   ];
 ?>
 
-<section id="home" class="relative min-h-[82svh] overflow-hidden bg-[#081f24] text-white">
+<section id="home" class="relative min-h-[82svh] overflow-hidden bg-slate-50 text-slate-900">
   <!-- Slides Container -->
   <div id="hero-slides-wrapper">
     <?php $__currentLoopData = $heroSlides; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $slide): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -49,7 +49,7 @@
         data-slide-index="<?php echo e($index); ?>"
       >
         <img src="<?php echo e($slide['image']); ?>" alt="فريق طبي داخل مستشفى الشفاء" class="h-full w-full object-cover" />
-        <div class="absolute inset-0 bg-[linear-gradient(90deg,rgba(8,31,36,0.97)_0%,rgba(8,31,36,0.86)_36%,rgba(15,118,110,0.54)_68%,rgba(246,113,91,0.18)_100%)]"></div>
+        <div class="absolute inset-0 bg-[linear-gradient(270deg,rgba(248,250,252,0.95)_0%,rgba(248,250,252,0.85)_50%,rgba(248,250,252,0.1)_100%)]"></div>
       </div>
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
   </div>
@@ -68,9 +68,9 @@
   <div class="relative mx-auto grid max-w-7xl gap-10 px-4 pb-20 pt-14 lg:grid-cols-[1.08fr_.92fr] lg:pb-24 lg:pt-20">
     <div class="flex flex-col justify-center">
       <!-- Dynamic Slide Content -->
-      <div id="hero-content-area" class="max-w-3xl min-h-[220px]">
-        <div class="mb-5 inline-flex items-center gap-3 rounded-[8px] border border-white/15 bg-white/10 px-4 py-2 text-sm font-bold backdrop-blur-md">
-          <span class="h-2 w-2 rounded-full bg-[#f6715b]"></span>
+      <div id="hero-content-area" class="max-w-3xl min-h-[220px] relative z-20">
+        <div class="mb-5 inline-flex items-center gap-3 rounded-[8px] border border-emerald-500/20 bg-emerald-50/80 px-4 py-2 text-sm font-bold text-emerald-800 backdrop-blur-md">
+          <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
           <span id="hero-slide-eyebrow"><?php echo e($heroSlides[0]['eyebrow']); ?></span>
         </div>
 
@@ -79,7 +79,7 @@
 
         </h1>
 
-        <p id="hero-slide-subtitle" class="mt-6 max-w-2xl text-lg leading-8 text-white/80 md:text-xl">
+        <p id="hero-slide-subtitle" class="mt-6 max-w-2xl text-lg leading-8 text-slate-600 md:text-xl">
           <?php echo e($heroSlides[0]['subtitle']); ?>
 
         </p>
@@ -89,7 +89,7 @@
         <a
           href="#appointment"
           onclick="event.preventDefault(); document.getElementById('appointment').scrollIntoView({behavior: 'smooth'});"
-          class="group inline-flex items-center gap-3 rounded-[8px] bg-[#f6715b] px-6 py-4 text-base font-black text-white shadow-lg shadow-[#f6715b]/20 transition hover:-translate-y-0.5 hover:bg-[#ff806d]"
+          class="group inline-flex items-center gap-3 rounded-[8px] bg-emerald-600 px-6 py-4 text-base font-black text-white shadow-lg shadow-emerald-600/20 transition hover:-translate-y-0.5 hover:bg-emerald-700"
         >
           <i data-lucide="calendar" class="w-[21px] h-[21px]"></i>
           <span>احجز موعدك</span>
@@ -97,7 +97,7 @@
         </a>
         <a
           href="tel:<?php echo e($settings->emergency ?? '920012345'); ?>"
-          class="inline-flex items-center gap-3 rounded-[8px] border border-white/20 bg-white/10 px-6 py-4 text-base font-black text-white backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white/20"
+          class="inline-flex items-center gap-3 rounded-[8px] border border-slate-200 bg-white/80 px-6 py-4 text-base font-black text-slate-800 shadow-sm backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white"
         >
           <i data-lucide="phone" class="w-[21px] h-[21px]"></i>
           <span>الطوارئ <?php echo e($settings->emergency ?? '920012345'); ?></span>
@@ -107,13 +107,13 @@
       <!-- Care Path -->
       <div class="mt-10 grid max-w-3xl grid-cols-2 gap-3 md:grid-cols-4 z-20">
         <?php $__currentLoopData = $carePath; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-          <div class="rounded-[8px] border border-white/10 bg-white/[0.08] p-4 backdrop-blur-md">
+          <div class="rounded-[8px] border border-slate-200 bg-white/60 p-4 shadow-sm backdrop-blur-md">
             <div class="mb-4 flex items-center justify-between">
-              <i data-lucide="<?php echo e($item['icon']); ?>" class="text-[#76e4d2] w-5 h-5"></i>
-              <span class="font-mono text-xs text-white/30">0<?php echo e($index + 1); ?></span>
+              <i data-lucide="<?php echo e($item['icon']); ?>" class="text-emerald-500 w-5 h-5"></i>
+              <span class="font-mono text-xs text-slate-400">0<?php echo e($index + 1); ?></span>
             </div>
             <p class="text-sm font-black"><?php echo e($item['label']); ?></p>
-            <p class="mt-1 text-xs text-white/50"><?php echo e($item['value']); ?></p>
+            <p class="mt-1 text-xs text-slate-500"><?php echo e($item['value']); ?></p>
           </div>
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
       </div>
@@ -121,13 +121,13 @@
 
     <!-- Live stats dashboard right card -->
     <div class="relative flex items-center lg:justify-end z-20">
-      <div class="w-full max-w-[520px] rounded-[8px] border border-white/10 bg-[#07181d]/70 p-4 shadow-2xl shadow-black/35 backdrop-blur-xl">
-        <div class="flex items-center justify-between border-b border-white/10 pb-4">
+      <div class="w-full max-w-[520px] rounded-[8px] border border-white/40 bg-white/70 p-4 shadow-xl shadow-slate-200/50 backdrop-blur-xl">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-4">
           <div>
-            <p class="text-sm font-bold text-[#76e4d2]">مؤشر التشغيل الآن</p>
-            <p class="text-xs text-white/40">تحديث مباشر لمسار المريض</p>
+            <p class="text-sm font-bold text-emerald-600">مؤشر التشغيل الآن</p>
+            <p class="text-xs text-slate-500">تحديث مباشر لمسار المريض</p>
           </div>
-          <div class="inline-flex items-center gap-2 rounded-[8px] bg-emerald-400/10 px-3 py-2 text-xs font-black text-emerald-200">
+          <div class="inline-flex items-center gap-2 rounded-[8px] bg-emerald-100 px-3 py-2 text-xs font-black text-emerald-700">
             <i data-lucide="timer" class="w-3.5 h-3.5"></i>
             متاح
           </div>
@@ -135,26 +135,26 @@
 
         <div class="grid gap-3 py-4">
           <?php $__currentLoopData = $highlights; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <div class="grid grid-cols-[44px_1fr] gap-4 rounded-[8px] bg-white/[0.06] p-4">
-              <div class="flex h-11 w-11 items-center justify-center rounded-[8px] bg-white text-[#0f766e]">
+            <div class="grid grid-cols-[44px_1fr] gap-4 rounded-[8px] border border-slate-100 bg-slate-50/80 p-4">
+              <div class="flex h-11 w-11 items-center justify-center rounded-[8px] bg-emerald-100 text-emerald-600">
                 <i data-lucide="<?php echo e($item['icon']); ?>" class="w-[22px] h-[22px]"></i>
               </div>
               <div>
                 <h3 class="font-black"><?php echo e($item['title']); ?></h3>
-                <p class="mt-1 text-sm leading-6 text-white/50"><?php echo e($item['text']); ?></p>
+                <p class="mt-1 text-sm leading-6 text-slate-500"><?php echo e($item['text']); ?></p>
               </div>
             </div>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
 
         <!-- Metric Card -->
-        <div class="grid grid-cols-[1fr_auto] items-end gap-4 rounded-[8px] bg-[#f8faf7] p-4 text-[#102a2d]">
+        <div class="grid grid-cols-[1fr_auto] items-end gap-4 rounded-[8px] border border-slate-100 bg-white p-4 text-slate-800 shadow-sm">
           <div>
-            <p class="text-xs font-bold text-[#0f766e]">قراءة الشريحة الحالية</p>
+            <p class="text-xs font-bold text-emerald-600">قراءة الشريحة الحالية</p>
             <p id="hero-slide-metric" class="mt-2 text-4xl font-black"><?php echo e($heroSlides[0]['metric']); ?></p>
-            <p id="hero-slide-metric-label" class="mt-1 text-sm text-slate-600"><?php echo e($heroSlides[0]['metricLabel']); ?></p>
+            <p id="hero-slide-metric-label" class="mt-1 text-sm text-slate-500"><?php echo e($heroSlides[0]['metricLabel']); ?></p>
           </div>
-          <i data-lucide="heart-pulse" class="w-10 h-10 text-[#f6715b]"></i>
+          <i data-lucide="heart-pulse" class="w-10 h-10 text-emerald-500"></i>
         </div>
       </div>
     </div>
@@ -164,7 +164,7 @@
   <div class="absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 items-center gap-3">
     <button
       onclick="prevHeroSlide()"
-      class="flex h-11 w-11 items-center justify-center rounded-[8px] border border-white/20 bg-white/10 text-white backdrop-blur-md transition hover:bg-white/20"
+      class="flex h-11 w-11 items-center justify-center rounded-[8px] border border-slate-200 bg-white/80 text-slate-700 shadow-sm backdrop-blur-md transition hover:bg-white"
       aria-label="الشريحة السابقة"
     >
       <i data-lucide="chevron-right" class="w-5 h-5"></i>
@@ -173,7 +173,7 @@
       <?php $__currentLoopData = $heroSlides; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $slide): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <button
           onclick="goToHeroSlide(<?php echo e($index); ?>)"
-          class="hero-dot-indicator h-2.5 rounded-full transition-all <?php echo e($index === 0 ? 'w-10 bg-[#f6715b]' : 'w-2.5 bg-white/30 hover:bg-white/60'); ?>"
+          class="hero-dot-indicator h-2.5 rounded-full transition-all <?php echo e($index === 0 ? 'w-10 bg-emerald-500' : 'w-2.5 bg-slate-300 hover:bg-slate-400'); ?>"
           data-dot-index="<?php echo e($index); ?>"
           aria-label="انتقل إلى الشريحة <?php echo e($index + 1); ?>"
         ></button>
@@ -181,7 +181,7 @@
     </div>
     <button
       onclick="nextHeroSlide()"
-      class="flex h-11 w-11 items-center justify-center rounded-[8px] border border-white/20 bg-white/10 text-white backdrop-blur-md transition hover:bg-white/20"
+      class="flex h-11 w-11 items-center justify-center rounded-[8px] border border-slate-200 bg-white/80 text-slate-700 shadow-sm backdrop-blur-md transition hover:bg-white"
       aria-label="الشريحة التالية"
     >
       <i data-lucide="chevron-left" class="w-5 h-5"></i>
@@ -211,11 +211,11 @@
     const dots = document.querySelectorAll('.hero-dot-indicator');
     dots.forEach((dot, idx) => {
       if (idx === currentHeroIndex) {
-        dot.classList.remove('w-2.5', 'bg-white/30');
-        dot.classList.add('w-10', 'bg-[#f6715b]');
+        dot.classList.remove('w-2.5', 'bg-slate-300');
+        dot.classList.add('w-10', 'bg-emerald-500');
       } else {
-        dot.classList.remove('w-10', 'bg-[#f6715b]');
-        dot.classList.add('w-2.5', 'bg-white/30');
+        dot.classList.remove('w-10', 'bg-emerald-500');
+        dot.classList.add('w-2.5', 'bg-slate-300');
       }
     });
 

@@ -54,12 +54,12 @@
       <!-- Column 1: Brand Info -->
       <div class="lg:col-span-1">
         <div class="flex items-center gap-3 mb-6">
-          <div class="w-[52px] h-[52px] bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-lg overflow-hidden">
+          <div class="w-[52px] h-[52px] bg-white rounded-xl flex items-center justify-center border border-gray-100 shadow-md p-1.5 overflow-hidden">
             @if(!empty($settings->logo))
               @if(str_starts_with($settings->logo, 'http') || str_starts_with($settings->logo, 'data:'))
-                <img src="{{ $settings->logo }}" alt="Logo" class="w-full h-full object-cover" />
+                <img src="{{ $settings->logo }}" alt="Logo" class="w-full h-full object-contain" />
               @else
-                <span class="text-xl text-white">{{ $settings->logo }}</span>
+                <span class="text-xl font-bold text-primary-600">{{ $settings->logo }}</span>
               @endif
             @else
               <span class="text-xl text-white">🏥</span>

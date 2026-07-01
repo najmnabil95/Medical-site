@@ -47,7 +47,7 @@ class NotificationController extends Controller
 
     public function clearAll()
     {
-        Notification::truncate();
+        Notification::query()->delete();
 
         return redirect()->back()->with('success', 'تم تفريغ سجل الإشعارات بالكامل.');
     }

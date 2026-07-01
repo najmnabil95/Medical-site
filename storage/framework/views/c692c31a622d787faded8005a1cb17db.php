@@ -76,12 +76,12 @@
       
       <!-- Logo -->
       <a href="/" class="flex items-center gap-3 group cursor-pointer">
-        <div class="w-12 h-12 bg-primary-500 rounded-xl flex items-center justify-center overflow-hidden shadow-lg shadow-primary-500/20 group-hover:shadow-primary-500/40 transition-all group-hover:scale-105">
+        <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center overflow-hidden border border-gray-100 shadow-md p-1.5 group-hover:scale-105 transition-all">
           <?php if(!empty($settings->logo)): ?>
             <?php if(str_starts_with($settings->logo, 'http') || str_starts_with($settings->logo, 'data:')): ?>
-              <img src="<?php echo e($settings->logo); ?>" alt="Logo" class="w-full h-full object-cover" />
+              <img src="<?php echo e($settings->logo); ?>" alt="Logo" class="w-full h-full object-contain" />
             <?php else: ?>
-              <span class="text-2xl"><?php echo e($settings->logo); ?></span>
+              <span class="text-2xl font-bold text-primary-600"><?php echo e($settings->logo); ?></span>
             <?php endif; ?>
           <?php else: ?>
             <span class="text-2xl">🏥</span>

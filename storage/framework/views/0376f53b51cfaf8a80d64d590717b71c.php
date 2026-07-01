@@ -27,8 +27,16 @@
         <!-- Logo -->
         <div class="text-center mb-8">
           <div class="inline-flex items-center gap-3 mb-6">
-            <div class="w-14 h-14 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl flex items-center justify-center shadow-2xl shadow-primary-500/30">
-              <span class="text-white text-xl">🏥</span>
+            <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center border border-gray-100 shadow-2xl p-1.5 overflow-hidden">
+              <?php if(!empty($settings->logo)): ?>
+                <?php if(str_starts_with($settings->logo, 'http') || str_starts_with($settings->logo, 'data:')): ?>
+                  <img src="<?php echo e($settings->logo); ?>" alt="Logo" class="w-full h-full object-contain" />
+                <?php else: ?>
+                  <span class="text-primary-600 text-xl font-bold"><?php echo e($settings->logo); ?></span>
+                <?php endif; ?>
+              <?php else: ?>
+                <span class="text-xl">🏥</span>
+              <?php endif; ?>
             </div>
             <div class="text-right">
               <h1 class="text-2xl font-bold text-white">مستشفى الشفاء</h1>
@@ -120,12 +128,13 @@
             <span>العودة إلى الموقع الرئيسي</span>
           </a>
 
+          <?php if(config('app.debug')): ?>
           <div class="mt-6 p-4 bg-blue-50/50 rounded-xl border border-blue-100">
-            <p class="text-xs text-blue-600 font-bold mb-1">💡 بيانات الدخول الافتراضية:</p>
-            <p class="text-xs text-blue-500">اسم المستخدم: <span class="font-bold">admin</span></p>
-            <p class="text-xs text-blue-500">كلمة المرور: <span class="font-bold">admin123</span></p>
-            <p class="text-xs text-blue-400 mt-2 font-medium">يمكنك إضافة مستخدمين جدد من صفحة "المستخدمون" في لوحة التحكم</p>
+            <p class="text-xs text-blue-600 font-bold mb-1">💡 وضع التطوير:</p>
+            <p class="text-xs text-blue-500">بيانات الدخول الافتراضية متاحة في ملف <span class="font-bold">DatabaseSeeder</span></p>
+            <p class="text-xs text-blue-400 mt-2 font-medium">تأكد من تغيير كلمة المرور قبل نشر الموقع</p>
           </div>
+          <?php endif; ?>
         </div>
 
         <p class="text-center text-white/35 text-xs mt-6">© 2024 مستشفى الشفاء الدولي</p>

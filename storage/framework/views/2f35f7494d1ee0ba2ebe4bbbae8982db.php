@@ -32,7 +32,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 animate-fade-in-up">
       <?php $__currentLoopData = $services; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $serv): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <?php
-          $icon = strtolower($serv->icon ?? 'activity');
+          $icon = strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', $serv->icon ?? 'activity'));
           $color = $serv->color ?? 'from-primary-500 to-primary-700';
           $number = $serv->number ?? sprintf("%02d", $index + 1);
         ?>

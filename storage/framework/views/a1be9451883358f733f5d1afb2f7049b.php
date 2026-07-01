@@ -29,12 +29,12 @@
         <!-- Logo Header -->
         <div class="h-16 px-6 flex items-center justify-between border-b border-gray-100">
           <a href="<?php echo e(route('admin.dashboard')); ?>" class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-lg shadow-primary-500/20 overflow-hidden">
+            <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center border border-gray-100 shadow-md p-1 overflow-hidden shrink-0">
               <?php if(!empty($settings->logo)): ?>
                 <?php if(str_starts_with($settings->logo, 'http') || str_starts_with($settings->logo, 'data:')): ?>
-                  <img src="<?php echo e($settings->logo); ?>" alt="Logo" class="w-full h-full object-cover" />
+                  <img src="<?php echo e($settings->logo); ?>" alt="Logo" class="w-full h-full object-contain" />
                 <?php else: ?>
-                  <span class="text-white text-base font-bold"><?php echo e($settings->logo); ?></span>
+                  <span class="text-primary-600 text-base font-bold"><?php echo e($settings->logo); ?></span>
                 <?php endif; ?>
               <?php else: ?>
                 <span class="text-white text-base font-bold">🏥</span>
@@ -235,23 +235,22 @@
                   <span class="flex-1 text-right">إعدادات الموقع</span>
                 </a>
               <?php endif; ?>
+            
+            <!-- Divider inside nav -->
+            <div class="h-px bg-gray-100 my-4"></div>
+
+            <div class="px-2 space-y-1">
+              <a
+                href="/"
+                class="flex items-center gap-3 px-4 py-2.5 bg-gradient-to-l from-emerald-500 to-emerald-600 text-white rounded-xl text-sm font-bold hover:shadow-lg hover:shadow-emerald-500/20 transition-all hover:-translate-y-0.5"
+              >
+                <i data-lucide="home" class="w-4.5 h-4.5"></i>
+                <span class="flex-1 text-right">زيارة الموقع</span>
+              </a>
             </div>
           </div>
           
         </nav>
-
-        <!-- Divider -->
-        <div class="h-px bg-gray-100 my-2 mx-3"></div>
-
-        <div class="px-3 py-2 space-y-2">
-          <a
-            href="/"
-            class="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-l from-emerald-500 to-emerald-600 text-white rounded-xl text-sm font-bold hover:shadow-lg hover:shadow-emerald-500/20 transition-all hover:-translate-y-0.5"
-          >
-            <i data-lucide="home" class="w-4.5 h-4.5"></i>
-            <span>زيارة الموقع</span>
-          </a>
-        </div>
 
         <!-- Logout Panel -->
         <div class="absolute bottom-0 right-0 left-0 p-4 border-t border-gray-100 bg-white">
@@ -297,6 +296,16 @@
           </div>
 
           <div class="flex items-center gap-3">
+            <!-- Return to Main Site Button -->
+            <a
+              href="/"
+              class="flex items-center gap-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-xl text-sm font-bold border border-gray-200/60 transition-all hover:shadow-sm"
+              title="العودة للموقع الرئيسي"
+            >
+              <i data-lucide="external-link" class="w-4 h-4 text-gray-500"></i>
+              <span class="hidden sm:inline">الموقع الرئيسي</span>
+            </a>
+
             <!-- Profile dropdown and info -->
             <div class="relative">
               <button

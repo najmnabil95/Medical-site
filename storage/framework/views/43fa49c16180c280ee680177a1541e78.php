@@ -18,7 +18,7 @@
     <?php if(!empty($settings->favicon)): ?>
         <link rel="icon" type="image/png" href="<?php echo e($settings->favicon); ?>">
     <?php else: ?>
-        <link rel="icon" type="image/png" href="/favicon.png">
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <?php endif; ?>
 
     <!-- Vite Assets -->

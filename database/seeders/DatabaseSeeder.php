@@ -62,10 +62,10 @@ class DatabaseSeeder extends Seeder
         $this->firstOrCreateDoctor('د. خالد العمري', 'استشاري جراحة المخ والأعصاب', 'جراحة المخ والأعصاب', 'https://images.pexels.com/photos/14438786/pexels-photo-14438786.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=400', 4.9, '18 سنة', '+4200', 'from-purple-500 to-violet-600');
         $this->firstOrCreateDoctor('د. نورة الحربي', 'استشارية طب العيون وجراحة الليزر', 'طب العيون', 'https://images.pexels.com/photos/19260195/pexels-photo-19260195.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=400', 4.7, '12 سنة', '+2800', 'from-cyan-500 to-teal-600');
 
-        Service::create(['icon' => 'Ambulance', 'title' => 'خدمة الإسعاف', 'desc' => 'سيارات إسعاف مجهزة بأحدث المعدات الطبية للنقل الآمن والسريع', 'color' => 'from-red-500 to-rose-600', 'number' => '01', 'active' => true]);
-        Service::create(['icon' => 'Clock', 'title' => 'طوارئ 24/7', 'desc' => 'قسم طوارئ يعمل على مدار الساعة بفريق طبي متخصص ومؤهل', 'color' => 'from-orange-500 to-amber-600', 'number' => '02', 'active' => true]);
-        Service::create(['icon' => 'flask-conical', 'title' => 'مختبرات متقدمة', 'desc' => 'تحاليل طبية شاملة بأحدث الأجهزة ونتائج دقيقة وسريعة', 'color' => 'from-blue-500 to-indigo-600', 'number' => '03', 'active' => true]);
-        Service::create(['icon' => 'Scan', 'title' => 'الأشعة والتصوير', 'desc' => 'أجهزة تصوير متطورة تشمل الرنين المغناطيسي والأشعة المقطعية', 'color' => 'from-purple-500 to-violet-600', 'number' => '04', 'active' => true]);
+        Service::firstOrCreate(['title' => 'خدمة الإسعاف'], ['icon' => 'Ambulance', 'desc' => 'سيارات إسعاف مجهزة بأحدث المعدات الطبية للنقل الآمن والسريع', 'color' => 'from-red-500 to-rose-600', 'number' => '01', 'active' => true]);
+        Service::firstOrCreate(['title' => 'طوارئ 24/7'], ['icon' => 'Clock', 'desc' => 'قسم طوارئ يعمل على مدار الساعة بفريق طبي متخصص ومؤهل', 'color' => 'from-orange-500 to-amber-600', 'number' => '02', 'active' => true]);
+        Service::firstOrCreate(['title' => 'مختبرات متقدمة'], ['icon' => 'flask-conical', 'desc' => 'تحاليل طبية شاملة بأحدث الأجهزة ونتائج دقيقة وسريعة', 'color' => 'from-blue-500 to-indigo-600', 'number' => '03', 'active' => true]);
+        Service::firstOrCreate(['title' => 'الأشعة والتصوير'], ['icon' => 'Scan', 'desc' => 'أجهزة تصوير متطورة تشمل الرنين المغناطيسي والأشعة المقطعية', 'color' => 'from-purple-500 to-violet-600', 'number' => '04', 'active' => true]);
 
         Package::create(['name' => 'الباقة الأساسية', 'name_en' => 'Basic', 'price' => '500', 'period' => 'سنوياً', 'icon' => '🩺', 'popular' => false, 'gradient' => 'from-gray-600 to-gray-800', 'features' => ['كشف طبي شامل سنوي', 'تحاليل دم أساسية', 'أشعة صدر'], 'active' => true]);
         Package::create(['name' => 'الباقة الذهبية', 'name_en' => 'Gold', 'price' => '1,500', 'period' => 'سنوياً', 'icon' => '👑', 'popular' => true, 'gradient' => 'from-amber-500 to-yellow-600', 'features' => ['كشف طبي شامل مرتين سنوياً', 'تحاليل دم شاملة', 'خصم 25%'], 'active' => true]);
@@ -78,9 +78,9 @@ class DatabaseSeeder extends Seeder
         News::create(['image' => 'https://images.pexels.com/photos/24193873/pexels-photo-24193873.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=350&w=550', 'category' => 'أخبار المستشفى', 'title' => 'مستشفى الشفاء يحصل على اعتماد JCI الدولي', 'excerpt' => 'حصل المستشفى على تجديد الاعتماد الدولي', 'date' => '2024-01-15', 'author' => 'إدارة المستشفى', 'read_time' => '5 دقائق', 'category_color' => 'bg-primary-100 text-primary-700', 'featured' => true]);
         News::create(['image' => 'https://images.pexels.com/photos/18112241/pexels-photo-18112241.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=350&w=550', 'category' => 'تقنية طبية', 'title' => 'إطلاق أحدث جهاز للتصوير بالرنين المغناطيسي', 'excerpt' => 'دشن المستشفى أحدث جهاز تصوير بالرنين', 'date' => '2024-01-08', 'author' => 'القسم التقني', 'read_time' => '3 دقائق', 'category_color' => 'bg-purple-100 text-purple-700', 'featured' => false]);
 
-        Faq::create(['question' => 'ما هي ساعات عمل المستشفى؟', 'answer' => 'يعمل المستشفى من السبت إلى الخميس من الساعة 8 صباحاً حتى 10 مساءً.']);
-        Faq::create(['question' => 'كيف يمكنني حجز موعد مع طبيب؟', 'answer' => 'يمكنك حجز موعد عبر النموذج الإلكتروني أو الاتصال بنا على الرقم 920012345.']);
-        Faq::create(['question' => 'هل يقبل المستشفى جميع شركات التأمين؟', 'answer' => 'نتعامل مع أكثر من 25 شركة تأمين طبي معتمدة.']);
+        Faq::firstOrCreate(['question' => 'ما هي ساعات عمل المستشفى؟'], ['answer' => 'يعمل المستشفى من السبت إلى الخميس من الساعة 8 صباحاً حتى 10 مساءً.']);
+        Faq::firstOrCreate(['question' => 'كيف يمكنني حجز موعد مع طبيب؟'], ['answer' => 'يمكنك حجز موعد عبر النموذج الإلكتروني أو الاتصال بنا على الرقم 920012345.']);
+        Faq::firstOrCreate(['question' => 'هل يقبل المستشفى جميع شركات التأمين؟'], ['answer' => 'نتعامل مع أكثر من 25 شركة تأمين طبي معتمدة.']);
 
         Insurance::create(['name' => 'بوبا العربية', 'abbr' => 'BUPA', 'active' => true]);
         Insurance::create(['name' => 'التعاونية', 'abbr' => 'TAWU', 'active' => true]);
@@ -94,16 +94,16 @@ class DatabaseSeeder extends Seeder
         Certification::create(['icon' => '🏆', 'name' => 'JCI', 'full_name' => 'الاعتماد الدولي', 'desc' => 'حاصلون على اعتماد الهيئة الدولية', 'year' => '2024', 'color' => 'from-amber-500 to-yellow-600', 'border' => 'border-amber-200', 'bg' => 'bg-amber-50']);
         Certification::create(['icon' => '🌟', 'name' => 'CBAHI', 'full_name' => 'المجلس المركزي', 'desc' => 'اعتماد المجلس المركزي', 'year' => '2024', 'color' => 'from-blue-500 to-indigo-600', 'border' => 'border-blue-200', 'bg' => 'bg-blue-50']);
 
-        PriceItem::create(['service' => 'استشارة عامة', 'category' => 'استشارة', 'price' => 100, 'currency' => 'ر.س', 'duration' => '30 دقيقة', 'active' => true]);
-        PriceItem::create(['service' => 'استشارة متخصصة', 'category' => 'استشارة', 'price' => 200, 'currency' => 'ر.س', 'duration' => '30 دقيقة', 'active' => true]);
-        PriceItem::create(['service' => 'استشارة استشاري', 'category' => 'استشارة', 'price' => 300, 'currency' => 'ر.س', 'duration' => '45 دقيقة', 'active' => true]);
-        PriceItem::create(['service' => 'فحص دم شامل', 'category' => 'تحليل', 'price' => 150, 'currency' => 'ر.س', 'active' => true]);
-        PriceItem::create(['service' => 'تحليل سكر تراكمي', 'category' => 'تحليل', 'price' => 80, 'currency' => 'ر.س', 'active' => true]);
-        PriceItem::create(['service' => 'أشعة سينية', 'category' => 'أشعة', 'price' => 120, 'currency' => 'ر.س', 'active' => true]);
-        PriceItem::create(['service' => 'أشعة مقطعية', 'category' => 'أشعة', 'price' => 800, 'currency' => 'ر.س', 'duration' => '20 دقيقة', 'active' => true]);
-        PriceItem::create(['service' => 'رنين مغناطيسي', 'category' => 'أشعة', 'price' => 1500, 'currency' => 'ر.س', 'duration' => '45 دقيقة', 'active' => true]);
-        PriceItem::create(['service' => 'عملية جراحية بسيطة', 'category' => 'جراحة', 'price' => 5000, 'currency' => 'ر.س', 'active' => true]);
-        PriceItem::create(['service' => 'عملية جراحية معقدة', 'category' => 'جراحة', 'price' => 15000, 'currency' => 'ر.س', 'active' => true]);
+        PriceItem::firstOrCreate(['service' => 'استشارة عامة', 'category' => 'استشارة'], ['price' => 100, 'currency' => 'ر.س', 'duration' => '30 دقيقة', 'active' => true]);
+        PriceItem::firstOrCreate(['service' => 'استشارة متخصصة', 'category' => 'استشارة'], ['price' => 200, 'currency' => 'ر.س', 'duration' => '30 دقيقة', 'active' => true]);
+        PriceItem::firstOrCreate(['service' => 'استشارة استشاري', 'category' => 'استشارة'], ['price' => 300, 'currency' => 'ر.س', 'duration' => '45 دقيقة', 'active' => true]);
+        PriceItem::firstOrCreate(['service' => 'فحص دم شامل', 'category' => 'تحليل'], ['price' => 150, 'currency' => 'ر.س', 'active' => true]);
+        PriceItem::firstOrCreate(['service' => 'تحليل سكر تراكمي', 'category' => 'تحليل'], ['price' => 80, 'currency' => 'ر.س', 'active' => true]);
+        PriceItem::firstOrCreate(['service' => 'أشعة سينية', 'category' => 'أشعة'], ['price' => 120, 'currency' => 'ر.س', 'active' => true]);
+        PriceItem::firstOrCreate(['service' => 'أشعة مقطعية', 'category' => 'أشعة'], ['price' => 800, 'currency' => 'ر.س', 'duration' => '20 دقيقة', 'active' => true]);
+        PriceItem::firstOrCreate(['service' => 'رنين مغناطيسي', 'category' => 'أشعة'], ['price' => 1500, 'currency' => 'ر.س', 'duration' => '45 دقيقة', 'active' => true]);
+        PriceItem::firstOrCreate(['service' => 'عملية جراحية بسيطة', 'category' => 'جراحة'], ['price' => 5000, 'currency' => 'ر.س', 'active' => true]);
+        PriceItem::firstOrCreate(['service' => 'عملية جراحية معقدة', 'category' => 'جراحة'], ['price' => 15000, 'currency' => 'ر.س', 'active' => true]);
 
         Setting::firstOrCreate(
             ['site_name' => 'مستشفى الشفاء'],
