@@ -7,6 +7,21 @@
     ['color' => 'from-blue-500 to-indigo-600', 'lightColor' => 'bg-blue-50 text-blue-600'],
   ];
 
+  $colorMap = [
+    'blue' => ['color' => 'from-blue-500 to-indigo-600', 'lightColor' => 'bg-blue-50 text-blue-600'],
+    'emerald' => ['color' => 'from-emerald-500 to-teal-600', 'lightColor' => 'bg-emerald-50 text-emerald-600'],
+    'purple' => ['color' => 'from-purple-500 to-violet-600', 'lightColor' => 'bg-purple-50 text-purple-600'],
+    'amber' => ['color' => 'from-amber-500 to-orange-600', 'lightColor' => 'bg-amber-50 text-amber-600'],
+    'rose' => ['color' => 'from-rose-500 to-pink-600', 'lightColor' => 'bg-rose-50 text-rose-600'],
+    'indigo' => ['color' => 'from-indigo-500 to-purple-600', 'lightColor' => 'bg-indigo-50 text-indigo-600'],
+    'from-red-500 to-rose-600' => ['color' => 'from-red-500 to-rose-600', 'lightColor' => 'bg-rose-50 text-rose-600'],
+    'from-purple-500 to-violet-600' => ['color' => 'from-purple-500 to-violet-600', 'lightColor' => 'bg-purple-50 text-purple-600'],
+    'from-amber-500 to-orange-600' => ['color' => 'from-amber-500 to-orange-600', 'lightColor' => 'bg-amber-50 text-amber-600'],
+    'from-pink-500 to-rose-600' => ['color' => 'from-pink-500 to-rose-600', 'lightColor' => 'bg-rose-50 text-rose-600'],
+    'from-cyan-500 to-teal-600' => ['color' => 'from-cyan-500 to-teal-600', 'lightColor' => 'bg-cyan-50 text-cyan-600'],
+    'from-blue-500 to-indigo-600' => ['color' => 'from-blue-500 to-indigo-600', 'lightColor' => 'bg-blue-50 text-blue-600'],
+  ];
+
   $dummyServices = [
     "تشخيص دقيق بأحدث التقنيات",
     "علاج متقدم وفعال",
@@ -47,8 +62,9 @@
       @foreach($departments as $index => $dept)
         @php
           $colors = $defaultColors[$index % count($defaultColors)];
-          $deptColor = $dept->color ?? $colors['color'];
-          $deptLightColor = $colors['lightColor'];
+          $mapped = $colorMap[$dept->color] ?? null;
+          $deptColor = $mapped['color'] ?? ($dept->color ?? $colors['color']);
+          $deptLightColor = $mapped['lightColor'] ?? $colors['lightColor'];
           $icon = strtolower($dept->icon ?? 'heart');
         @endphp
         
@@ -76,137 +92,6 @@
             </div>
           </div>
         </div>
-
-        <!-- Hidden Detail Modal for each Department -->
-        <div id="dept-modal-{{ $dept->id }}" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4">
-          <div class="fixed inset-0 bg-black/70 backdrop-blur-sm" onclick="closeDeptModal({{ $dept->id }})"></div>
-          <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto animate-scale-in">
-            <!-- Header -->
-            <div class="relative h-48 bg-gradient-to-br {{ $deptColor }} overflow-hidden">
-              <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle, white 1px, transparent 1px); background-size: 25px 25px;"></div>
-              <button
-                onclick="closeDeptModal({{ $dept->id }})"
-                class="absolute top-4 left-4 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors"
-              >
-                <i data-lucide="x" class="w-5 h-5"></i>
-              </button>
-              <div class="absolute bottom-6 right-6 text-white">
-                <div class="flex items-center gap-3 mb-3">
-                  <div class="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
-                    <i data-lucide="{{ $icon }}" class="text-white w-7 h-7"></i>
-                  </div>
-                  <div>
-                    <p class="text-white/70 text-xs">قسم طبي</p>
-                    <h2 class="text-3xl font-black">{{ $dept->name }}</h2>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Content -->
-            <div class="p-8 grid md:grid-cols-3 gap-8 text-gray-700">
-              <!-- Main Info -->
-              <div class="md:col-span-2 space-y-6">
-                <div>
-                  <h3 class="text-lg font-bold text-gray-800 mb-3">نبذة عن القسم</h3>
-                  <p class="text-gray-600 leading-relaxed">{{ $dept->desc }}</p>
-                </div>
-
-                <!-- Services list -->
-                <div>
-                  <h3 class="text-lg font-bold text-gray-800 mb-4">خدماتنا في هذا القسم</h3>
-                  <div class="grid grid-cols-2 gap-3">
-                    @foreach($dummyServices as $serv)
-                      <div class="flex items-center gap-2 bg-gray-50 rounded-xl p-3">
-                        <i data-lucide="check-circle" class="text-emerald-500 w-4 h-4 shrink-0"></i>
-                        <span class="text-sm text-gray-700">{{ $serv }}</span>
-                      </div>
-                    @endforeach
-                  </div>
-                </div>
-
-                <!-- Department Stats -->
-                <div class="grid grid-cols-3 gap-3">
-                  <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-center">
-                    <i data-lucide="users" class="text-emerald-500 mx-auto mb-2 w-5.5 h-5.5"></i>
-                    <div class="text-xl font-black text-slate-800">+2K</div>
-                    <div class="text-xs text-gray-500">مريض/سنة</div>
-                  </div>
-                  <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-center">
-                    <i data-lucide="award" class="text-emerald-500 mx-auto mb-2 w-5.5 h-5.5"></i>
-                    <div class="text-xl font-black text-slate-800">98%</div>
-                    <div class="text-xs text-gray-500">نسبة النجاح</div>
-                  </div>
-                  <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-center">
-                    <i data-lucide="activity" class="text-emerald-500 mx-auto mb-2 w-5.5 h-5.5"></i>
-                    <div class="text-xl font-black text-slate-800">24/7</div>
-                    <div class="text-xs text-gray-500">خدمة مستمرة</div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Sidebar: Doctors of this Department -->
-              <div class="space-y-4">
-                <h3 class="text-lg font-bold text-gray-800">أطباؤنا المتخصصون</h3>
-                
-                @php
-                  $deptDoctors = $doctors->where('department', $dept->name);
-                @endphp
-
-                @if($deptDoctors->isNotEmpty())
-                  <p class="text-xs text-gray-500 mb-2">
-                    {{ $deptDoctors->count() }} طبيب في هذا القسم
-                  </p>
-                  <div class="space-y-3">
-                    @foreach($deptDoctors as $doc)
-                      <div class="bg-white rounded-2xl border border-gray-100 p-4 hover:shadow-md transition-all">
-                        <div class="flex items-center gap-3 mb-2">
-                          <img src="{{ $doc->image }}" alt="{{ $doc->name }}" class="w-12 h-12 rounded-xl object-cover" />
-                          <div class="flex-1 min-w-0">
-                            <p class="font-bold text-gray-800 text-sm truncate">{{ $doc->name }}</p>
-                            <div class="flex items-center gap-1 mt-0.5">
-                              <i data-lucide="star" class="text-yellow-500 fill-current w-3 h-3"></i>
-                              <span class="text-xs text-gray-500">{{ $doc->rating }}</span>
-                            </div>
-                          </div>
-                        </div>
-                        <p class="text-xs text-gray-500 truncate mb-2">{{ $doc->specialty }}</p>
-                        <button
-                          onclick="prefillAppointment('{{ $dept->name }}', '{{ $doc->name }}')"
-                          class="w-full bg-emerald-50 text-emerald-600 py-2 rounded-lg text-xs font-bold hover:bg-emerald-100 transition-colors flex items-center justify-center gap-1"
-                        >
-                          <i data-lucide="clock" class="w-3.5 h-3.5"></i>
-                          <span>احجز موعداً</span>
-                        </button>
-                      </div>
-                    @endforeach
-                  </div>
-                @else
-                  <div class="bg-gray-50 rounded-2xl p-6 text-center">
-                    <i data-lucide="stethoscope" class="text-gray-300 mx-auto mb-3 w-10 h-10"></i>
-                    <p class="text-gray-500 text-sm">لا يوجد أطباء حالياً</p>
-                    <p class="text-xs text-gray-400 mt-2 font-medium">يمكنك الحجز العام وسنتواصل معك لاختيار الطبيب</p>
-                  </div>
-                @endif
-
-                <button
-                  onclick="prefillAppointment('{{ $dept->name }}', '')"
-                  class="w-full bg-emerald-600 text-white py-4 rounded-2xl font-bold hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2"
-                >
-                  <span>احجز موعد الآن</span>
-                  <i data-lucide="arrow-left" class="w-4 h-4"></i>
-                </button>
-
-                <a
-                  href="tel:{{ $settings->emergency ?? '920012345' }}"
-                  class="w-full bg-slate-100 text-slate-700 py-3 rounded-2xl font-bold hover:bg-slate-200 transition-colors flex items-center justify-center gap-2 text-sm"
-                >
-                  <span>📞 للاستفسار: {{ $settings->emergency ?? '920012345' }}</span>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
       @endforeach
     </div>
 
@@ -218,12 +103,164 @@
   </div>
 </section>
 
+{{-- Modals: placed OUTSIDE the <section> to avoid overflow-hidden / transform containment --}}
+@foreach($departments as $index => $dept)
+  @php
+    $colors = $defaultColors[$index % count($defaultColors)];
+    $mapped = $colorMap[$dept->color] ?? null;
+    $deptColor = $mapped['color'] ?? ($dept->color ?? $colors['color']);
+    $icon = strtolower($dept->icon ?? 'heart');
+  @endphp
+  
+  <div id="dept-modal-{{ $dept->id }}" class="hidden fixed inset-0 z-[9999] flex items-center justify-center p-4">
+    {{-- Solid dark overlay (no backdrop-blur for performance) --}}
+    <div class="fixed inset-0 bg-black/75" onclick="closeDeptModal({{ $dept->id }})"></div>
+    <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto z-10" style="animation: deptModalIn 0.25s ease-out;">
+      <!-- Header -->
+      <div class="relative h-48 bg-gradient-to-br {{ $deptColor }} overflow-hidden">
+        <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle, white 1px, transparent 1px); background-size: 25px 25px;"></div>
+        <button
+          onclick="closeDeptModal({{ $dept->id }})"
+          class="absolute top-4 left-4 w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors"
+        >
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+        <div class="absolute bottom-6 right-6 text-white">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center">
+              <i data-lucide="{{ $icon }}" class="text-white w-7 h-7"></i>
+            </div>
+            <div>
+              <p class="text-white/70 text-xs">قسم طبي</p>
+              <h2 class="text-3xl font-black">{{ $dept->name }}</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="p-8 grid md:grid-cols-3 gap-8 text-gray-700">
+        <!-- Main Info -->
+        <div class="md:col-span-2 space-y-6">
+          <div>
+            <h3 class="text-lg font-bold text-gray-800 mb-3">نبذة عن القسم</h3>
+            <p class="text-gray-600 leading-relaxed">{{ $dept->desc }}</p>
+          </div>
+
+          <!-- Services list -->
+          <div>
+            <h3 class="text-lg font-bold text-gray-800 mb-4">خدماتنا في هذا القسم</h3>
+            <div class="grid grid-cols-2 gap-3">
+              @foreach($dummyServices as $serv)
+                <div class="flex items-center gap-2 bg-gray-50 rounded-xl p-3">
+                  <i data-lucide="check-circle" class="text-emerald-500 w-4 h-4 shrink-0"></i>
+                  <span class="text-sm text-gray-700">{{ $serv }}</span>
+                </div>
+              @endforeach
+            </div>
+          </div>
+
+          <!-- Department Stats -->
+          <div class="grid grid-cols-3 gap-3">
+            <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-center">
+              <i data-lucide="users" class="text-emerald-500 mx-auto mb-2 w-5.5 h-5.5"></i>
+              <div class="text-xl font-black text-slate-800">+2K</div>
+              <div class="text-xs text-gray-500">مريض/سنة</div>
+            </div>
+            <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-center">
+              <i data-lucide="award" class="text-emerald-500 mx-auto mb-2 w-5.5 h-5.5"></i>
+              <div class="text-xl font-black text-slate-800">98%</div>
+              <div class="text-xs text-gray-500">نسبة النجاح</div>
+            </div>
+            <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-center">
+              <i data-lucide="activity" class="text-emerald-500 mx-auto mb-2 w-5.5 h-5.5"></i>
+              <div class="text-xl font-black text-slate-800">24/7</div>
+              <div class="text-xs text-gray-500">خدمة مستمرة</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar: Doctors of this Department -->
+        <div class="space-y-4">
+          <h3 class="text-lg font-bold text-gray-800">أطباؤنا المتخصصون</h3>
+          
+          @php
+            $deptDoctors = $doctors->where('department', $dept->name);
+          @endphp
+
+          @if($deptDoctors->isNotEmpty())
+            <p class="text-xs text-gray-500 mb-2">
+              {{ $deptDoctors->count() }} طبيب في هذا القسم
+            </p>
+            <div class="space-y-3">
+              @foreach($deptDoctors as $doc)
+                <div class="bg-white rounded-2xl border border-gray-100 p-4 hover:shadow-md transition-all">
+                  <div class="flex items-center gap-3 mb-2">
+                    <img src="{{ $doc->image }}" alt="{{ $doc->name }}" class="w-12 h-12 rounded-xl object-cover" />
+                    <div class="flex-1 min-w-0">
+                      <p class="font-bold text-gray-800 text-sm truncate">{{ $doc->name }}</p>
+                      <div class="flex items-center gap-1 mt-0.5">
+                        <i data-lucide="star" class="text-yellow-500 fill-current w-3 h-3"></i>
+                        <span class="text-xs text-gray-500">{{ $doc->rating }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="text-xs text-gray-500 truncate mb-2">{{ $doc->specialty }}</p>
+                  <button
+                    onclick="prefillAppointment('{{ $dept->name }}', '{{ $doc->name }}')"
+                    class="w-full bg-emerald-50 text-emerald-600 py-2 rounded-lg text-xs font-bold hover:bg-emerald-100 transition-colors flex items-center justify-center gap-1"
+                  >
+                    <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                    <span>احجز موعداً</span>
+                  </button>
+                </div>
+              @endforeach
+            </div>
+          @else
+            <div class="bg-gray-50 rounded-2xl p-6 text-center">
+              <i data-lucide="stethoscope" class="text-gray-300 mx-auto mb-3 w-10 h-10"></i>
+              <p class="text-gray-500 text-sm">لا يوجد أطباء حالياً</p>
+              <p class="text-xs text-gray-400 mt-2 font-medium">يمكنك الحجز العام وسنتواصل معك لاختيار الطبيب</p>
+            </div>
+          @endif
+
+          <button
+            onclick="prefillAppointment('{{ $dept->name }}', '')"
+            class="w-full bg-emerald-600 text-white py-4 rounded-2xl font-bold hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2"
+          >
+            <span>احجز موعد الآن</span>
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+          </button>
+
+          <a
+            href="tel:{{ $settings->emergency ?? '920012345' }}"
+            class="w-full bg-slate-100 text-slate-700 py-3 rounded-2xl font-bold hover:bg-slate-200 transition-colors flex items-center justify-center gap-2 text-sm"
+          >
+            <span>📞 للاستفسار: {{ $settings->emergency ?? '920012345' }}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+@endforeach
+
+<style>
+  @keyframes deptModalIn {
+    from { opacity: 0; transform: scale(0.95) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+</style>
+
 <script>
   function openDeptModal(id) {
     const modal = document.getElementById('dept-modal-' + id);
     if (modal) {
       modal.classList.remove('hidden');
       document.body.style.overflow = 'hidden';
+      // Re-render lucide icons inside the newly-visible modal
+      if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+      }
     }
   }
 
@@ -236,7 +273,7 @@
   }
 
   function prefillAppointment(deptName, docName) {
-    // Close the department details modal first
+    // Close all department modals
     const modals = document.querySelectorAll('[id^="dept-modal-"]');
     modals.forEach(modal => modal.classList.add('hidden'));
     document.body.style.overflow = '';
@@ -254,12 +291,10 @@
 
       if (deptSelect) {
         deptSelect.value = deptName;
-        // Trigger change event if there are listeners
         deptSelect.dispatchEvent(new Event('change'));
       }
 
       if (docSelect && docName) {
-        // Wait briefly for doctor list update if dynamic
         setTimeout(() => {
           docSelect.value = docName;
         }, 100);

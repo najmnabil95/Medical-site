@@ -33,6 +33,13 @@
       'amber' => 'bg-amber-50 text-amber-600 border-amber-100',
       'rose' => 'bg-rose-50 text-rose-600 border-rose-100',
       'indigo' => 'bg-indigo-50 text-indigo-600 border-indigo-100',
+      // Seeded gradients compatibility mapping
+      'from-red-500 to-rose-600' => 'bg-rose-50 text-rose-600 border-rose-100',
+      'from-purple-500 to-violet-600' => 'bg-purple-50 text-purple-600 border-purple-100',
+      'from-amber-500 to-orange-600' => 'bg-amber-50 text-amber-600 border-amber-100',
+      'from-pink-500 to-rose-600' => 'bg-rose-50 text-rose-600 border-rose-100',
+      'from-cyan-500 to-teal-600' => 'bg-cyan-50 text-cyan-600 border-cyan-100',
+      'from-blue-500 to-indigo-600' => 'bg-blue-50 text-blue-600 border-blue-100',
     ];
   @endphp
 
@@ -112,7 +119,14 @@
 
         <div class="flex items-center gap-2 pt-3 border-t border-gray-50">
           <button
-            onclick="openEditModal({{ $dept->id }}, '{{ addslashes($dept->name) }}', '{{ $dept->icon }}', '{{ addslashes($dept->desc) }}', '{{ $dept->color }}', {{ $dept->active ? 'true' : 'false' }})"
+            type="button"
+            onclick="openEditModal(this)"
+            data-id="{{ $dept->id }}"
+            data-name="{{ $dept->name }}"
+            data-icon="{{ $dept->icon }}"
+            data-desc="{{ $dept->desc }}"
+            data-color="{{ $dept->color }}"
+            data-active="{{ $dept->active ? '1' : '0' }}"
             class="flex-1 py-2 bg-blue-50 text-blue-600 rounded-lg text-xs font-bold hover:bg-blue-100 transition-colors flex items-center justify-center gap-1 cursor-pointer"
           >
             <i data-lucide="edit" class="w-3.5 h-3.5"></i>
@@ -277,14 +291,31 @@
       document.getElementById('create-modal').classList.add('hidden');
     }
 
-    function openEditModal(id, name, icon, desc, color, active) {
+    function openEditModal(btn) {
+      const id = btn.getAttribute('data-id');
+      const name = btn.getAttribute('data-name');
+      const icon = btn.getAttribute('data-icon') || '';
+      const desc = btn.getAttribute('data-desc');
+      const color = btn.getAttribute('data-color') || '';
+      const active = btn.getAttribute('data-active') === '1';
+
       const form = document.getElementById('edit-form');
       form.action = `/admin/departments/${id}`;
       
       document.getElementById('edit-name').value = name;
-      document.getElementById('edit-icon').value = icon;
+      document.getElementById('edit-icon').value = icon.toLowerCase();
       document.getElementById('edit-desc').value = desc;
-      document.getElementById('edit-color').value = color;
+      
+      // Map gradient string to simple color names for the select element
+      let mappedColor = color.toLowerCase();
+      if (mappedColor.includes('red') || mappedColor.includes('rose')) mappedColor = 'rose';
+      else if (mappedColor.includes('blue') || mappedColor.includes('sky')) mappedColor = 'blue';
+      else if (mappedColor.includes('emerald') || mappedColor.includes('teal')) mappedColor = 'emerald';
+      else if (mappedColor.includes('purple') || mappedColor.includes('violet')) mappedColor = 'purple';
+      else if (mappedColor.includes('amber') || mappedColor.includes('orange')) mappedColor = 'amber';
+      else if (mappedColor.includes('indigo')) mappedColor = 'indigo';
+      
+      document.getElementById('edit-color').value = mappedColor;
       document.getElementById('edit-active').checked = active;
       
       document.getElementById('edit-modal').classList.remove('hidden');
