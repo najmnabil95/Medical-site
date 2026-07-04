@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\ScreenController;
 
 // Public site routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/doctors', [HomeController::class, 'doctors'])->name('doctors.index');
 Route::post('/appointment', [HomeController::class, 'storeAppointment'])->name('appointments.store')->middleware('throttle:5,1');
 Route::post('/message', [HomeController::class, 'storeMessage'])->name('messages.store')->middleware('throttle:5,1');
 

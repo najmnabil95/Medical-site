@@ -157,6 +157,51 @@
             </select>
             <p class="text-xs text-gray-400">القناة الافتراضية لإرسال إشعارات الحجز للمرضى عند تأكيد الموعد.</p>
           </div>
+
+          <!-- Font Family Option -->
+          <div class="border-t border-gray-100 pt-4 mt-4 space-y-2">
+            <label class="block text-sm font-bold text-gray-700 mb-1">نوع الخط المستخدم في الموقع (Font Family)</label>
+            <select name="font_family" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500">
+              <option value="Tajawal" {{ old('font_family', $settings->font_family ?? 'Tajawal') === 'Tajawal' ? 'selected' : '' }}>Tajawal (تاجاوال - الافتراضي)</option>
+              <option value="Cairo" {{ old('font_family', $settings->font_family ?? 'Tajawal') === 'Cairo' ? 'selected' : '' }}>Cairo (كايرو)</option>
+              <option value="Almarai" {{ old('font_family', $settings->font_family ?? 'Tajawal') === 'Almarai' ? 'selected' : '' }}>Almarai (المراعي)</option>
+              <option value="Alexandria" {{ old('font_family', $settings->font_family ?? 'Tajawal') === 'Alexandria' ? 'selected' : '' }}>Alexandria (الإسكندرية)</option>
+              <option value="Amiri" {{ old('font_family', $settings->font_family ?? 'Tajawal') === 'Amiri' ? 'selected' : '' }}>Amiri (الأميري - كلاسيكي)</option>
+              <option value="Readex Pro" {{ old('font_family', $settings->font_family ?? 'Tajawal') === 'Readex Pro' ? 'selected' : '' }}>Readex Pro (ريدكس برو)</option>
+            </select>
+            <p class="text-xs text-gray-400">تغيير هذا الخيار سيقوم بتحديث خط نصوص الموقع بالكامل ولوحة التحكم بشكل فوري.</p>
+          </div>
+
+          <!-- About Us Section Images Upload -->
+          <div class="border-t border-gray-100 pt-4 mt-4 space-y-4">
+            <h4 class="font-bold text-gray-800 text-sm">صور قسم "من نحن" (About Us Images - 4 صور)</h4>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              @for($i = 1; $i <= 4; $i++)
+                @php $fieldName = 'about_image_' . $i; @endphp
+                <div class="space-y-2">
+                  <label class="block text-xs font-bold text-gray-500">الصورة {{ $i }}</label>
+                  <div class="flex flex-col items-center gap-3">
+                    <div id="about_image_{{ $i }}-preview-container" class="w-full h-24 border border-gray-200 rounded-xl flex items-center justify-center overflow-hidden bg-gray-50 shadow-sm shrink-0">
+                      @if(!empty($settings->$fieldName))
+                        <img id="about_image_{{ $i }}-preview" src="{{ $settings->$fieldName }}" alt="About Image {{ $i }}" class="w-full h-full object-cover" />
+                      @else
+                        <i id="about_image_{{ $i }}-preview-icon" data-lucide="image" class="text-gray-300 w-6 h-6"></i>
+                      @endif
+                    </div>
+                    <div class="w-full text-center">
+                      <input type="file" name="about_image_{{ $i }}" id="about_image_{{ $i }}-file-input" accept="image/*" class="hidden" onchange="previewSelectedImage(event, 'about_image_{{ $i }}-preview')" />
+                      <label for="about_image_{{ $i }}-file-input" class="w-full inline-flex items-center justify-center gap-2 px-2 py-1.5 bg-primary-50 text-primary-600 rounded-xl text-xs font-bold hover:bg-primary-100 transition-all cursor-pointer">
+                        <i data-lucide="upload" class="w-3 h-3"></i>
+                        <span>رفع صورة {{ $i }}</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              @endfor
+            </div>
+            <p class="text-xs text-gray-400">ستظهر هذه الصور في الواجهة الرئيسية ضمن شبكة عرض قسم "من نحن".</p>
+          </div>
         </div>
       </div>
 

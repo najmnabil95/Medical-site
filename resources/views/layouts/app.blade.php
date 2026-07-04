@@ -9,10 +9,33 @@
     <title>@yield('title', 'مستشفى الشفاء الدولي | Al-Shifa International Hospital')</title>
     <meta name="description" content="@yield('description', $settings->description ?? 'مستشفى الشفاء الدولي يقدم أفضل الرعايات الطبية والعمليات الجراحية بأحدث التقنيات وبأيدي أمهر الاستشاريين والأطباء.')">
 
-    <!-- Google Fonts: Tajawal -->
+    @php
+      $fontFamily = $settings->font_family ?? 'Tajawal';
+      $fontUrl = 'https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap';
+      if ($fontFamily === 'Cairo') {
+          $fontUrl = 'https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900;1000&display=swap';
+      } elseif ($fontFamily === 'Almarai') {
+          $fontUrl = 'https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap';
+      } elseif ($fontFamily === 'Alexandria') {
+          $fontUrl = 'https://fonts.googleapis.com/css2?family=Alexandria:wght@100;200;300;400;500;600;700;800;900&display=swap';
+      } elseif ($fontFamily === 'Amiri') {
+          $fontUrl = 'https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap';
+      } elseif ($fontFamily === 'Readex Pro') {
+          $fontUrl = 'https://fonts.googleapis.com/css2?family=Readex+Pro:wght@200;300;400;500;600;700&display=swap';
+      }
+    @endphp
+
+    <!-- Google Fonts Dynamic -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <link href="{{ $fontUrl }}" rel="stylesheet">
+
+    <!-- CSS Override to enforce Font Family -->
+    <style>
+      *:not(i):not([class*="lucide"]) {
+        font-family: '{{ $fontFamily }}', sans-serif !important;
+      }
+    </style>
 
     <!-- Favicon -->
     @if(!empty($settings->favicon))
@@ -44,11 +67,32 @@
     <!-- Progress Indicator -->
     <div id="scroll-progress-bar" class="fixed top-0 right-0 h-1 bg-gradient-to-l from-emerald-500 to-cyan-500 z-[9999] transition-all duration-100" style="width: 0%;"></div>
 
-    <!-- Main Header / Navbar -->
-    @include('components.home.Navbar')
+    @php
+      $showNewsTicker = false;
+      try {
+          if (isset($screens)) {
+              $showNewsTicker = $screens->contains('component', 'NewsTicker');
+          } else {
+              $showNewsTicker = \App\Models\Screen::where('component', 'NewsTicker')->where('enabled', 1)->exists();
+          }
+      } catch (\Exception $e) {
+          $showNewsTicker = false;
+      }
+    @endphp
 
-    <!-- News Ticker -->
-    @include('components.home.NewsTicker')
+    @php
+      $isDoctorsPage = Request::is('doctors') || Request::is('doctors/*');
+    @endphp
+
+    @if(!$isDoctorsPage)
+      <!-- Main Header / Navbar -->
+      @include('components.home.Navbar')
+
+      @if($showNewsTicker)
+        <!-- News Ticker -->
+        @include('components.home.NewsTicker')
+      @endif
+    @endif
 
     <!-- Main Content Area -->
     <main>
@@ -80,7 +124,7 @@
         localStorage.setItem('dark-mode', isDark ? 'true' : 'false');
       }
 
-      // Flash Messages auto-dismiss
+      // Flash Messages auto-dismiss & Url Pre-fill appointment parameters
       document.addEventListener("DOMContentLoaded", () => {
         lucide.createIcons();
         const alert = document.querySelector('[role="alert-flash"]');
@@ -89,6 +133,54 @@
             alert.style.opacity = '0';
             setTimeout(() => alert.remove(), 500);
           }, 4000);
+        }
+
+        // Smooth scroll to hash on load if present (navigating back from other pages)
+        if (window.location.hash) {
+          const targetId = window.location.hash.replace('#', '');
+          setTimeout(() => {
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+              const offset = 85;
+              const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+              window.scrollTo({
+                top: elementPosition - offset,
+                behavior: "smooth"
+              });
+            }
+          }, 400);
+        }
+
+        // Prefill Appointment parameters if redirected from doctors page
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlDept = urlParams.get('dept');
+        const urlDoc = urlParams.get('doc');
+        if (urlDept || urlDoc) {
+          setTimeout(() => {
+            const appointmentSection = document.getElementById('appointment');
+            if (appointmentSection) {
+              const offset = 80;
+              const elementPosition = appointmentSection.getBoundingClientRect().top + window.pageYOffset;
+              window.scrollTo({
+                top: elementPosition - offset,
+                behavior: "smooth"
+              });
+            }
+
+            const deptSelect = document.querySelector('select[name="department"]');
+            if (deptSelect && urlDept) {
+              deptSelect.value = urlDept;
+              deptSelect.dispatchEvent(new Event('change'));
+            }
+
+            setTimeout(() => {
+              const docSelect = document.querySelector('select[name="doctor"]');
+              if (docSelect && urlDoc) {
+                docSelect.value = urlDoc;
+                docSelect.dispatchEvent(new Event('change'));
+              }
+            }, 350);
+          }, 800);
         }
       });
     </script>

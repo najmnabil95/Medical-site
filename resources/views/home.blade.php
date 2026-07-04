@@ -17,6 +17,8 @@
 
     <!-- Dynamic Screens Loop -->
     @foreach($screens as $screen)
-        @includeIf('components.home.' . $screen->component)
+        @if($screen->component !== 'NewsTicker')
+            @includeIf('components.home.' . $screen->component)
+        @endif
     @endforeach
 @endsection

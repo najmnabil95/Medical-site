@@ -22,14 +22,14 @@
           <div class="col-span-7 space-y-4">
             <div class="rounded-3xl overflow-hidden shadow-2xl">
               <img
-                src="https://images.pexels.com/photos/20081928/pexels-photo-20081928.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=420&w=380"
+                src="<?php echo e($settings->about_image_1); ?>"
                 alt="فريق الجراحة"
                 class="w-full h-64 object-cover hover:scale-105 transition-transform duration-700"
               />
             </div>
             <div class="rounded-3xl overflow-hidden shadow-2xl">
               <img
-                src="https://images.pexels.com/photos/33216715/pexels-photo-33216715.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=320&w=380"
+                src="<?php echo e($settings->about_image_2); ?>"
                 alt="معدات طبية"
                 class="w-full h-48 object-cover hover:scale-105 transition-transform duration-700"
               />
@@ -38,14 +38,14 @@
           <div class="col-span-5 space-y-4 pt-10">
             <div class="rounded-3xl overflow-hidden shadow-2xl">
               <img
-                src="https://images.pexels.com/photos/4769133/pexels-photo-4769133.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=320&w=300"
+                src="<?php echo e($settings->about_image_3); ?>"
                 alt="جراحة"
                 class="w-full h-48 object-cover hover:scale-105 transition-transform duration-700"
               />
             </div>
             <div class="rounded-3xl overflow-hidden shadow-2xl relative group cursor-pointer" onclick="document.getElementById('video-section')?.scrollIntoView({behavior:'smooth'});">
               <img
-                src="https://images.pexels.com/photos/33216690/pexels-photo-33216690.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=420&w=300"
+                src="<?php echo e($settings->about_image_4); ?>"
                 alt="غرفة علاج"
                 class="w-full h-64 object-cover hover:scale-105 transition-transform duration-700"
               />

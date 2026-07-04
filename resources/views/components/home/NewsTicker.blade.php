@@ -1,5 +1,17 @@
 @php
-  $newsItems = [
+  // Fetch from database if available, otherwise use default
+  $dbNews = [];
+  try {
+      if (isset($news) && $news->isNotEmpty()) {
+          $dbNews = $news->pluck('title')->toArray();
+      } else {
+          $dbNews = \App\Models\News::orderBy('date', 'desc')->pluck('title')->toArray();
+      }
+  } catch (\Exception $e) {
+      $dbNews = [];
+  }
+
+  $newsItems = !empty($dbNews) ? $dbNews : [
     "🎉 مستشفى الشفاء يحصل على اعتماد JCI للمرة الثالثة",
     "📢 افتتاح قسم جراحة القلب بالروبوت الجراحي",
     "🏆 جائزة أفضل مستشفى في المنطقة لعام 2024",

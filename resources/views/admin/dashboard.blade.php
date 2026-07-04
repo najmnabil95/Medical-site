@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'لوحة التحكم - مستشفى الشفاء الدولي')
+@section('title', 'لوحة التحكم')
 
 @section('content')
 

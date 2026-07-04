@@ -183,20 +183,6 @@
           </div>
         </div>
 
-        <!-- Newsletter -->
-        <div class="mt-8 bg-white/[0.03] rounded-2xl p-5 border border-white/[0.05] text-white">
-          <p class="text-sm font-bold mb-3">📧 اشترك في النشرة البريدية</p>
-          <div class="flex gap-2">
-            <input
-              type="email"
-              placeholder="بريدك الإلكتروني"
-              class="flex-1 px-4 py-3 bg-white/[0.05] border border-white/10 rounded-xl text-sm focus:outline-none focus:border-primary-500 transition-colors placeholder:text-gray-600 text-white"
-            />
-            <button class="bg-gradient-to-l from-primary-500 to-primary-600 text-white px-4 py-3 rounded-xl hover:shadow-lg hover:shadow-primary-500/30 transition-all cursor-pointer">
-              <i data-lucide="mail" class="w-4.5 h-4.5"></i>
-            </button>
-          </div>
-        </div>
       </div>
 
     </div>

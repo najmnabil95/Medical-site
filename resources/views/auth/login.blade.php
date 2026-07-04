@@ -1,14 +1,25 @@
+@php
+  $fontFamily = $settings->font_family ?? 'Cairo';
+  $fontUrl = 'https://fonts.googleapis.com/css2?family=' . urlencode($fontFamily) . ':wght@300;400;500;700;800;900&display=swap';
+@endphp
 <!doctype html>
 <html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول - لوحة تحكم مستشفى الشفاء الدولي</title>
+    <title>تسجيل الدخول - لوحة تحكم {{ $settings->site_name ?? 'مستشفى الشفاء الدولي' }}</title>
     
-    <!-- Google Fonts: Tajawal -->
+    <!-- Google Fonts Dynamic -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <link href="{{ $fontUrl }}" rel="stylesheet">
+
+    <!-- CSS Override to enforce Font Family -->
+    <style>
+      *:not(i):not([class*="lucide"]) {
+        font-family: '{{ $fontFamily }}', sans-serif !important;
+      }
+    </style>
 
     <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -16,7 +27,7 @@
     <!-- Vite Assets -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
   </head>
-  <body class="min-h-screen bg-[#0f172a] font-tajawal antialiased text-gray-900">
+  <body class="min-h-screen bg-[#0f172a] antialiased text-gray-900">
 
     <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-900 via-primary-800 to-gray-900 p-4 relative overflow-hidden">
       <!-- Decorative background blur elements -->
@@ -39,7 +50,7 @@
               @endif
             </div>
             <div class="text-right">
-              <h1 class="text-2xl font-bold text-white">مستشفى الشفاء</h1>
+              <h1 class="text-2xl font-bold text-white">{{ $settings->site_name ?? 'مستشفى الشفاء' }}</h1>
               <p class="text-xs text-white/40 tracking-wider">لوحة التحكم</p>
             </div>
           </div>
@@ -137,7 +148,7 @@
           @endif
         </div>
 
-        <p class="text-center text-white/35 text-xs mt-6">© 2024 مستشفى الشفاء الدولي</p>
+        <p class="text-center text-white/35 text-xs mt-6">© {{ date('Y') }} {{ $settings->site_name ?? 'مستشفى الشفاء الدولي' }}</p>
       </div>
     </div>
 

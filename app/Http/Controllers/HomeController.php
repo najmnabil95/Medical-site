@@ -146,4 +146,16 @@ class HomeController extends Controller
 
         return back()->with('success', 'تم إرسال رسالتك بنجاح. شكراً لتواصلك معنا!');
     }
+
+    public function doctors(Request $request)
+    {
+        $settings = Setting::first() ?? new Setting();
+        $screens = Screen::where('enabled', true)->orderBy('order', 'asc')->get();
+        // Get all active doctors
+        $doctors = Doctor::where('active', true)->orderBy('id', 'desc')->get();
+        // Get all active departments
+        $departments = Department::where('active', true)->get();
+
+        return view('doctors', compact('settings', 'screens', 'doctors', 'departments'));
+    }
 }

@@ -16,7 +16,9 @@
 
     <!-- Dynamic Screens Loop -->
     <?php $__currentLoopData = $screens; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $screen): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-        <?php if ($__env->exists('components.home.' . $screen->component)) echo $__env->make('components.home.' . $screen->component, array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+        <?php if($screen->component !== 'NewsTicker'): ?>
+            <?php if ($__env->exists('components.home.' . $screen->component)) echo $__env->make('components.home.' . $screen->component, array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+        <?php endif; ?>
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 <?php $__env->stopSection(); ?>
 

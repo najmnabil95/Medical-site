@@ -1,4 +1,4 @@
-<?php $__env->startSection('title', 'لوحة التحكم - مستشفى الشفاء الدولي'); ?>
+<?php $__env->startSection('title', 'لوحة التحكم'); ?>
 
 <?php $__env->startSection('content'); ?>
 

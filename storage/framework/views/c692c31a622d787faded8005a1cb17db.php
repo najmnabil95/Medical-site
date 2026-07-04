@@ -3,7 +3,7 @@
     ['name' => 'الرئيسية', 'href' => '#home', 'id' => 'home', 'component' => 'Hero'],
     ['name' => 'من نحن', 'href' => '#about', 'id' => 'about', 'component' => 'About'],
     ['name' => 'الأقسام', 'href' => '#departments', 'id' => 'departments', 'component' => 'Departments'],
-    ['name' => 'أطباؤنا', 'href' => '#doctors', 'id' => 'doctors', 'component' => 'Doctors'],
+    ['name' => 'أطباؤنا', 'href' => '/doctors', 'id' => 'doctors', 'component' => 'Doctors'],
     ['name' => 'خدماتنا', 'href' => '#services', 'id' => 'services', 'component' => 'Services'],
     ['name' => 'آراء المرضى', 'href' => '#testimonials', 'id' => 'testimonials', 'component' => 'Testimonials'],
     ['name' => 'تواصل معنا', 'href' => '#contact', 'id' => 'contact', 'component' => 'Contact'],
@@ -14,60 +14,12 @@
       return !$screen || $screen->enabled;
   });
 
+  $isHomepage = Request::is('/') || Request::routeIs('home');
+  $isDoctorsPage = Request::is('doctors') || Request::is('doctors/*');
+
   $unreadNotifications = \App\Models\Notification::where('status', 'pending')->count();
   $notifications = \App\Models\Notification::latest()->take(10)->get();
 ?>
-
-<!-- Top Bar -->
-<div class="bg-gradient-to-l from-primary-800 to-primary-900 text-white text-sm hidden lg:block">
-  <div class="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-between">
-    <div class="flex items-center gap-6">
-      <a href="tel:<?php echo e($settings->phone); ?>" class="flex items-center gap-2 hover:text-emerald-400 transition-colors">
-        <i data-lucide="phone" class="w-3.5 h-3.5"></i>
-        <span class="text-xs font-medium"><?php echo e($settings->phone); ?></span>
-      </a>
-      <div class="w-px h-4 bg-white/20"></div>
-      <a href="mailto:<?php echo e($settings->email); ?>" class="flex items-center gap-2 hover:text-emerald-400 transition-colors">
-        <i data-lucide="mail" class="w-3.5 h-3.5"></i>
-        <span class="text-xs font-medium"><?php echo e($settings->email); ?></span>
-      </a>
-      <div class="w-px h-4 bg-white/20"></div>
-      <div class="flex items-center gap-2">
-        <i data-lucide="clock" class="w-3.5 h-3.5"></i>
-        <span class="text-xs font-medium">الطوارئ: 24 ساعة / 7 أيام</span>
-      </div>
-    </div>
-    <div class="flex items-center gap-4">
-      <div class="flex items-center gap-2">
-        <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
-        <span class="text-xs font-medium"><?php echo e($settings->address); ?>، <?php echo e($settings->city); ?></span>
-      </div>
-      <div class="h-4 w-px bg-white/20"></div>
-      <div class="flex items-center gap-2.5">
-        <?php if(!empty($settings->facebook) && $settings->facebook !== '#'): ?>
-          <a href="<?php echo e($settings->facebook); ?>" class="w-6 h-6 bg-white/10 rounded-md flex items-center justify-center hover:bg-emerald-500 transition-all hover:scale-110">
-            <i data-lucide="facebook" class="w-3.5 h-3.5"></i>
-          </a>
-        <?php endif; ?>
-        <?php if(!empty($settings->twitter) && $settings->twitter !== '#'): ?>
-          <a href="<?php echo e($settings->twitter); ?>" class="w-6 h-6 bg-white/10 rounded-md flex items-center justify-center hover:bg-emerald-500 transition-all hover:scale-110">
-            <i data-lucide="twitter" class="w-3.5 h-3.5"></i>
-          </a>
-        <?php endif; ?>
-        <?php if(!empty($settings->instagram) && $settings->instagram !== '#'): ?>
-          <a href="<?php echo e($settings->instagram); ?>" class="w-6 h-6 bg-white/10 rounded-md flex items-center justify-center hover:bg-emerald-500 transition-all hover:scale-110">
-            <i data-lucide="instagram" class="w-3.5 h-3.5"></i>
-          </a>
-        <?php endif; ?>
-        <?php if(!empty($settings->youtube) && $settings->youtube !== '#'): ?>
-          <a href="<?php echo e($settings->youtube); ?>" class="w-6 h-6 bg-white/10 rounded-md flex items-center justify-center hover:bg-emerald-500 transition-all hover:scale-110">
-            <i data-lucide="youtube" class="w-3.5 h-3.5"></i>
-          </a>
-        <?php endif; ?>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- Main Navbar -->
 <nav id="main-navbar" class="sticky top-0 z-50 transition-all duration-500 bg-white shadow-sm py-0">
@@ -102,14 +54,18 @@
       <!-- Desktop Links -->
       <div class="hidden lg:flex items-center gap-0.5">
         <?php $__currentLoopData = $navLinks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $link): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+          <?php
+            $href = $isHomepage ? $link['href'] : (str_starts_with($link['href'], '#') ? '/' . $link['href'] : $link['href']);
+            $isActive = $isDoctorsPage && $link['href'] === '/doctors';
+          ?>
           <a
-            href="<?php echo e($link['href']); ?>"
+            href="<?php echo e($href); ?>"
             data-section="<?php echo e($link['id']); ?>"
-            class="nav-anchor relative px-3.5 py-2 text-sm font-medium rounded-lg transition-all duration-300 cursor-pointer text-gray-600 hover:text-primary-600 hover:bg-gray-50"
+            class="nav-anchor relative px-3.5 py-2 text-sm font-medium rounded-lg transition-all duration-300 cursor-pointer <?php echo e($isActive ? 'text-primary-600 bg-primary-50 font-bold' : 'text-gray-600 hover:text-primary-600 hover:bg-gray-50'); ?>"
           >
             <?php echo e($link['name']); ?>
 
-            <span class="nav-indicator absolute bottom-0 right-1/2 translate-x-1/2 w-5 h-0.5 bg-primary-500 rounded-full hidden"></span>
+            <span class="nav-indicator absolute bottom-0 right-1/2 translate-x-1/2 w-5 h-0.5 bg-primary-500 rounded-full <?php echo e($isActive ? '' : 'hidden'); ?>"></span>
           </a>
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
       </div>
@@ -231,9 +187,14 @@
   >
     <div class="px-4 py-5 bg-white border-t border-gray-100 space-y-1 shadow-xl">
       <?php $__currentLoopData = $navLinks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $link): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <?php
+          $href = $isHomepage ? $link['href'] : (str_starts_with($link['href'], '#') ? '/' . $link['href'] : $link['href']);
+          $isActive = $isDoctorsPage && $link['href'] === '/doctors';
+        ?>
         <a
-          href="<?php echo e($link['href']); ?>"
-          class="mobile-nav-anchor block px-4 py-3 rounded-xl transition-all font-medium text-sm text-gray-600 hover:text-primary-600 hover:bg-gray-50"
+          href="<?php echo e($href); ?>"
+          data-section="<?php echo e($link['id']); ?>"
+          class="mobile-nav-anchor block px-4 py-3 rounded-xl transition-all font-medium text-sm <?php echo e($isActive ? 'text-primary-600 bg-primary-50 font-bold' : 'text-gray-600 hover:text-primary-600 hover:bg-gray-50'); ?>"
         >
           <?php echo e($link['name']); ?>
 
@@ -291,22 +252,26 @@
     // Close mobile menu on clicking links
     document.querySelectorAll(".mobile-nav-anchor").forEach(link => {
       link.addEventListener("click", (e) => {
-        e.preventDefault();
         const href = link.getAttribute("href");
-        const targetId = href.replace('#', '');
-        const targetElement = document.getElementById(targetId);
-        
-        mobileMenu.classList.add("hidden");
-        menuIcon.innerHTML = '<i data-lucide="menu" class="w-5 h-5"></i>';
-        lucide.createIcons();
+        if (href.startsWith('#')) {
+          e.preventDefault();
+          const targetId = href.replace('#', '');
+          const targetElement = document.getElementById(targetId);
+          
+          mobileMenu.classList.add("hidden");
+          menuIcon.innerHTML = '<i data-lucide="menu" class="w-5 h-5"></i>';
+          lucide.createIcons();
 
-        if (targetElement) {
-          const offset = 80;
-          const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
-          window.scrollTo({
-            top: elementPosition - offset,
-            behavior: "smooth"
-          });
+          if (targetElement) {
+            const offset = 80;
+            const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+            window.scrollTo({
+              top: elementPosition - offset,
+              behavior: "smooth"
+            });
+          }
+        } else {
+          mobileMenu.classList.add("hidden");
         }
       });
     });
@@ -314,18 +279,20 @@
     // Desktop smooth navigation scrolling and active link highlighting
     document.querySelectorAll(".nav-anchor").forEach(link => {
       link.addEventListener("click", (e) => {
-        e.preventDefault();
         const href = link.getAttribute("href");
-        const targetId = href.replace('#', '');
-        const targetElement = document.getElementById(targetId);
+        if (href.startsWith('#')) {
+          e.preventDefault();
+          const targetId = href.replace('#', '');
+          const targetElement = document.getElementById(targetId);
 
-        if (targetElement) {
-          const offset = 80;
-          const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
-          window.scrollTo({
-            top: elementPosition - offset,
-            behavior: "smooth"
-          });
+          if (targetElement) {
+            const offset = 80;
+            const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+            window.scrollTo({
+              top: elementPosition - offset,
+              behavior: "smooth"
+            });
+          }
         }
       });
     });
@@ -382,6 +349,15 @@
       }
       lucide.createIcons();
     };
+
+    // Force 'Our Doctors' to redirect to /doctors and bypass any other handler/scroll
+    document.querySelectorAll('[data-section="doctors"]').forEach(link => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        window.location.href = '/doctors';
+      });
+    });
 
     updateDarkModeIcon();
   });

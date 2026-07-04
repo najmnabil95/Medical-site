@@ -4,12 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'لوحة التحكم - مستشفى الشفاء الدولي')</title>
+    <title>@yield('title', 'لوحة التحكم') - {{ $settings->site_name ?? 'مستشفى الشفاء الدولي' }}</title>
     
+    <!-- Favicon -->
+    @if(!empty($settings->favicon))
+        <link rel="icon" type="image/png" href="{{ $settings->favicon }}">
+    @else
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    @endif
+
     <!-- Google Fonts: Tajawal -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    @php
+      $fontFamily = $settings->font_family ?? 'Tajawal';
+      $fontUrl = 'https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap';
+      if ($fontFamily === 'Cairo') {
+          $fontUrl = 'https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900;1000&display=swap';
+      } elseif ($fontFamily === 'Almarai') {
+          $fontUrl = 'https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap';
+      } elseif ($fontFamily === 'Alexandria') {
+          $fontUrl = 'https://fonts.googleapis.com/css2?family=Alexandria:wght@100;200;300;400;500;600;700;800;900&display=swap';
+      } elseif ($fontFamily === 'Amiri') {
+          $fontUrl = 'https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap';
+      } elseif ($fontFamily === 'Readex Pro') {
+          $fontUrl = 'https://fonts.googleapis.com/css2?family=Readex+Pro:wght@200;300;400;500;600;700&display=swap';
+      }
+    @endphp
+
+    <!-- Google Fonts Dynamic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="{{ $fontUrl }}" rel="stylesheet">
+
+    <!-- CSS Override to enforce Font Family -->
+    <style>
+      *:not(i):not([class*="lucide"]) {
+        font-family: '{{ $fontFamily }}', sans-serif !important;
+      }
+    </style>
 
     <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
