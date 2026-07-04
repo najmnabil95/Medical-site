@@ -4,6 +4,12 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * AppServiceProvider - مزود خدمات التطبيق الأساسي.
+ *
+ * يُهيئ الإعدادات المشتركة بين جميع العروض (Views)
+ * ويضبط إعدادات CORS في بيئة التطوير.
+ */
 class AppServiceProvider extends ServiceProvider
 {
     public function register(): void

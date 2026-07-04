@@ -22,8 +22,19 @@ use App\Models\Appointment;
 use App\Models\Message;
 use Illuminate\Support\Str;
 
+/**
+ * HomeController - متحكم الواجهة العامة للموقع.
+ *
+ * يعرض الصفحة الرئيسية وصفحة الأطباء للزوار،
+ * ويستقبل طلبات الحجز والرسائل من النماذج العامة.
+ */
 class HomeController extends Controller
 {
+    /**
+     * عرض الصفحة الرئيسية بجميع بياناتها.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
         $settings = Setting::first() ?? new Setting();
@@ -57,6 +68,15 @@ class HomeController extends Controller
         ));
     }
 
+    /**
+     * حفظ طلب حجز موعد جديد من الزائر.
+     *
+     * يتحقق من صحة المدخلات ومن عدم وجود تعارض في المواعيد
+     * قبل إنشاء السجل. يدعم الاستجابة بـ JSON وHTML.
+     *
+     * @param  Request  $request  بيانات نموذج الحجز.
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     */
     public function storeAppointment(Request $request)
     {
         $validated = $request->validate([
@@ -120,6 +140,12 @@ class HomeController extends Controller
         return back()->with('success', 'تم حجز الموعد بنجاح وسوف نتواصل معك لتأكيده.');
     }
 
+    /**
+     * حفظ رسالة تواصل جديدة من الزائر.
+     *
+     * @param  Request  $request  بيانات نموذج الرسالة.
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     */
     public function storeMessage(Request $request)
     {
         $validated = $request->validate([
@@ -147,6 +173,12 @@ class HomeController extends Controller
         return back()->with('success', 'تم إرسال رسالتك بنجاح. شكراً لتواصلك معنا!');
     }
 
+    /**
+     * عرض صفحة جميع الأطباء مع خاصية البحث.
+     *
+     * @param  Request  $request  كائن الطلب.
+     * @return \Illuminate\View\View
+     */
     public function doctors(Request $request)
     {
         $settings = Setting::first() ?? new Setting();

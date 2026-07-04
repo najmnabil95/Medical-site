@@ -8,8 +8,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
+/**
+ * UserController - متحكم إدارة مستخدمي النظام.
+ *
+ * يتعامل مع إنشاء وتعديل وحذف حسابات المستخدمين
+ * وإسناد الأدوار لهم. يتطلب صلاحية Super Admin أو Manager.
+ */
 class UserController extends Controller
 {
+    /**
+     * عرض قائمة مستخدمي النظام مع الأدوار المتاحة.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
         $users = User::orderBy('id', 'desc')->get();
@@ -17,6 +28,12 @@ class UserController extends Controller
         return view('admin.users.index', compact('users', 'roles'));
     }
 
+    /**
+     * إنشاء حساب مستخدم جديد مع تشفير كلمة المرور.
+     *
+     * @param  Request  $request  بيانات المستخدم الجديد.
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -40,6 +57,13 @@ class UserController extends Controller
         return redirect()->route('admin.users.index')->with('success', 'تم إنشاء المستخدم بنجاح.');
     }
 
+    /**
+     * تحديث بيانات مستخدم موجود مع حماية حساب المدير العام.
+     *
+     * @param  Request  $request  البيانات المعدلة.
+     * @param  int      $id       معرف المستخدم.
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
@@ -84,6 +108,12 @@ class UserController extends Controller
         return redirect()->route('admin.users.index')->with('success', 'تم تحديث بيانات المستخدم بنجاح.');
     }
 
+    /**
+     * حذف حساب مستخدم مع منع حذف الحساب الشخصي وحساب المدير.
+     *
+     * @param  int  $id  معرف المستخدم المراد حذفه.
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function destroy($id)
     {
         $user = User::findOrFail($id);

@@ -6,6 +6,12 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * SecurityHeaders - برمجية وسيطة لحقن رؤوس الأمان القياسية.
+ *
+ * تُضاف تلقائياً لكل استجابة HTTP لحماية الموقع من هجمات
+ * Clickjacking وMIME-Sniffing وXSS وتسريب بيانات المراجع.
+ */
 class SecurityHeaders
 {
     /**

@@ -7,14 +7,31 @@ use App\Models\Doctor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * DoctorController - متحكم إدارة بيانات الأطباء.
+ *
+ * يتعامل مع عرض وإضافة وتعديل وحذف سجلات الأطباء
+ * من لوحة تحكم الإدارة. يتطلب صلاحية Editor أو أعلى.
+ */
 class DoctorController extends Controller
 {
+    /**
+     * عرض قائمة جميع الأطباء.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
         $doctors = Doctor::orderBy('id', 'desc')->get();
         return view('admin.doctors.index', compact('doctors'));
     }
 
+    /**
+     * حفظ سجل طبيب جديد.
+     *
+     * @param  Request  $request  بيانات الطبيب الجديد.
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -43,6 +60,13 @@ class DoctorController extends Controller
         return redirect()->route('admin.doctors.index')->with('success', 'تم إضافة الطبيب بنجاح.');
     }
 
+    /**
+     * تحديث بيانات طبيب موجود.
+     *
+     * @param  Request  $request  البيانات المعدلة.
+     * @param  int      $id       معرف الطبيب.
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(Request $request, $id)
     {
         $doctor = Doctor::findOrFail($id);
