@@ -14,22 +14,63 @@ use Illuminate\Support\Facades\Storage;
 class ImageService
 {
     /**
-     * رفع صورة جديدة وتخزينها في القرص العام.
+     * رفع صورة جديدة وتخزينها في القرص العام مع خيار التحويل التلقائي لصيغة WebP لضغط الحجم وتحسين الأداء.
      *
-     * @param  Request  $request   كائن الطلب الحالي.
-     * @param  string   $fieldName اسم حقل الملف في النموذج (مثل 'logo', 'image').
-     * @param  string   $folder    المجلد الفرعي للتخزين (مثل 'uploads', 'doctors').
-     * @return string|null         المسار النسبي للصورة المرفوعة، أو null إذا لم يُرفع ملف.
+     * @param  Request  $request        كائن الطلب الحالي.
+     * @param  string   $fieldName      اسم حقل الملف في النموذج (مثل 'logo', 'image').
+     * @param  string   $folder         المجلد الفرعي للتخزين (مثل 'uploads', 'doctors').
+     * @param  bool     $convertToWebp  تحديد ما إذا كان يجب تحويل الصورة إلى صيغة WebP تلقائياً.
+     * @param  int      $quality        جودة الصورة بعد التحويل (0 - 100).
+     * @return string|null              المسار النسبي للصورة المرفوعة، أو null إذا لم يُرفع ملف.
      */
-    public function upload(Request $request, string $fieldName, string $folder = 'uploads'): ?string
+    public function upload(Request $request, string $fieldName, string $folder = 'uploads', bool $convertToWebp = true, int $quality = 80): ?string
     {
         if (!$request->hasFile($fieldName)) {
             return null;
         }
 
-        $path = $request->file($fieldName)->store($folder, 'public');
+        $file = $request->file($fieldName);
+        $mime = $file->getMimeType();
+        $convertibleMimes = ['image/jpeg', 'image/png', 'image/webp', 'image/bmp'];
 
-        return 'storage/' . $path;
+        // إذا كان التحويل معطلاً أو الملف ليس من صيغ الصور القابلة للتحويل (مثل SVG أو GIF)، نرفعه بشكل طبيعي
+        if (!$convertToWebp || !in_array($mime, $convertibleMimes)) {
+            $path = $file->store($folder, 'public');
+            return 'storage/' . $path;
+        }
+
+        try {
+            $src = $this->createImageFromMime($mime, $file->getRealPath());
+            if (!$src) {
+                $path = $file->store($folder, 'public');
+                return 'storage/' . $path;
+            }
+
+            // توليد اسم ملف فريد بامتداد webp
+            $fileName = pathinfo($file->hashName(), PATHINFO_FILENAME) . '.webp';
+            $relativeStoragePath = $folder . '/' . $fileName;
+
+            // التأكد من وجود المجلد الفعلي للتخزين
+            $physicalDirectory = storage_path('app/public/' . $folder);
+            if (!file_exists($physicalDirectory)) {
+                mkdir($physicalDirectory, 0755, true);
+            }
+            $physicalPath = $physicalDirectory . '/' . $fileName;
+
+            // الحفاظ على الشفافية لصور PNG و WebP
+            imagealphablending($src, false);
+            imagesavealpha($src, true);
+
+            // حفظ الصورة بصيغة WebP وبجودة محددة
+            imagewebp($src, $physicalPath, $quality);
+            imagedestroy($src);
+
+            return 'storage/' . $relativeStoragePath;
+        } catch (\Exception $e) {
+            // في حال حدوث أي خطأ، نعود للطريقة التقليدية كخيار احتياطي (Fallback)
+            $path = $file->store($folder, 'public');
+            return 'storage/' . $path;
+        }
     }
 
     /**

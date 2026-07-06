@@ -21,6 +21,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Setting extends Model
 {
+    /**
+     * مفتاح تخزين الكاش لـ إعدادات الموقع.
+     */
+    public const CACHE_KEY = 'site_settings';
+
     protected $fillable = [
         'site_name',
         'site_name_en',
@@ -54,6 +59,42 @@ class Setting extends Model
     ];
 
     public $timestamps = false;
+
+    /**
+     * تهيئة النموذج لإضافة مستمعين لأحداث حفظ وحذف النموذج لمسح الكاش تلقائياً.
+     */
+    protected static function booted()
+    {
+        static::saved(function () {
+            self::clearCache();
+        });
+
+        static::deleted(function () {
+            self::clearCache();
+        });
+    }
+
+    /**
+     * الحصول على الإعدادات بشكل مخبأ (Cached) لتقليل الضغط على قاعدة البيانات.
+     *
+     * @return self
+     */
+    public static function getCached(): self
+    {
+        return \Illuminate\Support\Facades\Cache::rememberForever(self::CACHE_KEY, function () {
+            return self::first() ?? new self();
+        });
+    }
+
+    /**
+     * مسح كاش الإعدادات يدوياً أو برمجياً عند التعديل.
+     *
+     * @return void
+     */
+    public static function clearCache(): void
+    {
+        \Illuminate\Support\Facades\Cache::forget(self::CACHE_KEY);
+    }
 
     /**
      * القيم الافتراضية لصور قسم "من نحن" عند عدم رفع صور مخصصة.

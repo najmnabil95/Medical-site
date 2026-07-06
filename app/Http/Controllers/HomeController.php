@@ -37,7 +37,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $settings = Setting::first() ?? new Setting();
+        $settings = Setting::getCached();
         $screens = Screen::where('enabled', true)->orderBy('order', 'asc')->get();
         $departments = Department::where('active', true)->get();
         $doctors = Doctor::where('active', true)->get();
@@ -181,7 +181,7 @@ class HomeController extends Controller
      */
     public function doctors(Request $request)
     {
-        $settings = Setting::first() ?? new Setting();
+        $settings = Setting::getCached();
         $screens = Screen::where('enabled', true)->orderBy('order', 'asc')->get();
         // Get all active doctors
         $doctors = Doctor::where('active', true)->orderBy('id', 'desc')->get();

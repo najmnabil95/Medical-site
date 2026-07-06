@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
         }
 
         try {
-            $settings = \App\Models\Setting::first();
+            $settings = \App\Models\Setting::getCached();
             \Illuminate\Support\Facades\View::share('settings', $settings);
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\View::share('settings', null);
