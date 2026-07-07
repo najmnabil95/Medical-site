@@ -3,7 +3,7 @@
     ['name' => 'الرئيسية', 'href' => '#home', 'id' => 'home', 'component' => 'Hero'],
     ['name' => 'من نحن', 'href' => '#about', 'id' => 'about', 'component' => 'About'],
     ['name' => 'الأقسام', 'href' => '#departments', 'id' => 'departments', 'component' => 'Departments'],
-    ['name' => 'أطباؤنا', 'href' => '/doctors', 'id' => 'doctors', 'component' => 'Doctors'],
+    ['name' => 'أطباؤنا', 'href' => '#doctors', 'id' => 'doctors', 'component' => 'Doctors'],
     ['name' => 'خدماتنا', 'href' => '#services', 'id' => 'services', 'component' => 'Services'],
     ['name' => 'آراء المرضى', 'href' => '#testimonials', 'id' => 'testimonials', 'component' => 'Testimonials'],
     ['name' => 'تواصل معنا', 'href' => '#contact', 'id' => 'contact', 'component' => 'Contact'],
@@ -349,15 +349,6 @@
       }
       lucide.createIcons();
     };
-
-    // Force 'Our Doctors' to redirect to /doctors and bypass any other handler/scroll
-    document.querySelectorAll('[data-section="doctors"]').forEach(link => {
-      link.addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        window.location.href = '/doctors';
-      });
-    });
 
     updateDarkModeIcon();
   });

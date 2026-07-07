@@ -190,4 +190,73 @@ class HomeController extends Controller
 
         return view('doctors', compact('settings', 'screens', 'doctors', 'departments'));
     }
+
+    /**
+     * جلب الفترات الزمنية المتاحة لقسم أو طبيب في تاريخ معين.
+     *
+     * @param  Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getAvailableSlots(Request $request)
+    {
+        $validated = $request->validate([
+            'department' => ['required', 'string', 'max:255'],
+            'doctor'     => ['nullable', 'string', 'max:255'],
+            'date'       => ['required', 'date', 'after_or_equal:today'],
+        ]);
+
+        $date = $validated['date'];
+        $doctor = $validated['doctor'] ?? null;
+        $department = $validated['department'];
+
+        // الفترات الزمنية القياسية المتاحة يومياً
+        $allSlots = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00"];
+
+        if (!empty($doctor)) {
+            // جلب الأوقات المحجوزة لهذا الطبيب تحديداً في هذا اليوم
+            $bookedTimes = Appointment::where('doctor', $doctor)
+                ->whereDate('date', $date)
+                ->where('status', '!=', 'cancelled')
+                ->pluck('time')
+                ->toArray();
+
+            // توحيد صيغة الأوقات للتأكد من مطابقة المقارنة (HH:MM)
+            $bookedTimes = array_map(function ($time) {
+                return date('H:i', strtotime($time));
+            }, $bookedTimes);
+
+            // استبعاد الأوقات المحجوزة
+            $availableSlots = array_values(array_filter($allSlots, function ($slot) use ($bookedTimes) {
+                return !in_array($slot, $bookedTimes);
+            }));
+        } else {
+            // إذا لم يتم تحديد طبيب، نجلب المواعيد المتاحة للقسم ككل
+            // بحيث يعتبر الوقت متاحاً إذا كان هناك طبيب واحد على الأقل في القسم غير محجوز
+            $doctorsInDept = Doctor::where('department', $department)
+                ->where('active', true)
+                ->pluck('name')
+                ->toArray();
+
+            if (empty($doctorsInDept)) {
+                return response()->json([]);
+            }
+
+            $availableSlots = [];
+            foreach ($allSlots as $slot) {
+                $bookedCount = Appointment::whereIn('doctor', $doctorsInDept)
+                    ->whereDate('date', $date)
+                    ->where('time', $slot)
+                    ->where('status', '!=', 'cancelled')
+                    ->count();
+
+                // إذا كان عدد الأطباء المحجوزين في هذا الوقت أقل من إجمالي أطباء القسم، فالوقت متاح
+                if ($bookedCount < count($doctorsInDept)) {
+                    $availableSlots[] = $slot;
+                }
+            }
+        }
+
+        return response()->json($availableSlots);
+    }
 }
+

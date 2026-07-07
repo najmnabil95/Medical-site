@@ -135,7 +135,7 @@
                   name="department"
                   id="appointment-department-select"
                   required
-                  onchange="updateDoctorsDropdown()"
+                  onchange="updateDoctorsDropdown(); updateTimeSlots();"
                   class="w-full pr-12 pl-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:bg-white transition-all text-sm appearance-none text-gray-600 text-right"
                 >
                   <option value="">اختر القسم المطلوب</option>
@@ -150,6 +150,7 @@
                   name="doctor"
                   id="appointment-doctor-select"
                   disabled
+                  onchange="updateTimeSlots();"
                   class="w-full pr-12 pl-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:bg-white transition-all text-sm appearance-none text-gray-600 text-right disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <option value="">يرجى اختيار القسم أولاً</option>
@@ -164,8 +165,10 @@
                 <input
                   type="date"
                   name="date"
+                  id="appointment-date-input"
                   min="<?php echo e($todayDate); ?>"
                   required
+                  onchange="updateTimeSlots();"
                   class="w-full pr-12 pl-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:bg-white transition-all text-sm text-right"
                 />
               </div>
@@ -173,13 +176,12 @@
                 <i data-lucide="clock" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 w-4.5 h-4.5"></i>
                 <select
                   name="time"
+                  id="appointment-time-select"
                   required
-                  class="w-full pr-12 pl-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:bg-white transition-all text-sm appearance-none text-gray-600 text-right"
+                  disabled
+                  class="w-full pr-12 pl-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:bg-white transition-all text-sm appearance-none text-gray-600 text-right disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <option value="">اختر الوقت المفضل</option>
-                  <?php $__currentLoopData = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00"]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $time): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <option value="<?php echo e($time); ?>"><?php echo e($time); ?></option>
-                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                  <option value="">يرجى اختيار القسم والتاريخ أولاً</option>
                 </select>
               </div>
             </div>
@@ -283,10 +285,61 @@
     }
   }
 
+  async function updateTimeSlots() {
+    const deptSelect = document.getElementById('appointment-department-select');
+    const docSelect = document.getElementById('appointment-doctor-select');
+    const dateInput = document.getElementById('appointment-date-input');
+    const timeSelect = document.getElementById('appointment-time-select');
+
+    const selectedDept = deptSelect.value;
+    const selectedDoc = docSelect.value;
+    const selectedDate = dateInput.value;
+
+    // كل من القسم والتاريخ مطلوبان للحصول على المواعيد المتاحة
+    if (!selectedDept || !selectedDate) {
+      timeSelect.disabled = true;
+      timeSelect.innerHTML = '<option value="">يرجى اختيار القسم والتاريخ أولاً</option>';
+      return;
+    }
+
+    timeSelect.disabled = true;
+    timeSelect.innerHTML = '<option value="">جاري تحميل الأوقات المتاحة...</option>';
+
+    try {
+      const url = `/available-slots?department=${encodeURIComponent(selectedDept)}&doctor=${encodeURIComponent(selectedDoc)}&date=${encodeURIComponent(selectedDate)}`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('فشل جلب الأوقات');
+      
+      const slots = await response.json();
+      
+      if (slots.length === 0) {
+        timeSelect.innerHTML = '<option value="">لا توجد مواعيد متاحة في هذا اليوم</option>';
+        alert('عذراً، لا تتوفر مواعيد متاحة في هذا اليوم لخياراتك الحالية. يرجى اختيار تاريخ آخر.');
+        return;
+      }
+
+      timeSelect.innerHTML = '<option value="">اختر الوقت المفضل</option>';
+      slots.forEach(slot => {
+        const opt = document.createElement('option');
+        opt.value = slot;
+        opt.textContent = slot;
+        timeSelect.appendChild(opt);
+      });
+      timeSelect.disabled = false;
+    } catch (error) {
+      console.error(error);
+      timeSelect.innerHTML = '<option value="">فشل تحميل الأوقات</option>';
+    }
+  }
+
   function resetBookingForm() {
     document.getElementById('booking-form-wrapper').classList.remove('hidden');
     document.getElementById('booking-success-state').classList.add('hidden');
     updateDoctorsDropdown();
+    
+    const timeSelect = document.getElementById('appointment-time-select');
+    timeSelect.disabled = true;
+    timeSelect.innerHTML = '<option value="">يرجى اختيار القسم والتاريخ أولاً</option>';
   }
 </script>
 <?php /**PATH D:\laravel-hospital-website-development\resources\views/components/home/Appointment.blade.php ENDPATH**/ ?>

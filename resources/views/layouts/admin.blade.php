@@ -261,6 +261,13 @@
               </a>
               @if(Auth::user()->hasRole('Super Admin'))
                 <a
+                  href="{{ route('admin.activity-logs.index') }}"
+                  class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.activity-logs') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                >
+                  <i data-lucide="history" class="w-4.5 h-4.5"></i>
+                  <span class="flex-1 text-right">سجل النشاطات</span>
+                </a>
+                <a
                   href="{{ route('admin.settings.index') }}"
                   class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.settings') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
                 >

@@ -20,10 +20,12 @@ use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\CertificationController;
 use App\Http\Controllers\Admin\PriceItemController;
 use App\Http\Controllers\Admin\ScreenController;
+use App\Http\Controllers\Admin\ActivityLogController;
 
 // Public site routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/doctors', [HomeController::class, 'doctors'])->name('doctors.index');
+Route::get('/available-slots', [HomeController::class, 'getAvailableSlots'])->name('appointments.available-slots');
 Route::post('/appointment', [HomeController::class, 'storeAppointment'])->name('appointments.store')->middleware('throttle:5,1');
 Route::post('/message', [HomeController::class, 'storeMessage'])->name('messages.store')->middleware('throttle:5,1');
 
@@ -53,12 +55,17 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Route::post('/screens/{id}/down', [ScreenController::class, 'moveDown'])->name('admin.screens.down');
     });
 
-    // Super Admin Only Protected Routes (Settings Management)
+    // Super Admin Only Protected Routes (Settings & Logs Management)
     Route::middleware(['role:Super Admin'])->group(function () {
         // Settings management
         Route::get('/settings', [SettingsController::class, 'index'])->name('admin.settings.index');
         Route::post('/settings', [SettingsController::class, 'update'])->name('admin.settings.update');
+
+        // Activity Logs management
+        Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('admin.activity-logs.index');
+        Route::delete('/activity-logs/clear-all', [ActivityLogController::class, 'clearAll'])->name('admin.activity-logs.clearAll');
     });
+
 
     // Manager, Editor, and Super Admin Protected Routes (Content & Medical Admin)
     Route::middleware(['role:Super Admin|Manager|Editor'])->group(function () {

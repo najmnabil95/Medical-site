@@ -23,6 +23,16 @@ class AppServiceProvider extends ServiceProvider
             $this->app->make('config')->set('cors.supports_credentials', true);
         }
 
+        // Register Auth Event Listeners for Activity Logging
+        \Illuminate\Support\Facades\Event::listen(
+            \Illuminate\Auth\Events\Login::class,
+            \App\Listeners\LogSuccessfulLogin::class
+        );
+        \Illuminate\Support\Facades\Event::listen(
+            \Illuminate\Auth\Events\Logout::class,
+            \App\Listeners\LogSuccessfulLogout::class
+        );
+
         try {
             $settings = \App\Models\Setting::getCached();
             \Illuminate\Support\Facades\View::share('settings', $settings);
@@ -31,3 +41,4 @@ class AppServiceProvider extends ServiceProvider
         }
     }
 }
+

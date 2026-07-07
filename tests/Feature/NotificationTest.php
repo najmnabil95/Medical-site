@@ -100,4 +100,90 @@ class NotificationTest extends TestCase
         $this->assertEquals(0, Notification::where('type', 'whatsapp')->count());
         $this->assertEquals(1, Notification::where('type', 'sms')->count());
     }
+
+    public function test_notifications_send_via_real_twilio_when_configured_success(): void
+    {
+        // 1. Configure fake Twilio env variables
+        putenv('TWILIO_SID=ACXXXXXX');
+        putenv('TWILIO_AUTH_TOKEN=fake_token');
+        putenv('TWILIO_SMS_FROM=AlShifa');
+        putenv('TWILIO_WHATSAPP_FROM=+14155238886');
+
+        // 2. Fake HTTP requests
+        \Illuminate\Support\Facades\Http::fake([
+            'https://api.twilio.com/*' => \Illuminate\Support\Facades\Http::response([
+                'sid' => 'SMxxxxxx',
+                'status' => 'queued'
+            ], 201)
+        ]);
+
+        // 3. Create a confirmed appointment (this triggers SendAppointmentNotification listener)
+        $appointment = \App\Models\Appointment::create([
+            'patient_name' => 'Jane Doe',
+            'phone' => '+966500000000',
+            'department' => 'أمراض القلب',
+            'date' => '2026-07-02',
+            'time' => '10:00',
+            'status' => 'confirmed',
+        ]);
+
+        // 4. Verify HTTP requests were made to Twilio
+        \Illuminate\Support\Facades\Http::assertSent(function (\Illuminate\Http\Client\Request $request) {
+            return str_contains($request->url(), 'api.twilio.com') &&
+                   $request['To'] === 'whatsapp:+966500000000' &&
+                   $request['From'] === 'whatsapp:+14155238886';
+        });
+
+        // 5. Verify database records are updated correctly
+        $whatsappNotification = Notification::where('type', 'whatsapp')->first();
+        $this->assertNotNull($whatsappNotification);
+        $this->assertEquals('delivered', $whatsappNotification->status);
+        $this->assertNull($whatsappNotification->error_message);
+
+        // Clean env variables
+        putenv('TWILIO_SID');
+        putenv('TWILIO_AUTH_TOKEN');
+        putenv('TWILIO_SMS_FROM');
+        putenv('TWILIO_WHATSAPP_FROM');
+    }
+
+    public function test_notifications_send_via_real_twilio_when_configured_failure(): void
+    {
+        // 1. Configure fake Twilio env variables
+        putenv('TWILIO_SID=ACXXXXXX');
+        putenv('TWILIO_AUTH_TOKEN=fake_token');
+        putenv('TWILIO_SMS_FROM=AlShifa');
+        putenv('TWILIO_WHATSAPP_FROM=+14155238886');
+
+        // 2. Fake HTTP requests with failure status
+        \Illuminate\Support\Facades\Http::fake([
+            'https://api.twilio.com/*' => \Illuminate\Support\Facades\Http::response([
+                'code' => 21211,
+                'message' => 'The To number is not a valid phone number.'
+            ], 400)
+        ]);
+
+        // 3. Create a confirmed appointment
+        $appointment = \App\Models\Appointment::create([
+            'patient_name' => 'Jane Doe',
+            'phone' => 'invalid_number',
+            'department' => 'أمراض القلب',
+            'date' => '2026-07-02',
+            'time' => '10:00',
+            'status' => 'confirmed',
+        ]);
+
+        // 4. Verify database records updated as failed with error message
+        $whatsappNotification = Notification::where('type', 'whatsapp')->first();
+        $this->assertNotNull($whatsappNotification);
+        $this->assertEquals('failed', $whatsappNotification->status);
+        $this->assertEquals('The To number is not a valid phone number.', $whatsappNotification->error_message);
+
+        // Clean env variables
+        putenv('TWILIO_SID');
+        putenv('TWILIO_AUTH_TOKEN');
+        putenv('TWILIO_SMS_FROM');
+        putenv('TWILIO_WHATSAPP_FROM');
+    }
 }
+

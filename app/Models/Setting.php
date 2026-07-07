@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\LogsActivity;
 
 /**
  * Setting - نموذج إعدادات الموقع العامة.
@@ -21,6 +22,19 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Setting extends Model
 {
+    use LogsActivity;
+
+    /**
+     * Customize the activity log message for this model.
+     *
+     * @param  string  $type
+     * @return string
+     */
+    public function toActivityLogMessage(string $type): string
+    {
+        return "تم تحديث إعدادات الموقع العامة";
+    }
+
     /**
      * مفتاح تخزين الكاش لـ إعدادات الموقع.
      */
