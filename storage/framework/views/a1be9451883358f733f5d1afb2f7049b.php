@@ -114,6 +114,7 @@
           <?php endif; ?>
 
           <!-- قسم العمليات -->
+          <?php if (\Illuminate\Support\Facades\Blade::check('hasanyrole', 'Super Admin|Manager|Reception')): ?>
           <div>
             <p class="text-[10px] font-bold text-gray-400 mb-2 px-3 tracking-wider text-right uppercase">العمليات والطلبات</p>
             <div class="space-y-1">
@@ -140,8 +141,10 @@
               </a>
             </div>
           </div>
+          <?php endif; ?>
 
           <!-- قسم الإدارة الطبية -->
+          <?php if (\Illuminate\Support\Facades\Blade::check('hasanyrole', 'Super Admin|Manager|Editor')): ?>
           <div>
             <p class="text-[10px] font-bold text-gray-400 mb-2 px-3 tracking-wider text-right uppercase">الإدارة الطبية</p>
             <div class="space-y-1">
@@ -168,8 +171,10 @@
               </a>
             </div>
           </div>
+          <?php endif; ?>
 
           <!-- الخدمات والأسعار -->
+          <?php if (\Illuminate\Support\Facades\Blade::check('hasanyrole', 'Super Admin|Manager|Accountant')): ?>
           <div>
             <p class="text-[10px] font-bold text-gray-400 mb-2 px-3 tracking-wider text-right uppercase">الخدمات والأسعار</p>
             <div class="space-y-1">
@@ -196,8 +201,10 @@
               </a>
             </div>
           </div>
+          <?php endif; ?>
 
           <!-- الإعلام والمحتوى -->
+          <?php if (\Illuminate\Support\Facades\Blade::check('hasanyrole', 'Super Admin|Manager|Editor')): ?>
           <div>
             <p class="text-[10px] font-bold text-gray-400 mb-2 px-3 tracking-wider text-right uppercase">المحتوى والشهادات</p>
             <div class="space-y-1">
@@ -238,6 +245,7 @@
               </a>
             </div>
           </div>
+          <?php endif; ?>
 
           <!-- إدارة النظام -->
           <div>
@@ -252,13 +260,15 @@
                   <span class="flex-1 text-right">المستخدمون</span>
                 </a>
               <?php endif; ?>
-              <a
-                href="<?php echo e(route('admin.screens.index')); ?>"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 <?php echo e(str_starts_with(Route::currentRouteName(), 'admin.screens') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600'); ?>"
-              >
-                <i data-lucide="monitor" class="w-4.5 h-4.5"></i>
-                <span class="flex-1 text-right">أقسام العرض (Screens)</span>
-              </a>
+              <?php if(Auth::user()->hasRole('Super Admin') || Auth::user()->hasRole('Manager')): ?>
+                <a
+                  href="<?php echo e(route('admin.screens.index')); ?>"
+                  class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 <?php echo e(str_starts_with(Route::currentRouteName(), 'admin.screens') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600'); ?>"
+                >
+                  <i data-lucide="monitor" class="w-4.5 h-4.5"></i>
+                  <span class="flex-1 text-right">أقسام العرض (Screens)</span>
+                </a>
+              <?php endif; ?>
               <?php if(Auth::user()->hasRole('Super Admin')): ?>
                 <a
                   href="<?php echo e(route('admin.activity-logs.index')); ?>"

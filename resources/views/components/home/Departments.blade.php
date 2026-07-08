@@ -271,34 +271,4 @@
       document.body.style.overflow = '';
     }
   }
-
-  function prefillAppointment(deptName, docName) {
-    // Close all department modals
-    const modals = document.querySelectorAll('[id^="dept-modal-"]');
-    modals.forEach(modal => modal.classList.add('hidden'));
-    document.body.style.overflow = '';
-
-    // Scroll to the appointment section
-    const appointmentSection = document.getElementById('appointment');
-    if (appointmentSection) {
-      appointmentSection.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    // Prefill the form fields
-    setTimeout(() => {
-      const deptSelect = document.querySelector('select[name="department"]');
-      const docSelect = document.querySelector('select[name="doctor"]');
-
-      if (deptSelect) {
-        deptSelect.value = deptName;
-        deptSelect.dispatchEvent(new Event('change'));
-      }
-
-      if (docSelect && docName) {
-        setTimeout(() => {
-          docSelect.value = docName;
-        }, 100);
-      }
-    }, 500);
-  }
 </script>

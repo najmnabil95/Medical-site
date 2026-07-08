@@ -4,7 +4,19 @@ namespace App\Traits;
 
 use App\Models\ActivityLog;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
+/**
+ * Trait LogsActivity
+ *
+ * Provides automatic activity logging for Eloquent models.
+ *
+ * @mixin \Illuminate\Database\Eloquent\Model
+ *
+ * @method static void created(\Closure $callback)
+ * @method static void updated(\Closure $callback)
+ * @method static void deleted(\Closure $callback)
+ */
 trait LogsActivity
 {
     /**
@@ -17,10 +29,9 @@ trait LogsActivity
         });
 
         static::updated(function ($model) {
-            // For updates, only log if there are actual changes (excluding timestamps)
             $dirty = $model->getDirty();
             unset($dirty['updated_at']);
-            
+
             if (!empty($dirty)) {
                 self::logAction($model, 'update');
             }
@@ -40,10 +51,8 @@ trait LogsActivity
     protected static function logAction($model, string $type)
     {
         try {
-            // Identify the responsible user
             $user = Auth::check() ? Auth::user()->name : 'زائر الموقع';
-            
-            // Build action message
+
             $action = self::getActivityMessage($model, $type);
 
             ActivityLog::create([
@@ -53,8 +62,7 @@ trait LogsActivity
                 'timestamp' => now(),
             ]);
         } catch (\Exception $e) {
-            // Prevent logging failures from breaking application requests
-            \Log::error("Failed to write activity log: " . $e->getMessage());
+            Log::error("Failed to write activity log: " . $e->getMessage());
         }
     }
 
@@ -72,8 +80,7 @@ trait LogsActivity
         }
 
         $modelName = self::getModelArabicName(class_basename($model));
-        
-        // Find a suitable display name for the model
+
         $nameField = $model->name ?? $model->title ?? $model->patient_name ?? $model->service ?? $model->username ?? $model->id;
 
         switch ($type) {
@@ -117,5 +124,4 @@ trait LogsActivity
 
         return $map[$className] ?? $className;
     }
-
 }

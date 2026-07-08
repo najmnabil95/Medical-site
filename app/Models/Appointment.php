@@ -22,7 +22,7 @@ class Appointment extends Model
                 return "تم حجز موعد جديد للمريض {$this->patient_name} في عيادة {$this->department}";
             case 'update':
                 if ($this->isDirty('status')) {
-                    $statusArabic = match($this->status) {
+                    $statusArabic = match ($this->status) {
                         'pending'   => 'قيد الانتظار',
                         'confirmed' => 'مؤكد',
                         'cancelled' => 'ملغي',
@@ -69,32 +69,32 @@ class Appointment extends Model
         });
     }
 
-    public function scopeToday($query)
+    public function scopeToday(\Illuminate\Database\Eloquent\Builder $query)
     {
         return $query->whereDate('date', today());
     }
 
-    public function scopeUpcoming($query)
+    public function scopeUpcoming(\Illuminate\Database\Eloquent\Builder $query)
     {
         return $query->whereDate('date', '>', today());
     }
 
-    public function scopePast($query)
+    public function scopePast(\Illuminate\Database\Eloquent\Builder $query)
     {
         return $query->whereDate('date', '<', today());
     }
 
-    public function scopePending($query)
+    public function scopePending(\Illuminate\Database\Eloquent\Builder $query)
     {
         return $query->where('status', 'pending');
     }
 
-    public function scopeConfirmed($query)
+    public function scopeConfirmed(\Illuminate\Database\Eloquent\Builder $query)
     {
         return $query->where('status', 'confirmed');
     }
 
-    public function scopeForDoctor($query, $doctorName)
+    public function scopeForDoctor(\Illuminate\Database\Eloquent\Builder $query, string $doctorName)
     {
         return $query->where('doctor', $doctorName);
     }

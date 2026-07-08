@@ -1,11 +1,11 @@
 <?php
-  $todayDate = date('Y-m-d');
-  $appointmentFeatures = [
-    ['icon' => 'clock', 'title' => 'مواعيد مرنة', 'desc' => 'اختر الوقت والتاريخ المناسب لك', 'color' => 'bg-primary-50 text-primary-600'],
-    ['icon' => 'check-circle', 'title' => 'تأكيد فوري', 'desc' => 'ستتلقى تأكيد الموعد برسالة نصية فوراً', 'color' => 'bg-emerald-50 text-emerald-600'],
-    ['icon' => 'stethoscope', 'title' => 'اختر طبيبك', 'desc' => 'حرية اختيار الطبيب والتخصص المناسب', 'color' => 'bg-purple-50 text-purple-600'],
-    ['icon' => 'shield', 'title' => 'تأمين طبي', 'desc' => 'نتعامل مع أكثر من 25 شركة تأمين معتمدة', 'color' => 'bg-blue-50 text-blue-600'],
-  ];
+$todayDate = date('Y-m-d');
+$appointmentFeatures = [
+['icon' => 'clock', 'title' => 'مواعيد مرنة', 'desc' => 'اختر الوقت والتاريخ المناسب لك', 'color' => 'bg-primary-50 text-primary-600'],
+['icon' => 'check-circle', 'title' => 'تأكيد فوري', 'desc' => 'ستتلقى تأكيد الموعد برسالة نصية فوراً', 'color' => 'bg-emerald-50 text-emerald-600'],
+['icon' => 'stethoscope', 'title' => 'اختر طبيبك', 'desc' => 'حرية اختيار الطبيب والتخصص المناسب', 'color' => 'bg-purple-50 text-purple-600'],
+['icon' => 'shield', 'title' => 'تأمين طبي', 'desc' => 'نتعامل مع أكثر من 25 شركة تأمين معتمدة', 'color' => 'bg-blue-50 text-blue-600'],
+];
 ?>
 
 <section id="appointment" class="py-24 bg-white relative overflow-hidden text-gray-700">
@@ -17,7 +17,7 @@
 
   <div class="max-w-7xl mx-auto px-4 relative">
     <div class="grid lg:grid-cols-2 gap-16 items-stretch">
-      
+
       <!-- Info Left Column -->
       <div class="space-y-7 animate-fade-in-up text-right">
         <div>
@@ -37,15 +37,15 @@
         <!-- Features list -->
         <div class="space-y-4">
           <?php $__currentLoopData = $appointmentFeatures; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $feat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <div class="flex items-center gap-4 bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
-              <div class="w-12 h-12 <?php echo e($feat['color']); ?> rounded-xl flex items-center justify-center shrink-0">
-                <i data-lucide="<?php echo e($feat['icon']); ?>" class="w-5.5 h-5.5"></i>
-              </div>
-              <div class="text-right">
-                <h4 class="font-bold text-gray-900 text-sm"><?php echo e($feat['title']); ?></h4>
-                <p class="text-gray-500 text-xs"><?php echo e($feat['desc']); ?></p>
-              </div>
+          <div class="flex items-center gap-4 bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
+            <div class="w-12 h-12 <?php echo e($feat['color']); ?> rounded-xl flex items-center justify-center shrink-0">
+              <i data-lucide="<?php echo e($feat['icon']); ?>" class="w-5.5 h-5.5"></i>
             </div>
+            <div class="text-right">
+              <h4 class="font-bold text-gray-900 text-sm"><?php echo e($feat['title']); ?></h4>
+              <p class="text-gray-500 text-xs"><?php echo e($feat['desc']); ?></p>
+            </div>
+          </div>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
 
@@ -75,7 +75,7 @@
           <div class="flex items-center gap-1">
             <?php for($i = 0; $i < 5; $i++): ?>
               <i data-lucide="star" class="text-yellow-500 fill-current w-4.5 h-4.5"></i>
-            <?php endfor; ?>
+              <?php endfor; ?>
           </div>
           <span class="text-gray-500 text-sm">تقييم 4.9 من أصل 5 | أكثر من 5000 تقييم</span>
         </div>
@@ -112,8 +112,7 @@
                   name="patient_name"
                   placeholder="الاسم الكامل للمريض"
                   required
-                  class="w-full pr-12 pl-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:bg-white transition-all text-sm text-right"
-                />
+                  class="w-full pr-12 pl-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:bg-white transition-all text-sm text-right" />
               </div>
               <div class="relative">
                 <i data-lucide="phone" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 w-4.5 h-4.5"></i>
@@ -122,8 +121,7 @@
                   name="phone"
                   placeholder="رقم الجوال"
                   required
-                  class="w-full pr-12 pl-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:bg-white transition-all text-sm text-right"
-                />
+                  class="w-full pr-12 pl-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:bg-white transition-all text-sm text-right" />
               </div>
             </div>
 
@@ -136,11 +134,10 @@
                   id="appointment-department-select"
                   required
                   onchange="updateDoctorsDropdown(); updateTimeSlots();"
-                  class="w-full pr-12 pl-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:bg-white transition-all text-sm appearance-none text-gray-600 text-right"
-                >
+                  class="w-full pr-12 pl-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:bg-white transition-all text-sm appearance-none text-gray-600 text-right">
                   <option value="">اختر القسم المطلوب</option>
                   <?php $__currentLoopData = $departments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dept): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <option value="<?php echo e($dept->name); ?>"><?php echo e($dept->name); ?></option>
+                  <option value="<?php echo e($dept->name); ?>"><?php echo e($dept->name); ?></option>
                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>
               </div>
@@ -151,8 +148,7 @@
                   id="appointment-doctor-select"
                   disabled
                   onchange="updateTimeSlots();"
-                  class="w-full pr-12 pl-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:bg-white transition-all text-sm appearance-none text-gray-600 text-right disabled:opacity-50 disabled:cursor-not-allowed"
-                >
+                  class="w-full pr-12 pl-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:bg-white transition-all text-sm appearance-none text-gray-600 text-right disabled:opacity-50 disabled:cursor-not-allowed">
                   <option value="">يرجى اختيار القسم أولاً</option>
                 </select>
               </div>
@@ -169,8 +165,7 @@
                   min="<?php echo e($todayDate); ?>"
                   required
                   onchange="updateTimeSlots();"
-                  class="w-full pr-12 pl-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:bg-white transition-all text-sm text-right"
-                />
+                  class="w-full pr-12 pl-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:bg-white transition-all text-sm text-right" />
               </div>
               <div class="relative">
                 <i data-lucide="clock" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 w-4.5 h-4.5"></i>
@@ -179,8 +174,7 @@
                   id="appointment-time-select"
                   required
                   disabled
-                  class="w-full pr-12 pl-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:bg-white transition-all text-sm appearance-none text-gray-600 text-right disabled:opacity-50 disabled:cursor-not-allowed"
-                >
+                  class="w-full pr-12 pl-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:bg-white transition-all text-sm appearance-none text-gray-600 text-right disabled:opacity-50 disabled:cursor-not-allowed">
                   <option value="">يرجى اختيار القسم والتاريخ أولاً</option>
                 </select>
               </div>
@@ -193,14 +187,12 @@
                 name="notes"
                 placeholder="ملاحظات إضافية أو وصف للحالة (اختياري)"
                 rows="3"
-                class="w-full pr-12 pl-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:bg-white transition-all text-sm resize-none text-right"
-              ></textarea>
+                class="w-full pr-12 pl-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:bg-white transition-all text-sm resize-none text-right"></textarea>
             </div>
 
             <button
               type="submit"
-              class="w-full bg-gradient-to-l from-primary-500 to-primary-700 text-white py-4.5 rounded-xl font-bold text-lg hover:shadow-xl hover:shadow-primary-500/30 transition-all hover:-translate-y-1 flex items-center justify-center gap-3 group cursor-pointer"
-            >
+              class="w-full bg-gradient-to-l from-primary-500 to-primary-700 text-white py-4.5 rounded-xl font-bold text-lg hover:shadow-xl hover:shadow-primary-500/30 transition-all hover:-translate-y-1 flex items-center justify-center gap-3 group cursor-pointer">
               <i data-lucide="send" class="w-5 h-5 group-hover:-translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
               <span>تأكيد الحجز</span>
             </button>
@@ -216,8 +208,12 @@
   </div>
 </section>
 
+<!-- Store doctors data for JavaScript usage -->
+<div id="doctors-data-container" data-doctors='<?php echo e(json_encode($doctors)); ?>' class="hidden" aria-hidden="true"></div>
+
 <script>
-  const allDoctorsList = <?php echo json_encode($doctors, 15, 512) ?>;
+  const doctorsDataElement = document.getElementById('doctors-data-container');
+  const allDoctorsList = doctorsDataElement ? JSON.parse(doctorsDataElement.dataset.doctors) : [];
 
   function updateDoctorsDropdown() {
     const deptSelect = document.getElementById('appointment-department-select');
@@ -235,7 +231,7 @@
 
     // Filter and add doctors
     const filteredDocs = allDoctorsList.filter(d => d.department === selectedDept);
-    
+
     if (filteredDocs.length === 0) {
       docSelect.innerHTML = '<option value="">لا يوجد أطباء حالياً في هذا القسم</option>';
       docSelect.disabled = true;
@@ -272,11 +268,11 @@
         form.reset();
       } else {
         if (response.status === 422 && result.errors) {
-            // It's a validation error, extract the messages
-            const errorMessages = Object.values(result.errors).flat().join('\n');
-            alert('يوجد خطأ في البيانات المدخلة:\n' + errorMessages);
+          // It's a validation error, extract the messages
+          const errorMessages = Object.values(result.errors).flat().join('\n');
+          alert('يوجد خطأ في البيانات المدخلة:\n' + errorMessages);
         } else {
-            alert(result.message || 'حدث خطأ غير متوقع، يرجى المحاولة لاحقاً.');
+          alert(result.message || 'حدث خطأ غير متوقع، يرجى المحاولة لاحقاً.');
         }
       }
     } catch (error) {
@@ -309,9 +305,9 @@
       const url = `/available-slots?department=${encodeURIComponent(selectedDept)}&doctor=${encodeURIComponent(selectedDoc)}&date=${encodeURIComponent(selectedDate)}`;
       const response = await fetch(url);
       if (!response.ok) throw new Error('فشل جلب الأوقات');
-      
+
       const slots = await response.json();
-      
+
       if (slots.length === 0) {
         timeSelect.innerHTML = '<option value="">لا توجد مواعيد متاحة في هذا اليوم</option>';
         alert('عذراً، لا تتوفر مواعيد متاحة في هذا اليوم لخياراتك الحالية. يرجى اختيار تاريخ آخر.');
@@ -336,10 +332,9 @@
     document.getElementById('booking-form-wrapper').classList.remove('hidden');
     document.getElementById('booking-success-state').classList.add('hidden');
     updateDoctorsDropdown();
-    
+
     const timeSelect = document.getElementById('appointment-time-select');
     timeSelect.disabled = true;
     timeSelect.innerHTML = '<option value="">يرجى اختيار القسم والتاريخ أولاً</option>';
   }
-</script>
-<?php /**PATH D:\laravel-hospital-website-development\resources\views/components/home/Appointment.blade.php ENDPATH**/ ?>
+</script><?php /**PATH D:\laravel-hospital-website-development\resources\views/components/home/Appointment.blade.php ENDPATH**/ ?>

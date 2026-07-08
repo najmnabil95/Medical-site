@@ -74,7 +74,7 @@ class Setting extends Model
 
     public $timestamps = false;
 
-    /**
+    /**b
      * تهيئة النموذج لإضافة مستمعين لأحداث حفظ وحذف النموذج لمسح الكاش تلقائياً.
      */
     protected static function booted()
@@ -122,47 +122,47 @@ class Setting extends Model
 
     // ─── Accessors (موحّدة عبر دالة resolveAssetUrl) ─────────────────
 
-    public function getLogoAttribute($value)
+    public function getLogoAttribute(?string $value)
     {
         return $this->resolveAssetUrl($value);
     }
 
-    public function getFaviconAttribute($value)
+    public function getFaviconAttribute(?string $value)
     {
         return $this->resolveAssetUrl($value);
     }
 
-    public function getHeroImage1Attribute($value)
+    public function getHeroImage1Attribute(?string $value)
     {
         return $this->resolveAssetUrl($value);
     }
 
-    public function getHeroImage2Attribute($value)
+    public function getHeroImage2Attribute(?string $value)
     {
         return $this->resolveAssetUrl($value);
     }
 
-    public function getHeroImage3Attribute($value)
+    public function getHeroImage3Attribute(?string $value)
     {
         return $this->resolveAssetUrl($value);
     }
 
-    public function getAboutImage1Attribute($value)
+    public function getAboutImage1Attribute(?string $value)
     {
         return $this->resolveAssetUrl($value, self::ABOUT_IMAGE_DEFAULTS['about_image_1']);
     }
 
-    public function getAboutImage2Attribute($value)
+    public function getAboutImage2Attribute(?string $value)
     {
         return $this->resolveAssetUrl($value, self::ABOUT_IMAGE_DEFAULTS['about_image_2']);
     }
 
-    public function getAboutImage3Attribute($value)
+    public function getAboutImage3Attribute(?string $value)
     {
         return $this->resolveAssetUrl($value, self::ABOUT_IMAGE_DEFAULTS['about_image_3']);
     }
 
-    public function getAboutImage4Attribute($value)
+    public function getAboutImage4Attribute(?string $value)
     {
         return $this->resolveAssetUrl($value, self::ABOUT_IMAGE_DEFAULTS['about_image_4']);
     }

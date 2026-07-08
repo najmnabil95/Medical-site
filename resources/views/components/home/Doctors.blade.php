@@ -87,14 +87,25 @@
               class="mt-5 w-full bg-gradient-to-l {{ $gradient }} text-white py-3 rounded-xl font-bold text-sm hover:shadow-lg transition-all flex items-center justify-center gap-2 opacity-90 hover:opacity-100 cursor-pointer"
             >
               <i data-lucide="calendar" class="w-4 h-4"></i>
-              <span>احجز موعد</span>
+              <span>احجز الآن</span>
             </button>
           </div>
         </div>
       @endforeach
     </div>
 
-    @if($doctors->isEmpty())
+    @if(!$doctors->isEmpty())
+      <!-- View More Button -->
+      <div class="text-center mt-12">
+        <a
+          href="/doctors"
+          class="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl bg-slate-50 border border-gray-200 hover:bg-primary-50 hover:border-primary-200 text-gray-700 hover:text-primary-700 font-bold text-base transition-all duration-300 shadow-sm hover:shadow-lg hover:-translate-y-0.5 cursor-pointer"
+        >
+          <span>عرض المزيد من الأطباء</span>
+          <i data-lucide="arrow-left" class="w-5 h-5 transition-transform hover:-translate-x-1"></i>
+        </a>
+      </div>
+    @else
       <div class="text-center py-16">
         <p class="text-gray-400 text-lg">لا يوجد أطباء متاحين حالياً</p>
       </div>

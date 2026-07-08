@@ -116,6 +116,46 @@
         document.getElementById('scroll-progress-bar').style.width = scrolled + '%';
       });
 
+      // Global function to prefill and scroll to appointment
+      window.prefillAppointment = function(deptName, docName) {
+        // Close all department modals if they exist
+        const modals = document.querySelectorAll('[id^="dept-modal-"]');
+        modals.forEach(modal => modal.classList.add('hidden'));
+        document.body.style.overflow = '';
+
+        // Scroll to the appointment section
+        const appointmentSection = document.getElementById('appointment');
+        if (appointmentSection) {
+          const offset = 80;
+          const elementPosition = appointmentSection.getBoundingClientRect().top + window.pageYOffset;
+          window.scrollTo({
+            top: elementPosition - offset,
+            behavior: "smooth"
+          });
+        } else {
+          // If not on homepage, redirect to homepage with params
+          window.location.href = `/?dept=${encodeURIComponent(deptName)}&doc=${encodeURIComponent(docName)}`;
+          return;
+        }
+
+        // Prefill the form fields
+        setTimeout(() => {
+          const deptSelect = document.querySelector('select[name="department"]');
+          const docSelect = document.querySelector('select[name="doctor"]');
+
+          if (deptSelect) {
+            deptSelect.value = deptName;
+            deptSelect.dispatchEvent(new Event('change'));
+          }
+
+          if (docSelect && docName) {
+            setTimeout(() => {
+              docSelect.value = docName;
+            }, 100);
+          }
+        }, 500);
+      };
+
       // Dark Mode Toggler Logic
       function toggleDarkMode() {
         const body = document.body;
