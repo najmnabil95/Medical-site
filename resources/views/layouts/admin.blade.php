@@ -114,7 +114,7 @@
           @endif
 
           <!-- قسم العمليات -->
-          @hasanyrole('Super Admin|Manager|Reception')
+          @hasanyrole('Super Admin|Manager|Reception|Nurse')
           <div>
             <p class="text-[10px] font-bold text-gray-400 mb-2 px-3 tracking-wider text-right uppercase">العمليات والطلبات</p>
             <div class="space-y-1">
@@ -125,6 +125,7 @@
                 <i data-lucide="calendar" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">الحجوزات</span>
               </a>
+              @hasanyrole('Super Admin|Manager|Reception')
               <a
                 href="{{ route('admin.messages.index') }}"
                 class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.messages') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
@@ -139,6 +140,7 @@
                 <i data-lucide="bell" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">سجل الإشعارات</span>
               </a>
+              @endhasanyrole
             </div>
           </div>
           @endhasanyrole

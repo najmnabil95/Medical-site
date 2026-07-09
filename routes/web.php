@@ -139,15 +139,18 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Route::delete('/prices/{id}', [PriceItemController::class, 'destroy'])->name('admin.prices.destroy');
     });
 
-    // Manager, Reception, and Super Admin Protected Routes (Operations Management)
-    Route::middleware(['role:Super Admin|Manager|Reception'])->group(function () {
+    // Manager, Reception, Nurse, and Super Admin Protected Routes (Appointments)
+    Route::middleware(['role:Super Admin|Manager|Reception|Nurse'])->group(function () {
         // Appointments management
         Route::get('/appointments', [AppointmentController::class, 'index'])->name('admin.appointments.index');
         Route::post('/appointments', [AppointmentController::class, 'store'])->name('admin.appointments.store');
         Route::put('/appointments/{id}', [AppointmentController::class, 'update'])->name('admin.appointments.update');
         Route::put('/appointments/{id}/status', [AppointmentController::class, 'updateStatus'])->name('admin.appointments.updateStatus');
         Route::delete('/appointments/{id}', [AppointmentController::class, 'destroy'])->name('admin.appointments.destroy');
+    });
 
+    // Manager, Reception, and Super Admin Protected Routes (Operations Management - Messages & Notifications)
+    Route::middleware(['role:Super Admin|Manager|Reception'])->group(function () {
         // Messages management
         Route::get('/messages', [MessageController::class, 'index'])->name('admin.messages.index');
         Route::post('/messages', [MessageController::class, 'store'])->name('admin.messages.store');

@@ -5,6 +5,14 @@
     $departments = \App\Models\Department::where('active', true)->get();
     $doctors = \App\Models\Doctor::where('active', true)->get();
 
+    if (auth()->user()->hasRole('Nurse')) {
+      $assignedDoctors = auth()->user()->assigned_doctors ?? [];
+      $doctors = $doctors->filter(fn($d) => in_array($d->name, $assignedDoctors));
+      
+      $assignedDepts = auth()->user()->assigned_departments ?? [];
+      $departments = $departments->filter(fn($d) => in_array($d->name, $assignedDepts));
+    }
+
     $statusLabels = [
       'pending' => 'قيد الانتظار',
       'confirmed' => 'مؤكد',
@@ -54,7 +62,14 @@
           <i data-lucide="clock" class="w-5 h-5"></i>
         </div>
         <div class="text-2xl font-black text-gray-800 tabular-nums">
-          <?php echo e(\App\Models\Appointment::where('status', $status)->count()); ?>
+          <?php
+            $countQuery = \App\Models\Appointment::where('status', $status);
+            if (auth()->user()->hasRole('Nurse')) {
+                $assignedDoctors = auth()->user()->assigned_doctors ?? [];
+                $countQuery->whereIn('doctor', $assignedDoctors);
+            }
+          ?>
+          <?php echo e($countQuery->count()); ?>
 
         </div>
         <div class="text-xs text-gray-400 mt-1 font-medium"><?php echo e($label); ?></div>
@@ -187,6 +202,7 @@
                   </button>
 
                   <!-- Delete -->
+                  <?php if(!auth()->user()->hasRole('Nurse')): ?>
                   <form action="<?php echo e(route('admin.appointments.destroy', $appt->id)); ?>" method="POST" onsubmit="return confirm('هل أنت متأكد من حذف هذا الحجز نهائياً؟');" class="inline-block">
                     <?php echo csrf_field(); ?>
                     <?php echo method_field('DELETE'); ?>
@@ -194,6 +210,7 @@
                       <i data-lucide="trash-2" class="w-4 h-4"></i>
                     </button>
                   </form>
+                  <?php endif; ?>
                 </div>
               </td>
             </tr>
@@ -322,10 +339,14 @@
           </div>
         </div>
 
+        <?php if(auth()->user()->hasRole('Nurse')): ?>
+          <input type="hidden" name="department" id="edit-department-hidden" />
+          <input type="hidden" name="doctor" id="edit-doctor-hidden" />
+        <?php endif; ?>
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="block text-xs font-bold text-gray-500 mb-2">القسم الطبي</label>
-            <select name="department" id="edit-department" required onchange="updateEditDoctors()" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500">
+            <select name="department" id="edit-department" required onchange="updateEditDoctors()" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500 disabled:opacity-75 disabled:bg-gray-100 disabled:cursor-not-allowed" <?php if(auth()->user()->hasRole('Nurse')): ?> disabled <?php endif; ?>>
               <?php $__currentLoopData = $departments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dept): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <option value="<?php echo e($dept->name); ?>"><?php echo e($dept->name); ?></option>
               <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -333,7 +354,7 @@
           </div>
           <div>
             <label class="block text-xs font-bold text-gray-500 mb-2">الطبيب</label>
-            <select name="doctor" id="edit-doctor" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500">
+            <select name="doctor" id="edit-doctor" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500 disabled:opacity-75 disabled:bg-gray-100 disabled:cursor-not-allowed" <?php if(auth()->user()->hasRole('Nurse')): ?> disabled <?php endif; ?>>
               <!-- populated dynamically -->
             </select>
           </div>
@@ -469,7 +490,8 @@
       const selectedDept = deptSelect.value;
 
       docSelect.innerHTML = '<option value="">اختر الطبيب</option>';
-      docSelect.disabled = false;
+      const isNurse = <?php echo json_encode(auth()->user()->hasRole('Nurse'), 15, 512) ?>;
+      docSelect.disabled = isNurse;
 
       const filteredDocs = allDoctorsList.filter(d => d.department === selectedDept);
       
@@ -491,6 +513,11 @@
       
       document.getElementById('edit-department').value = department;
       updateEditDoctors(doctor); // This will update the doctor list based on the department and select the current doctor
+
+      const deptHidden = document.getElementById('edit-department-hidden');
+      const docHidden = document.getElementById('edit-doctor-hidden');
+      if (deptHidden) deptHidden.value = department;
+      if (docHidden) docHidden.value = doctor;
     };
   </script>
 <?php $__env->stopSection(); ?>

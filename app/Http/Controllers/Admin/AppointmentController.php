@@ -14,6 +14,11 @@ class AppointmentController extends Controller
 
         $query = Appointment::orderBy('date', 'asc')->orderBy('time', 'asc');
 
+        if (auth()->user()->hasRole('Nurse')) {
+            $assignedDoctors = auth()->user()->assigned_doctors ?? [];
+            $query->whereIn('doctor', $assignedDoctors);
+        }
+
         if ($tab === 'today') {
             $query->today();
         } elseif ($tab === 'pending') {
@@ -22,7 +27,12 @@ class AppointmentController extends Controller
 
         $appointments = $query->get();
         
-        $todayRemaining = Appointment::today()->whereIn('status', ['pending', 'confirmed'])->count();
+        $todayRemainingQuery = Appointment::today()->whereIn('status', ['pending', 'confirmed']);
+        if (auth()->user()->hasRole('Nurse')) {
+            $assignedDoctors = auth()->user()->assigned_doctors ?? [];
+            $todayRemainingQuery->whereIn('doctor', $assignedDoctors);
+        }
+        $todayRemaining = $todayRemainingQuery->count();
 
         return view('admin.appointments.index', compact('appointments', 'tab', 'todayRemaining'));
     }
@@ -53,6 +63,13 @@ class AppointmentController extends Controller
             return redirect()->back()->withInput()->withErrors(['doctor' => 'عذراً، هذا الطبيب لديه حجز آخر في نفس التاريخ والوقت المحددين.']);
         }
 
+        if (auth()->user()->hasRole('Nurse')) {
+            $assignedDoctors = auth()->user()->assigned_doctors ?? [];
+            if (!in_array($request->doctor, $assignedDoctors)) {
+                return redirect()->back()->withInput()->withErrors(['doctor' => 'غير مصرح لك بجدولة مواعيد لهذا الطبيب.']);
+            }
+        }
+
         Appointment::create($validated);
 
         return redirect()->route('admin.appointments.index')->with('success', 'تم إنشاء الحجز بنجاح.');
@@ -61,6 +78,16 @@ class AppointmentController extends Controller
     public function update(Request $request, $id)
     {
         $appointment = Appointment::findOrFail($id);
+
+        if (auth()->user()->hasRole('Nurse')) {
+            $assignedDoctors = auth()->user()->assigned_doctors ?? [];
+            if (!in_array($appointment->doctor, $assignedDoctors)) {
+                abort(403, 'غير مصرح لك بتعديل هذا الحجز.');
+            }
+            if ($appointment->doctor !== $request->doctor || $appointment->department !== $request->department) {
+                abort(403, 'غير مصرح للممرض بتغيير الطبيب أو القسم الخاص بالحجز.');
+            }
+        }
 
         $validated = $request->validate([
             'patient_name' => 'required|string|max:255',
@@ -95,6 +122,14 @@ class AppointmentController extends Controller
     public function updateStatus(Request $request, $id)
     {
         $appointment = Appointment::findOrFail($id);
+
+        if (auth()->user()->hasRole('Nurse')) {
+            $assignedDoctors = auth()->user()->assigned_doctors ?? [];
+            if (!in_array($appointment->doctor, $assignedDoctors)) {
+                abort(403, 'غير مصرح لك بتحديث حالة هذا الحجز.');
+            }
+        }
+
         $status = $request->get('status');
         
         if (in_array($status, ['pending', 'confirmed', 'completed', 'cancelled'])) {
@@ -107,6 +142,11 @@ class AppointmentController extends Controller
     public function destroy($id)
     {
         $appointment = Appointment::findOrFail($id);
+
+        if (auth()->user()->hasRole('Nurse')) {
+            abort(403, 'غير مصرح للممرضين بحذف الحجوزات.');
+        }
+
         $appointment->delete();
 
         return redirect()->back()->with('success', 'تم حذف الحجز بنجاح.');

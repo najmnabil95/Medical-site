@@ -48,6 +48,22 @@ class UserController extends Controller
             'assigned_doctors' => 'nullable|array',
         ]);
 
+        if ($validated['role'] === 'Nurse') {
+            $assignedDocs = $validated['assigned_doctors'] ?? [];
+            $assignedDepts = $validated['assigned_departments'] ?? [];
+            
+            foreach ($assignedDocs as $docName) {
+                $doctor = \App\Models\Doctor::where('name', $docName)->first();
+                if ($doctor) {
+                    if (!in_array($doctor->department, $assignedDepts)) {
+                        return back()->withInput()->withErrors([
+                            'assigned_doctors' => "يجب ربط الممرض بقسم ({$doctor->department}) أولاً قبل ربطه بالطبيب ({$docName})."
+                        ]);
+                    }
+                }
+            }
+        }
+
         $validated['active'] = $request->has('active');
         $validated['password'] = Hash::make($validated['password']);
         
@@ -93,6 +109,22 @@ class UserController extends Controller
             'assigned_departments' => 'nullable|array',
             'assigned_doctors' => 'nullable|array',
         ]);
+
+        if ($validated['role'] === 'Nurse') {
+            $assignedDocs = $validated['assigned_doctors'] ?? [];
+            $assignedDepts = $validated['assigned_departments'] ?? [];
+            
+            foreach ($assignedDocs as $docName) {
+                $doctor = \App\Models\Doctor::where('name', $docName)->first();
+                if ($doctor) {
+                    if (!in_array($doctor->department, $assignedDepts)) {
+                        return back()->withInput()->withErrors([
+                            'assigned_doctors' => "يجب ربط الممرض بقسم ({$doctor->department}) أولاً قبل ربطه بالطبيب ({$docName})."
+                        ]);
+                    }
+                }
+            }
+        }
 
         $validated['active'] = $request->has('active');
 

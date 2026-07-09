@@ -7,6 +7,14 @@
     $departments = \App\Models\Department::where('active', true)->get();
     $doctors = \App\Models\Doctor::where('active', true)->get();
 
+    if (auth()->user()->hasRole('Nurse')) {
+      $assignedDoctors = auth()->user()->assigned_doctors ?? [];
+      $doctors = $doctors->filter(fn($d) => in_array($d->name, $assignedDoctors));
+      
+      $assignedDepts = auth()->user()->assigned_departments ?? [];
+      $departments = $departments->filter(fn($d) => in_array($d->name, $assignedDepts));
+    }
+
     $statusLabels = [
       'pending' => 'قيد الانتظار',
       'confirmed' => 'مؤكد',
@@ -56,7 +64,14 @@
           <i data-lucide="clock" class="w-5 h-5"></i>
         </div>
         <div class="text-2xl font-black text-gray-800 tabular-nums">
-          {{ \App\Models\Appointment::where('status', $status)->count() }}
+          @php
+            $countQuery = \App\Models\Appointment::where('status', $status);
+            if (auth()->user()->hasRole('Nurse')) {
+                $assignedDoctors = auth()->user()->assigned_doctors ?? [];
+                $countQuery->whereIn('doctor', $assignedDoctors);
+            }
+          @endphp
+          {{ $countQuery->count() }}
         </div>
         <div class="text-xs text-gray-400 mt-1 font-medium">{{ $label }}</div>
       </div>
@@ -186,6 +201,7 @@
                   </button>
 
                   <!-- Delete -->
+                  @if(!auth()->user()->hasRole('Nurse'))
                   <form action="{{ route('admin.appointments.destroy', $appt->id) }}" method="POST" onsubmit="return confirm('هل أنت متأكد من حذف هذا الحجز نهائياً؟');" class="inline-block">
                     @csrf
                     @method('DELETE')
@@ -193,6 +209,7 @@
                       <i data-lucide="trash-2" class="w-4 h-4"></i>
                     </button>
                   </form>
+                  @endif
                 </div>
               </td>
             </tr>
@@ -321,10 +338,14 @@
           </div>
         </div>
 
+        @if(auth()->user()->hasRole('Nurse'))
+          <input type="hidden" name="department" id="edit-department-hidden" />
+          <input type="hidden" name="doctor" id="edit-doctor-hidden" />
+        @endif
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="block text-xs font-bold text-gray-500 mb-2">القسم الطبي</label>
-            <select name="department" id="edit-department" required onchange="updateEditDoctors()" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500">
+            <select name="department" id="edit-department" required onchange="updateEditDoctors()" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500 disabled:opacity-75 disabled:bg-gray-100 disabled:cursor-not-allowed" @if(auth()->user()->hasRole('Nurse')) disabled @endif>
               @foreach($departments as $dept)
                 <option value="{{ $dept->name }}">{{ $dept->name }}</option>
               @endforeach
@@ -332,7 +353,7 @@
           </div>
           <div>
             <label class="block text-xs font-bold text-gray-500 mb-2">الطبيب</label>
-            <select name="doctor" id="edit-doctor" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500">
+            <select name="doctor" id="edit-doctor" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500 disabled:opacity-75 disabled:bg-gray-100 disabled:cursor-not-allowed" @if(auth()->user()->hasRole('Nurse')) disabled @endif>
               <!-- populated dynamically -->
             </select>
           </div>
@@ -468,7 +489,8 @@
       const selectedDept = deptSelect.value;
 
       docSelect.innerHTML = '<option value="">اختر الطبيب</option>';
-      docSelect.disabled = false;
+      const isNurse = @json(auth()->user()->hasRole('Nurse'));
+      docSelect.disabled = isNurse;
 
       const filteredDocs = allDoctorsList.filter(d => d.department === selectedDept);
       
@@ -490,6 +512,11 @@
       
       document.getElementById('edit-department').value = department;
       updateEditDoctors(doctor); // This will update the doctor list based on the department and select the current doctor
+
+      const deptHidden = document.getElementById('edit-department-hidden');
+      const docHidden = document.getElementById('edit-doctor-hidden');
+      if (deptHidden) deptHidden.value = department;
+      if (docHidden) docHidden.value = doctor;
     };
   </script>
 @endsection
