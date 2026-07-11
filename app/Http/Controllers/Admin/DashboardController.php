@@ -14,6 +14,17 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        /** @var \App\Models\User $user */
+        $user = request()->user();
+
+        if ($user && $user->hasRole('Doctor')) {
+            return redirect()->route('doctor.appointments.index');
+        }
+
+        if ($user && $user->hasRole('Nurse')) {
+            return redirect()->route('admin.appointments.index');
+        }
+
         $stats = [
             'total_appointments' => Appointment::count(),
             'pending_appointments' => Appointment::where('status', 'pending')->count(),
