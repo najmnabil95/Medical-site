@@ -32,7 +32,7 @@ $dummyServices = [
 ];
 @endphp
 
-<section id="departments" class="py-24 bg-gray-50 relative overflow-hidden">
+<section id="departments" class="py-24 bg-gray-50 relative overflow-hidden scroll-mt-32">
   <!-- Decoration shape -->
   <div class="absolute bottom-0 right-0 w-80 h-80 bg-primary-100/30 rounded-full blur-3xl"></div>
 
@@ -73,7 +73,7 @@ $dummyServices = [
         data-delay="{{ $index * 80 }}"
         class="department-card group bg-white rounded-2xl p-6 shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border border-gray-100 cursor-pointer relative overflow-hidden">
         <!-- Hover background -->
-        <div class="absolute inset-0 bg-gradient-to-br {{ $deptColor }} opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div class="absolute inset-0 bg-linear-to-br {{ $deptColor }} opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
         <div class="relative">
           <div class="w-14 h-14 {{ $deptLightColor }} group-hover:bg-white/20 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
@@ -114,12 +114,12 @@ $closeModalData = 'data-close-modal="' . $dept->id . '"';
 $deptNameEscaped = str_replace("'", "\\'", $dept->name);
 @endphp
 
-<div id="{{ $modalId }}" class="hidden fixed inset-0 z-[9999] flex items-center justify-center p-4">
+<div id="{{ $modalId }}" class="fixed inset-0 z-9999 items-center justify-center p-4" style="display: none;">
   {{-- Solid dark overlay (no backdrop-blur for performance) --}}
   <div class="fixed inset-0 bg-black/75" {!! $closeModalData !!}></div>
   <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto z-10" style="animation: deptModalIn 0.25s ease-out;">
     <!-- Header -->
-    <div class="relative h-48 bg-gradient-to-br {{ $deptColor }} overflow-hidden">
+    <div class="relative h-48 bg-linear-to-br {{ $deptColor }} overflow-hidden">
       <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle, white 1px, transparent 1px); background-size: 25px 25px;"></div>
       <button
         {!! $closeModalData !!}

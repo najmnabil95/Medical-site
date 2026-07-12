@@ -77,7 +77,7 @@
   <body class="min-h-screen bg-white font-tajawal antialiased text-gray-900 transition-colors duration-300">
     
     <!-- Progress Indicator -->
-    <div id="scroll-progress-bar" class="fixed top-0 right-0 h-1 bg-linear-to-l from-emerald-500 to-cyan-500 z-9999 transition-all duration-100" style="width: 0%;"></div>
+    <div id="scroll-progress-bar" class="fixed top-0 right-0 h-1 bg-gradient-to-l from-emerald-500 to-cyan-500 z-[9999] transition-all duration-100" style="width: 0%;"></div>
 
     @php
       $showNewsTicker = false;
@@ -115,6 +115,9 @@
     @include('components.home.Footer')
 
     <!-- Floating Utilities -->
+    @if(!$isDoctorsPage)
+      @include('components.home.WhatsAppFloat')
+    @endif
     @include('components.home.CookieBanner')
 
     <!-- Global Client JS -->
@@ -212,6 +215,7 @@
       });
     </script>
     <x-booking-modal />
+    <x-doctor-info-modal />
     @yield('scripts')
   </body>
 </html>

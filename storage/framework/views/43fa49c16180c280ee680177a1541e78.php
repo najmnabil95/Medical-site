@@ -77,7 +77,7 @@
   <body class="min-h-screen bg-white font-tajawal antialiased text-gray-900 transition-colors duration-300">
     
     <!-- Progress Indicator -->
-    <div id="scroll-progress-bar" class="fixed top-0 right-0 h-1 bg-linear-to-l from-emerald-500 to-cyan-500 z-9999 transition-all duration-100" style="width: 0%;"></div>
+    <div id="scroll-progress-bar" class="fixed top-0 right-0 h-1 bg-gradient-to-l from-emerald-500 to-cyan-500 z-[9999] transition-all duration-100" style="width: 0%;"></div>
 
     <?php
       $showNewsTicker = false;
@@ -115,6 +115,9 @@
     <?php echo $__env->make('components.home.Footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <!-- Floating Utilities -->
+    <?php if(!$isDoctorsPage): ?>
+      <?php echo $__env->make('components.home.WhatsAppFloat', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    <?php endif; ?>
     <?php echo $__env->make('components.home.CookieBanner', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <!-- Global Client JS -->
@@ -230,6 +233,26 @@
 <?php if (isset($__componentOriginalb4f229802bc089ba43c0d67b3c70c8da)): ?>
 <?php $component = $__componentOriginalb4f229802bc089ba43c0d67b3c70c8da; ?>
 <?php unset($__componentOriginalb4f229802bc089ba43c0d67b3c70c8da); ?>
+<?php endif; ?>
+    <?php if (isset($component)) { $__componentOriginalcdf9962c05aba2918afd39e0dad95a8d = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalcdf9962c05aba2918afd39e0dad95a8d = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.doctor-info-modal','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('doctor-info-modal'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalcdf9962c05aba2918afd39e0dad95a8d)): ?>
+<?php $attributes = $__attributesOriginalcdf9962c05aba2918afd39e0dad95a8d; ?>
+<?php unset($__attributesOriginalcdf9962c05aba2918afd39e0dad95a8d); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalcdf9962c05aba2918afd39e0dad95a8d)): ?>
+<?php $component = $__componentOriginalcdf9962c05aba2918afd39e0dad95a8d; ?>
+<?php unset($__componentOriginalcdf9962c05aba2918afd39e0dad95a8d); ?>
 <?php endif; ?>
     <?php echo $__env->yieldContent('scripts'); ?>
   </body>

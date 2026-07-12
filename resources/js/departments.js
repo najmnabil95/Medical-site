@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function openDeptModal(id) {
         var modal = document.getElementById('dept-modal-' + id);
         if (modal) {
-            modal.classList.remove('hidden');
+            modal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function closeDeptModal(id) {
         var modal = document.getElementById('dept-modal-' + id);
         if (modal) {
-            modal.classList.add('hidden');
+            modal.style.display = 'none';
             document.body.style.overflow = '';
         }
     }

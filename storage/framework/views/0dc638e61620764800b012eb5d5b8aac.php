@@ -32,7 +32,7 @@ $dummyServices = [
 ];
 ?>
 
-<section id="departments" class="py-24 bg-gray-50 relative overflow-hidden">
+<section id="departments" class="py-24 bg-gray-50 relative overflow-hidden scroll-mt-32">
   <!-- Decoration shape -->
   <div class="absolute bottom-0 right-0 w-80 h-80 bg-primary-100/30 rounded-full blur-3xl"></div>
 

@@ -9,7 +9,7 @@
   ];
 @endphp
 
-<section id="about" class="py-24 bg-white relative overflow-hidden">
+<section id="about" class="py-24 bg-white relative overflow-hidden scroll-mt-32">
   <!-- Decorative Background shape -->
   <div class="absolute top-0 left-0 w-80 h-80 bg-slate-100 rounded-full blur-3xl opacity-50"></div>
 
@@ -60,7 +60,7 @@
         </div>
 
         <!-- Experience Badge -->
-        <div class="absolute -bottom-4 right-8 bg-gradient-to-br from-emerald-500 to-emerald-600 text-white rounded-2xl p-6 shadow-2xl shadow-emerald-500/20 animate-float">
+        <div class="absolute -bottom-4 right-8 bg-linear-to-br from-emerald-500 to-emerald-600 text-white rounded-2xl p-6 shadow-2xl shadow-emerald-500/20 animate-float">
           <div class="text-center">
             <div class="text-5xl font-black leading-none">25<span class="text-emerald-400">+</span></div>
             <div class="text-sm font-medium opacity-90 mt-1">سنة من التميز</div>

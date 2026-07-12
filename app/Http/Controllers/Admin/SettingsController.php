@@ -60,6 +60,7 @@ class SettingsController extends Controller
             'linkedin'             => 'nullable|string|max:500',
             'snapchat'             => 'nullable|string|max:500',
             'description'          => 'nullable|string|max:1000',
+            'footer_copyright'     => 'nullable|string|max:500',
             'map_link'             => 'nullable|string|max:1000',
             'logo'                 => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
             'favicon'              => 'nullable|image|mimes:jpeg,png,jpg,gif,ico,svg,webp|max:2048',

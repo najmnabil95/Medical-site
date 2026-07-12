@@ -27,7 +27,7 @@
   ];
 @endphp
 
-<section id="contact" class="py-24 bg-gray-50 relative overflow-hidden">
+<section id="contact" class="py-24 bg-gray-50 relative overflow-hidden scroll-mt-32">
   <div class="absolute top-0 right-0 w-80 h-80 bg-primary-100/30 rounded-full blur-3xl"></div>
 
   <div class="max-w-7xl mx-auto px-4 relative">
@@ -56,9 +56,9 @@
       @foreach($contactInfo as $index => $info)
         <div
           class="bg-white rounded-2xl p-7 shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-500 hover:-translate-y-3 group text-center"
-          style="animation-delay: {{ $index * 100 }}ms"
+          style="animation-delay: {{ $index * 100 }}ms;"
         >
-          <div class="w-16 h-16 bg-gradient-to-br {{ $info['color'] }} rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+          <div class="w-16 h-16 bg-linear-to-br {{ $info['color'] }} rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
             <i data-lucide="{{ $info['icon'] }}" class="text-white w-[26px] h-[26px]"></i>
           </div>
           <h4 class="text-lg font-bold text-gray-900 mb-3">{{ $info['title'] }}</h4>
@@ -85,7 +85,7 @@
           title="موقع المستشفى"
         ></iframe>
         <div class="absolute bottom-6 right-6 bg-white rounded-2xl p-4 shadow-xl flex items-center gap-3">
-          <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center">
+          <div class="w-10 h-10 bg-linear-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center">
             <i data-lucide="map-pin" class="text-white w-5 h-5"></i>
           </div>
           <div>
@@ -97,8 +97,10 @@
 
       <!-- Quick Message Form -->
       <div class="bg-white rounded-3xl p-8 md:p-10 shadow-xl border border-gray-100 relative">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-linear-to-br from-primary-50 to-emerald-50 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2 opacity-70"></div>
+        
         <!-- Success State -->
-        <div id="contact-success-state" class="hidden h-full flex flex-col items-center justify-center text-center space-y-4 py-16">
+        <div id="contact-success-state" class="h-full flex flex-col items-center justify-center text-center space-y-4 py-16" style="display: none;">
           <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center animate-scale-in">
             <i data-lucide="check-circle" class="text-emerald-500 w-10 h-10"></i>
           </div>
@@ -149,7 +151,7 @@
             
             <button
               type="submit"
-              class="w-full bg-gradient-to-l from-primary-500 to-primary-700 text-white py-4.5 rounded-xl font-bold text-lg hover:shadow-xl hover:shadow-primary-500/30 transition-all hover:-translate-y-1 flex items-center justify-center gap-3 cursor-pointer"
+              class="w-full bg-linear-to-l from-primary-500 to-primary-700 text-white py-4.5 rounded-xl font-bold text-lg hover:shadow-xl hover:shadow-primary-500/30 transition-all hover:-translate-y-1 flex items-center justify-center gap-3 cursor-pointer"
             >
               <i data-lucide="send" class="w-5 h-5"></i>
               <span>إرسال الرسالة</span>
@@ -200,8 +202,8 @@
 
       const result = await response.json();
       if (response.ok && result.success) {
-        document.getElementById('contact-form-container').classList.add('hidden');
-        document.getElementById('contact-success-state').classList.remove('hidden');
+        document.getElementById('contact-form-container').style.display = 'none';
+        document.getElementById('contact-success-state').style.display = 'flex';
         form.reset();
       } else {
         alert(result.message || 'حدث خطأ غير متوقع، يرجى المحاولة لاحقاً.');
@@ -213,7 +215,7 @@
   }
 
   function resetContactForm() {
-    document.getElementById('contact-form-container').classList.remove('hidden');
-    document.getElementById('contact-success-state').classList.add('hidden');
+    document.getElementById('contact-form-container').style.display = 'block';
+    document.getElementById('contact-success-state').style.display = 'none';
   }
 </script>

@@ -124,7 +124,18 @@
                 <?php echo e($doc->name); ?>
 
               </h3>
-              <p class="text-gray-500 text-sm font-medium mt-1.5 line-clamp-2 h-10"><?php echo e($doc->specialty); ?></p>
+              <p class="text-primary-600 text-sm font-bold mt-1.5"><?php echo e($doc->specialty); ?></p>
+              <?php if($doc->description): ?>
+                <div class="relative">
+                    <p class="text-gray-500 text-xs font-medium mt-2 line-clamp-2 leading-relaxed text-right"><?php echo e($doc->description); ?></p>
+                    <button onclick="if(typeof openDoctorInfoModal === 'function') openDoctorInfoModal(<?php echo e($doc->id); ?>)" class="text-primary-600 hover:text-primary-700 text-xs font-bold mt-1 inline-flex items-center gap-1 group/btn cursor-pointer">
+                        <span>عرض التفاصيل</span>
+                        <i data-lucide="chevron-down" class="w-3 h-3 group-hover/btn:translate-y-0.5 transition-transform"></i>
+                    </button>
+                </div>
+              <?php else: ?>
+                <div class="h-12 mt-2"></div> <!-- Spacer to keep cards aligned if no description -->
+              <?php endif; ?>
 
               <div class="flex items-center justify-between mt-5 pt-5 border-t border-gray-100 text-gray-700">
                 <div class="text-center">

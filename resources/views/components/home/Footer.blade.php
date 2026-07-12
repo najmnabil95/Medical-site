@@ -191,9 +191,8 @@
   <!-- Bottom Copyright Bar -->
   <div class="border-t border-white/[0.05] text-gray-500">
     <div class="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
-      <p class="text-sm flex items-center gap-1 text-gray-400">
-        © 2024 {{ $settings->site_name ?? 'مستشفى الشفاء الدولي' }}. جميع الحقوق محفوظة. صنع بـ
-        <i data-lucide="heart" class="text-red-500 fill-current w-3.5 h-3.5 mx-1"></i>
+      <p class="text-sm font-medium">
+        {{ $settings->footer_copyright ?? '© ' . date('Y') . ' ' . ($settings->site_name ?? 'مستشفى الشفاء الدولي') . '. جميع الحقوق محفوظة صنع بـ ❤️' }}
       </p>
       <div class="flex items-center gap-6 text-sm text-gray-400">
         <button onclick="togglePrivacyModal(true)" class="hover:text-emerald-400 transition-colors cursor-pointer">سياسة الخصوصية</button>

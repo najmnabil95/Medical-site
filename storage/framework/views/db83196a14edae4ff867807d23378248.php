@@ -9,7 +9,7 @@
   ];
 ?>
 
-<section id="about" class="py-24 bg-white relative overflow-hidden">
+<section id="about" class="py-24 bg-white relative overflow-hidden scroll-mt-32">
   <!-- Decorative Background shape -->
   <div class="absolute top-0 left-0 w-80 h-80 bg-slate-100 rounded-full blur-3xl opacity-50"></div>
 

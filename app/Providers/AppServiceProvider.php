@@ -40,7 +40,7 @@ class AppServiceProvider extends ServiceProvider
             \Illuminate\Support\Facades\View::share('settings', null);
         }
 
-        \Illuminate\Support\Facades\View::composer('components.booking-modal', function ($view) {
+        \Illuminate\Support\Facades\View::composer(['components.booking-modal', 'components.doctor-info-modal'], function ($view) {
             try {
                 $departments = \App\Models\Department::where('active', true)->orderBy('order')->get();
                 $doctors = \App\Models\Doctor::where('active', true)->orderBy('id', 'desc')->get();

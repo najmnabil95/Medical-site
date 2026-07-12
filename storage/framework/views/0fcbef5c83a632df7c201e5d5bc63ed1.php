@@ -1,8 +1,6 @@
-@extends('layouts.admin')
+<?php $__env->startSection('title', 'إعدادات الموقع - لوحة التحكم'); ?>
 
-@section('title', 'إعدادات الموقع - لوحة التحكم')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
   <!-- Header -->
   <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4 text-right">
     <div>
@@ -29,8 +27,8 @@
     </div>
   </div>
 
-  <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6 text-right">
-    @csrf
+  <form action="<?php echo e(route('admin.settings.update')); ?>" method="POST" enctype="multipart/form-data" class="space-y-6 text-right">
+    <?php echo csrf_field(); ?>
 
     <div class="grid lg:grid-cols-2 gap-6">
       
@@ -46,17 +44,17 @@
           <div class="grid grid-cols-2 gap-4">
             <div>
               <label class="block text-sm font-bold text-gray-700 mb-2">اسم الموقع (بالعربية) <span class="text-red-500">*</span></label>
-              <input type="text" name="site_name" value="{{ old('site_name', $settings->site_name) }}" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500" />
+              <input type="text" name="site_name" value="<?php echo e(old('site_name', $settings->site_name)); ?>" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500" />
             </div>
             <div>
               <label class="block text-sm font-bold text-gray-700 mb-2">اسم الموقع (بالإنجليزية) <span class="text-red-500">*</span></label>
-              <input type="text" name="site_name_en" value="{{ old('site_name_en', $settings->site_name_en) }}" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500" />
+              <input type="text" name="site_name_en" value="<?php echo e(old('site_name_en', $settings->site_name_en)); ?>" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500" />
             </div>
           </div>
 
           <div>
             <label class="block text-sm font-bold text-gray-700 mb-2">وصف الموقع التعريفي</label>
-            <textarea name="description" rows="3" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none resize-none">{{ old('description', $settings->description) }}</textarea>
+            <textarea name="description" rows="3" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none resize-none"><?php echo e(old('description', $settings->description)); ?></textarea>
           </div>
 
           <!-- Logo Upload -->
@@ -64,15 +62,15 @@
             <label class="block text-sm font-bold text-gray-700 mb-2">شعار المستشفى (Logo)</label>
             <div class="flex items-center gap-4 justify-start">
               <div id="logo-preview-container" class="w-18 h-18 border border-gray-200 rounded-xl flex items-center justify-center overflow-hidden bg-white shadow-sm shrink-0 p-1.5">
-                @if(!empty($settings->logo))
-                   @if(str_starts_with($settings->logo, 'http') || str_starts_with($settings->logo, 'data:'))
-                    <img id="logo-preview" src="{{ $settings->logo }}" alt="Logo" class="w-full h-full object-contain" />
-                  @else
-                    <span class="text-3xl font-bold text-primary-600">{{ $settings->logo }}</span>
-                  @endif
-                @else
+                <?php if(!empty($settings->logo)): ?>
+                   <?php if(str_starts_with($settings->logo, 'http') || str_starts_with($settings->logo, 'data:')): ?>
+                    <img id="logo-preview" src="<?php echo e($settings->logo); ?>" alt="Logo" class="w-full h-full object-contain" />
+                  <?php else: ?>
+                    <span class="text-3xl font-bold text-primary-600"><?php echo e($settings->logo); ?></span>
+                  <?php endif; ?>
+                <?php else: ?>
                   <i id="logo-preview-icon" data-lucide="image" class="text-gray-300 w-8 h-8"></i>
-                @endif
+                <?php endif; ?>
               </div>
               <div class="flex-1 space-y-2">
                 <input type="file" name="logo" id="logo-file-input" accept="image/*" class="hidden" onchange="previewSelectedImage(event, 'logo-preview')" />
@@ -90,11 +88,11 @@
             <label class="block text-sm font-bold text-gray-700 mb-2">أيقونة المتصفح (Favicon)</label>
             <div class="flex items-center gap-4 justify-start">
               <div id="favicon-preview-container" class="w-12 h-12 border border-gray-200 rounded-xl flex items-center justify-center overflow-hidden bg-gray-50 shrink-0">
-                @if(!empty($settings->favicon))
-                  <img id="favicon-preview" src="{{ $settings->favicon }}" alt="Favicon" class="w-full h-full object-cover" />
-                @else
+                <?php if(!empty($settings->favicon)): ?>
+                  <img id="favicon-preview" src="<?php echo e($settings->favicon); ?>" alt="Favicon" class="w-full h-full object-cover" />
+                <?php else: ?>
                   <i id="favicon-preview-icon" data-lucide="image" class="text-gray-300 w-6 h-6"></i>
-                @endif
+                <?php endif; ?>
               </div>
               <div class="flex-1 space-y-2">
                 <input type="file" name="favicon" id="favicon-file-input" accept="image/*" class="hidden" onchange="previewSelectedImage(event, 'favicon-preview')" />
@@ -112,28 +110,28 @@
             <h4 class="font-bold text-gray-800 text-sm">صور واجهة الموقع الرئيسية (Slider Images)</h4>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              @for($i = 1; $i <= 3; $i++)
-                @php $fieldName = 'hero_image_' . $i; @endphp
+              <?php for($i = 1; $i <= 3; $i++): ?>
+                <?php $fieldName = 'hero_image_' . $i; ?>
                 <div class="space-y-2">
-                  <label class="block text-xs font-bold text-gray-500">الصورة {{ $i }}</label>
+                  <label class="block text-xs font-bold text-gray-500">الصورة <?php echo e($i); ?></label>
                   <div class="flex flex-col items-center gap-3">
-                    <div id="hero_image_{{ $i }}-preview-container" class="w-full h-32 border border-gray-200 rounded-xl flex items-center justify-center overflow-hidden bg-gray-50 shadow-sm shrink-0">
-                      @if(!empty($settings->$fieldName))
-                        <img id="hero_image_{{ $i }}-preview" src="{{ $settings->$fieldName }}" alt="Hero Image {{ $i }}" class="w-full h-full object-cover" />
-                      @else
-                        <i id="hero_image_{{ $i }}-preview-icon" data-lucide="image" class="text-gray-300 w-8 h-8"></i>
-                      @endif
+                    <div id="hero_image_<?php echo e($i); ?>-preview-container" class="w-full h-32 border border-gray-200 rounded-xl flex items-center justify-center overflow-hidden bg-gray-50 shadow-sm shrink-0">
+                      <?php if(!empty($settings->$fieldName)): ?>
+                        <img id="hero_image_<?php echo e($i); ?>-preview" src="<?php echo e($settings->$fieldName); ?>" alt="Hero Image <?php echo e($i); ?>" class="w-full h-full object-cover" />
+                      <?php else: ?>
+                        <i id="hero_image_<?php echo e($i); ?>-preview-icon" data-lucide="image" class="text-gray-300 w-8 h-8"></i>
+                      <?php endif; ?>
                     </div>
                     <div class="w-full text-center">
-                      <input type="file" name="hero_image_{{ $i }}" id="hero_image_{{ $i }}-file-input" accept="image/*" class="hidden" onchange="previewSelectedImage(event, 'hero_image_{{ $i }}-preview')" />
-                      <label for="hero_image_{{ $i }}-file-input" class="w-full inline-flex items-center justify-center gap-2 px-3 py-2 bg-primary-50 text-primary-600 rounded-xl text-xs font-bold hover:bg-primary-100 transition-all cursor-pointer">
+                      <input type="file" name="hero_image_<?php echo e($i); ?>" id="hero_image_<?php echo e($i); ?>-file-input" accept="image/*" class="hidden" onchange="previewSelectedImage(event, 'hero_image_<?php echo e($i); ?>-preview')" />
+                      <label for="hero_image_<?php echo e($i); ?>-file-input" class="w-full inline-flex items-center justify-center gap-2 px-3 py-2 bg-primary-50 text-primary-600 rounded-xl text-xs font-bold hover:bg-primary-100 transition-all cursor-pointer">
                         <i data-lucide="upload" class="w-3.5 h-3.5"></i>
-                        <span>اختر صورة {{ $i }}</span>
+                        <span>اختر صورة <?php echo e($i); ?></span>
                       </label>
                     </div>
                   </div>
                 </div>
-              @endfor
+              <?php endfor; ?>
             </div>
           </div>
           
@@ -141,8 +139,8 @@
           <div class="border-t border-gray-100 pt-4 mt-4 space-y-2">
             <label class="block text-sm font-bold text-gray-700 mb-1">شفافية غطاء الصورة الخلفية للواجهة (Background Overlay Opacity)</label>
             <div class="flex items-center gap-4">
-              <input type="range" name="hero_overlay_opacity" min="0" max="100" value="{{ old('hero_overlay_opacity', $settings->hero_overlay_opacity ?? 80) }}" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600" oninput="updateOpacityLabel(this.value)" />
-              <span id="opacity-label" class="text-sm font-bold text-gray-700 shrink-0">{{ old('hero_overlay_opacity', $settings->hero_overlay_opacity ?? 80) }}%</span>
+              <input type="range" name="hero_overlay_opacity" min="0" max="100" value="<?php echo e(old('hero_overlay_opacity', $settings->hero_overlay_opacity ?? 80)); ?>" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600" oninput="updateOpacityLabel(this.value)" />
+              <span id="opacity-label" class="text-sm font-bold text-gray-700 shrink-0"><?php echo e(old('hero_overlay_opacity', $settings->hero_overlay_opacity ?? 80)); ?>%</span>
             </div>
             <p class="text-xs text-gray-400">تتحكم هذه القيمة في مدى وضوح النص فوق الصورة الخلفية (0% شفاف تماماً، 100% غطاء صلب بلون الخلفية).</p>
           </div>
@@ -151,9 +149,9 @@
           <div class="border-t border-gray-100 pt-4 mt-4 space-y-2">
             <label class="block text-sm font-bold text-gray-700 mb-1">قناة الإشعارات المفضلة (Notification Channel)</label>
             <select name="notification_channel" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500">
-              <option value="whatsapp" {{ old('notification_channel', $settings->notification_channel ?? 'whatsapp') === 'whatsapp' ? 'selected' : '' }}>واتساب فقط (WhatsApp Only)</option>
-              <option value="sms" {{ old('notification_channel', $settings->notification_channel ?? 'whatsapp') === 'sms' ? 'selected' : '' }}>رسائل نصية فقط (SMS Only)</option>
-              <option value="both" {{ old('notification_channel', $settings->notification_channel ?? 'whatsapp') === 'both' ? 'selected' : '' }}>كلاهما (Both WhatsApp & SMS)</option>
+              <option value="whatsapp" <?php echo e(old('notification_channel', $settings->notification_channel ?? 'whatsapp') === 'whatsapp' ? 'selected' : ''); ?>>واتساب فقط (WhatsApp Only)</option>
+              <option value="sms" <?php echo e(old('notification_channel', $settings->notification_channel ?? 'whatsapp') === 'sms' ? 'selected' : ''); ?>>رسائل نصية فقط (SMS Only)</option>
+              <option value="both" <?php echo e(old('notification_channel', $settings->notification_channel ?? 'whatsapp') === 'both' ? 'selected' : ''); ?>>كلاهما (Both WhatsApp & SMS)</option>
             </select>
             <p class="text-xs text-gray-400">القناة الافتراضية لإرسال إشعارات الحجز للمرضى عند تأكيد الموعد.</p>
           </div>
@@ -162,12 +160,12 @@
           <div class="border-t border-gray-100 pt-4 mt-4 space-y-2">
             <label class="block text-sm font-bold text-gray-700 mb-1">نوع الخط المستخدم في الموقع (Font Family)</label>
             <select name="font_family" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500">
-              <option value="Tajawal" {{ old('font_family', $settings->font_family ?? 'Tajawal') === 'Tajawal' ? 'selected' : '' }}>Tajawal (تاجاوال - الافتراضي)</option>
-              <option value="Cairo" {{ old('font_family', $settings->font_family ?? 'Tajawal') === 'Cairo' ? 'selected' : '' }}>Cairo (كايرو)</option>
-              <option value="Almarai" {{ old('font_family', $settings->font_family ?? 'Tajawal') === 'Almarai' ? 'selected' : '' }}>Almarai (المراعي)</option>
-              <option value="Alexandria" {{ old('font_family', $settings->font_family ?? 'Tajawal') === 'Alexandria' ? 'selected' : '' }}>Alexandria (الإسكندرية)</option>
-              <option value="Amiri" {{ old('font_family', $settings->font_family ?? 'Tajawal') === 'Amiri' ? 'selected' : '' }}>Amiri (الأميري - كلاسيكي)</option>
-              <option value="Readex Pro" {{ old('font_family', $settings->font_family ?? 'Tajawal') === 'Readex Pro' ? 'selected' : '' }}>Readex Pro (ريدكس برو)</option>
+              <option value="Tajawal" <?php echo e(old('font_family', $settings->font_family ?? 'Tajawal') === 'Tajawal' ? 'selected' : ''); ?>>Tajawal (تاجاوال - الافتراضي)</option>
+              <option value="Cairo" <?php echo e(old('font_family', $settings->font_family ?? 'Tajawal') === 'Cairo' ? 'selected' : ''); ?>>Cairo (كايرو)</option>
+              <option value="Almarai" <?php echo e(old('font_family', $settings->font_family ?? 'Tajawal') === 'Almarai' ? 'selected' : ''); ?>>Almarai (المراعي)</option>
+              <option value="Alexandria" <?php echo e(old('font_family', $settings->font_family ?? 'Tajawal') === 'Alexandria' ? 'selected' : ''); ?>>Alexandria (الإسكندرية)</option>
+              <option value="Amiri" <?php echo e(old('font_family', $settings->font_family ?? 'Tajawal') === 'Amiri' ? 'selected' : ''); ?>>Amiri (الأميري - كلاسيكي)</option>
+              <option value="Readex Pro" <?php echo e(old('font_family', $settings->font_family ?? 'Tajawal') === 'Readex Pro' ? 'selected' : ''); ?>>Readex Pro (ريدكس برو)</option>
             </select>
             <p class="text-xs text-gray-400">تغيير هذا الخيار سيقوم بتحديث خط نصوص الموقع بالكامل ولوحة التحكم بشكل فوري.</p>
           </div>
@@ -177,28 +175,28 @@
             <h4 class="font-bold text-gray-800 text-sm">صور قسم "من نحن" (About Us Images - 4 صور)</h4>
             
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-              @for($i = 1; $i <= 4; $i++)
-                @php $fieldName = 'about_image_' . $i; @endphp
+              <?php for($i = 1; $i <= 4; $i++): ?>
+                <?php $fieldName = 'about_image_' . $i; ?>
                 <div class="space-y-2">
-                  <label class="block text-xs font-bold text-gray-500">الصورة {{ $i }}</label>
+                  <label class="block text-xs font-bold text-gray-500">الصورة <?php echo e($i); ?></label>
                   <div class="flex flex-col items-center gap-3">
-                    <div id="about_image_{{ $i }}-preview-container" class="w-full h-24 border border-gray-200 rounded-xl flex items-center justify-center overflow-hidden bg-gray-50 shadow-sm shrink-0">
-                      @if(!empty($settings->$fieldName))
-                        <img id="about_image_{{ $i }}-preview" src="{{ $settings->$fieldName }}" alt="About Image {{ $i }}" class="w-full h-full object-cover" />
-                      @else
-                        <i id="about_image_{{ $i }}-preview-icon" data-lucide="image" class="text-gray-300 w-6 h-6"></i>
-                      @endif
+                    <div id="about_image_<?php echo e($i); ?>-preview-container" class="w-full h-24 border border-gray-200 rounded-xl flex items-center justify-center overflow-hidden bg-gray-50 shadow-sm shrink-0">
+                      <?php if(!empty($settings->$fieldName)): ?>
+                        <img id="about_image_<?php echo e($i); ?>-preview" src="<?php echo e($settings->$fieldName); ?>" alt="About Image <?php echo e($i); ?>" class="w-full h-full object-cover" />
+                      <?php else: ?>
+                        <i id="about_image_<?php echo e($i); ?>-preview-icon" data-lucide="image" class="text-gray-300 w-6 h-6"></i>
+                      <?php endif; ?>
                     </div>
                     <div class="w-full text-center">
-                      <input type="file" name="about_image_{{ $i }}" id="about_image_{{ $i }}-file-input" accept="image/*" class="hidden" onchange="previewSelectedImage(event, 'about_image_{{ $i }}-preview')" />
-                      <label for="about_image_{{ $i }}-file-input" class="w-full inline-flex items-center justify-center gap-2 px-2 py-1.5 bg-primary-50 text-primary-600 rounded-xl text-xs font-bold hover:bg-primary-100 transition-all cursor-pointer">
+                      <input type="file" name="about_image_<?php echo e($i); ?>" id="about_image_<?php echo e($i); ?>-file-input" accept="image/*" class="hidden" onchange="previewSelectedImage(event, 'about_image_<?php echo e($i); ?>-preview')" />
+                      <label for="about_image_<?php echo e($i); ?>-file-input" class="w-full inline-flex items-center justify-center gap-2 px-2 py-1.5 bg-primary-50 text-primary-600 rounded-xl text-xs font-bold hover:bg-primary-100 transition-all cursor-pointer">
                         <i data-lucide="upload" class="w-3 h-3"></i>
-                        <span>رفع صورة {{ $i }}</span>
+                        <span>رفع صورة <?php echo e($i); ?></span>
                       </label>
                     </div>
                   </div>
                 </div>
-              @endfor
+              <?php endfor; ?>
             </div>
             <p class="text-xs text-gray-400">ستظهر هذه الصور في الواجهة الرئيسية ضمن شبكة عرض قسم "من نحن".</p>
           </div>
@@ -217,50 +215,50 @@
           <div class="grid grid-cols-2 gap-4">
             <div>
               <label class="block text-sm font-bold text-gray-700 mb-2">رقم الهاتف الرئيسي <span class="text-red-500">*</span></label>
-              <input type="text" name="phone" value="{{ old('phone', $settings->phone) }}" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" placeholder="+966 12 345 6789" />
+              <input type="text" name="phone" value="<?php echo e(old('phone', $settings->phone)); ?>" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" placeholder="+966 12 345 6789" />
             </div>
             <div>
               <label class="block text-sm font-bold text-gray-700 mb-2">رقم خدمة العملاء (المختصر)</label>
-              <input type="text" name="phone_en" value="{{ old('phone_en', $settings->phone_en) }}" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" placeholder="920012345" />
+              <input type="text" name="phone_en" value="<?php echo e(old('phone_en', $settings->phone_en)); ?>" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" placeholder="920012345" />
             </div>
           </div>
 
           <div class="grid grid-cols-2 gap-4">
             <div>
               <label class="block text-sm font-bold text-gray-700 mb-2">رقم الطوارئ السريع <span class="text-red-500">*</span></label>
-              <input type="text" name="emergency" value="{{ old('emergency', $settings->emergency) }}" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" />
+              <input type="text" name="emergency" value="<?php echo e(old('emergency', $settings->emergency)); ?>" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" />
             </div>
             <div>
               <label class="block text-sm font-bold text-gray-700 mb-2">رقم الواتساب (دون ترميز +) <span class="text-red-500">*</span></label>
-              <input type="text" name="whatsapp" value="{{ old('whatsapp', $settings->whatsapp) }}" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" placeholder="966123456789" />
+              <input type="text" name="whatsapp" value="<?php echo e(old('whatsapp', $settings->whatsapp)); ?>" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" placeholder="966123456789" />
             </div>
           </div>
 
           <div>
             <label class="block text-sm font-bold text-gray-700 mb-2">البريد الإلكتروني الرسمي <span class="text-red-500">*</span></label>
-            <input type="email" name="email" value="{{ old('email', $settings->email) }}" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" placeholder="info@alshifa.com" />
+            <input type="email" name="email" value="<?php echo e(old('email', $settings->email)); ?>" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" placeholder="info@alshifa.com" />
           </div>
 
           <div class="grid grid-cols-2 gap-4">
             <div>
               <label class="block text-sm font-bold text-gray-700 mb-2">العنوان والشارع <span class="text-red-500">*</span></label>
-              <input type="text" name="address" value="{{ old('address', $settings->address) }}" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" />
+              <input type="text" name="address" value="<?php echo e(old('address', $settings->address)); ?>" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" />
             </div>
             <div>
               <label class="block text-sm font-bold text-gray-700 mb-2">المدينة والدولة <span class="text-red-500">*</span></label>
-              <input type="text" name="city" value="{{ old('city', $settings->city) }}" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" />
+              <input type="text" name="city" value="<?php echo e(old('city', $settings->city)); ?>" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" />
             </div>
           </div>
 
           <div>
             <label class="block text-sm font-bold text-gray-700 mb-2">رابط الخريطة الجغرافية (جوجل ماب Embed) - اختياري</label>
-            <input type="text" name="map_link" value="{{ old('map_link', $settings->map_link) }}" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" placeholder="https://www.google.com/maps/embed?pb=..." />
+            <input type="text" name="map_link" value="<?php echo e(old('map_link', $settings->map_link)); ?>" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" placeholder="https://www.google.com/maps/embed?pb=..." />
             <p class="text-xs text-gray-400 mt-1">إذا لم تقم بوضع رابط مخصص، فسيقوم النظام بتوليد خريطة تلقائية بناءً على العنوان والمدينة أعلاه.</p>
           </div>
 
           <div>
             <label class="block text-sm font-bold text-gray-700 mb-2">نص حقوق الملكية في ذيل الصفحة (Footer Copyright)</label>
-            <input type="text" name="footer_copyright" value="{{ old('footer_copyright', $settings->footer_copyright) }}" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" placeholder="© 2024 مستشفى الشفاء. جميع الحقوق محفوظة" />
+            <input type="text" name="footer_copyright" value="<?php echo e(old('footer_copyright', $settings->footer_copyright)); ?>" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" placeholder="© 2024 مستشفى الشفاء. جميع الحقوق محفوظة" />
           </div>
         </div>
       </div>
@@ -278,43 +276,43 @@
       <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div>
           <label class="block text-sm font-bold text-gray-700 mb-2">رابط فيسبوك (Facebook)</label>
-          <input type="text" name="facebook" value="{{ old('facebook', $settings->facebook) }}" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" />
+          <input type="text" name="facebook" value="<?php echo e(old('facebook', $settings->facebook)); ?>" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" />
         </div>
         <div>
           <label class="block text-sm font-bold text-gray-700 mb-2">رابط تويتر/إكس (Twitter/X)</label>
-          <input type="text" name="twitter" value="{{ old('twitter', $settings->twitter) }}" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" />
+          <input type="text" name="twitter" value="<?php echo e(old('twitter', $settings->twitter)); ?>" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" />
         </div>
         <div>
           <label class="block text-sm font-bold text-gray-700 mb-2">رابط انستغرام (Instagram)</label>
-          <input type="text" name="instagram" value="{{ old('instagram', $settings->instagram) }}" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" />
+          <input type="text" name="instagram" value="<?php echo e(old('instagram', $settings->instagram)); ?>" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" />
         </div>
         <div>
           <label class="block text-sm font-bold text-gray-700 mb-2">رابط يوتيوب (YouTube)</label>
-          <input type="text" name="youtube" value="{{ old('youtube', $settings->youtube) }}" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" />
+          <input type="text" name="youtube" value="<?php echo e(old('youtube', $settings->youtube)); ?>" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" />
         </div>
         <div>
           <label class="block text-sm font-bold text-gray-700 mb-2">رابط لينكد إن (LinkedIn)</label>
-          <input type="text" name="linkedin" value="{{ old('linkedin', $settings->linkedin) }}" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" />
+          <input type="text" name="linkedin" value="<?php echo e(old('linkedin', $settings->linkedin)); ?>" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" />
         </div>
         <div>
           <label class="block text-sm font-bold text-gray-700 mb-2">رابط سناب شات (Snapchat)</label>
-          <input type="text" name="snapchat" value="{{ old('snapchat', $settings->snapchat) }}" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" />
+          <input type="text" name="snapchat" value="<?php echo e(old('snapchat', $settings->snapchat)); ?>" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" />
         </div>
       </div>
     </div>
 
     <!-- Actions Save Buttons -->
     <div class="flex items-center justify-end gap-3 pt-6 border-t border-gray-200">
-      <a href="{{ route('admin.dashboard') }}" class="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-bold text-sm hover:bg-gray-200 transition-all">تراجع</a>
-      <button type="submit" class="px-8 py-3 bg-linear-to-l from-emerald-500 to-emerald-600 text-white rounded-xl font-bold text-sm hover:shadow-lg hover:shadow-emerald-500/25 transition-all hover:-translate-y-0.5 cursor-pointer">
+      <a href="<?php echo e(route('admin.dashboard')); ?>" class="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-bold text-sm hover:bg-gray-200 transition-all">تراجع</a>
+      <button type="submit" class="px-8 py-3 bg-gradient-to-l from-emerald-500 to-emerald-600 text-white rounded-xl font-bold text-sm hover:shadow-lg hover:shadow-emerald-500/25 transition-all hover:-translate-y-0.5 cursor-pointer">
         حفظ التغييرات
       </button>
     </div>
 
   </form>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('scripts')
+<?php $__env->startSection('scripts'); ?>
 <script>
   function previewSelectedImage(event, previewId) {
     const file = event.target.files[0];
@@ -337,4 +335,6 @@
     }
   }
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\laravel-hospital-website-development\resources\views/admin/settings/index.blade.php ENDPATH**/ ?>

@@ -167,7 +167,7 @@
           <!-- Card actions -->
           <div class="flex items-center gap-2 pt-3 border-t border-gray-50">
             <button
-              onclick="openEditModal(<?php echo e($doc->id); ?>, '<?php echo e(addslashes($doc->name)); ?>', '<?php echo e(addslashes($doc->specialty)); ?>', '<?php echo e(addslashes($doc->department)); ?>', '<?php echo e($doc->rating); ?>', '<?php echo e(preg_replace('/[^0-9]/', '', $doc->experience)); ?>', '<?php echo e(preg_replace('/[^0-9]/', '', $doc->patients)); ?>', '<?php echo e($doc->gradient); ?>', <?php echo e($doc->active ? 'true' : 'false'); ?>)"
+              onclick="openEditModal(<?php echo e($doc->id); ?>, '<?php echo e(addslashes($doc->name)); ?>', '<?php echo e(addslashes($doc->specialty)); ?>', '<?php echo e(addslashes($doc->description ?? '')); ?>', '<?php echo e(addslashes($doc->department)); ?>', '<?php echo e($doc->rating); ?>', '<?php echo e(preg_replace('/[^0-9]/', '', $doc->experience)); ?>', '<?php echo e(preg_replace('/[^0-9]/', '', $doc->patients)); ?>', '<?php echo e($doc->gradient); ?>', <?php echo e($doc->active ? 'true' : 'false'); ?>)"
               class="flex-1 py-2 bg-blue-50 text-blue-600 rounded-lg text-xs font-bold hover:bg-blue-100 transition-colors flex items-center justify-center gap-1 cursor-pointer"
             >
               <i data-lucide="edit" class="w-3.5 h-3.5"></i>
@@ -218,6 +218,11 @@
             <label class="block text-xs font-bold text-gray-500 mb-2">التخصص الطبي الدقيق</label>
             <input type="text" name="specialty" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500" placeholder="استشاري جراحة القلب" />
           </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-500 mb-2">وصف الطبيب</label>
+          <textarea name="description" rows="3" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500" placeholder="نبذة عن الطبيب وخبراته..."></textarea>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
@@ -298,6 +303,11 @@
           </div>
         </div>
 
+        <div>
+          <label class="block text-xs font-bold text-gray-500 mb-2">وصف الطبيب</label>
+          <textarea name="description" id="edit-description" rows="3" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" placeholder="نبذة عن الطبيب وخبراته..."></textarea>
+        </div>
+
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="block text-xs font-bold text-gray-500 mb-2">القسم الطبي المسند</label>
@@ -376,12 +386,13 @@
       document.getElementById('create-modal').classList.add('hidden');
     }
 
-    function openEditModal(id, name, specialty, department, rating, experience, patients, gradient, active) {
+    function openEditModal(id, name, specialty, description, department, rating, experience, patients, gradient, active) {
       const form = document.getElementById('edit-form');
       form.action = `/admin/doctors/${id}`;
       
       document.getElementById('edit-name').value = name;
       document.getElementById('edit-specialty').value = specialty;
+      document.getElementById('edit-description').value = description;
       document.getElementById('edit-department').value = department;
       document.getElementById('edit-rating').value = rating;
       document.getElementById('edit-experience').value = experience;

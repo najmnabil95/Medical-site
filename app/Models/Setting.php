@@ -59,6 +59,7 @@ class Setting extends Model
         'logo',
         'favicon',
         'description',
+        'footer_copyright',
         'map_link',
         'hero_image_1',
         'hero_image_2',

@@ -1,4 +1,4 @@
-<section id="doctors" class="py-24 bg-white relative overflow-hidden">
+<section id="doctors" class="py-24 bg-white relative overflow-hidden scroll-mt-32">
   <!-- Decorative background -->
   <div class="absolute top-0 right-0 w-72 h-72 bg-emerald-100/30 rounded-full blur-3xl"></div>
 
@@ -71,7 +71,18 @@
             <?php echo e($doc->name); ?>
 
           </h3>
-          <p class="text-primary-600 text-sm font-medium mt-1.5"><?php echo e($doc->specialty); ?></p>
+          <p class="text-primary-600 text-sm font-bold mt-1.5"><?php echo e($doc->specialty); ?></p>
+          <?php if($doc->description): ?>
+            <div class="relative">
+                <p class="text-gray-500 text-xs font-medium mt-2 line-clamp-2 leading-relaxed text-right"><?php echo e($doc->description); ?></p>
+                <button onclick="if(typeof openDoctorInfoModal === 'function') openDoctorInfoModal(<?php echo e($doc->id); ?>)" class="text-primary-600 hover:text-primary-700 text-xs font-bold mt-1 inline-flex items-center gap-1 group/btn cursor-pointer">
+                    <span>عرض التفاصيل</span>
+                    <i data-lucide="chevron-down" class="w-3 h-3 group-hover/btn:translate-y-0.5 transition-transform"></i>
+                </button>
+            </div>
+          <?php else: ?>
+            <div class="h-8 mt-2"></div> <!-- Spacer -->
+          <?php endif; ?>
 
           <div class="flex items-center justify-between mt-5 pt-5 border-t border-gray-100 text-gray-700">
             <div class="text-center">

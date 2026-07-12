@@ -1,4 +1,4 @@
-<section id="services" class="py-24 bg-gradient-to-b from-primary-800 via-primary-900 to-gray-900 relative overflow-hidden">
+<section id="services" class="py-24 bg-gradient-to-b from-primary-800 via-primary-900 to-gray-900 relative overflow-hidden scroll-mt-32">
   <!-- Decorative background shapes -->
   <div class="absolute top-0 left-0 w-96 h-96 bg-primary-600/15 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
   <div class="absolute bottom-0 right-0 w-96 h-96 bg-emerald-500/8 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>

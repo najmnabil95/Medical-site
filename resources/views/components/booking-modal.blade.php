@@ -2,7 +2,7 @@
 <div id="modal-doctors-data-container" data-doctors='{{ json_encode($doctors) }}' class="hidden" aria-hidden="true"></div>
 
 <!-- Booking Modal -->
-<div id="booking-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+<div id="booking-modal" class="fixed inset-0 z-100 items-center justify-center p-4" style="display: none;">
   <!-- Backdrop -->
   <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeBookingModal()"></div>
   
@@ -124,7 +124,7 @@
 
         <button
           type="submit"
-          class="w-full bg-gradient-to-l from-primary-500 to-primary-700 text-white py-3.5 rounded-xl font-bold text-base hover:shadow-xl hover:shadow-primary-500/30 transition-all hover:-translate-y-0.5 flex items-center justify-center gap-3 group cursor-pointer">
+          class="w-full bg-linear-to-l from-primary-500 to-primary-700 text-white py-3.5 rounded-xl font-bold text-base hover:shadow-xl hover:shadow-primary-500/30 transition-all hover:-translate-y-0.5 flex items-center justify-center gap-3 group cursor-pointer">
           <i data-lucide="send" class="w-5 h-5 group-hover:-translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
           <span>تأكيد الحجز</span>
         </button>
@@ -169,14 +169,14 @@
     timeSelect.innerHTML = '<option value="">يرجى اختيار القسم والتاريخ أولاً</option>';
 
     // Show modal
-    modal.classList.remove('hidden');
+    modal.style.display = 'flex';
     if(typeof lucide !== 'undefined') {
         lucide.createIcons();
     }
   }
 
   function closeBookingModal() {
-    document.getElementById('booking-modal').classList.add('hidden');
+    document.getElementById('booking-modal').style.display = 'none';
   }
 
   function updateModalDoctorsDropdown() {

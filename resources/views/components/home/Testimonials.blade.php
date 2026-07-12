@@ -1,4 +1,4 @@
-<section id="testimonials" class="py-24 relative overflow-hidden">
+<section id="testimonials" class="py-24 relative overflow-hidden scroll-mt-32">
   {{-- Background --}}
   <div class="absolute inset-0 bg-linear-to-b from-gray-50 to-white"></div>
   <div class="absolute top-0 left-0 w-80 h-80 bg-primary-100/20 rounded-full blur-3xl"></div>

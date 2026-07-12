@@ -124,7 +124,13 @@
               </h3>
               <p class="text-primary-600 text-sm font-bold mt-1.5">{{ $doc->specialty }}</p>
               @if($doc->description)
-                <p class="text-gray-500 text-xs font-medium mt-2 line-clamp-3 h-12 leading-relaxed">{{ $doc->description }}</p>
+                <div class="relative">
+                    <p class="text-gray-500 text-xs font-medium mt-2 line-clamp-2 leading-relaxed text-right">{{ $doc->description }}</p>
+                    <button onclick="if(typeof openDoctorInfoModal === 'function') openDoctorInfoModal({{ $doc->id }})" class="text-primary-600 hover:text-primary-700 text-xs font-bold mt-1 inline-flex items-center gap-1 group/btn cursor-pointer">
+                        <span>عرض التفاصيل</span>
+                        <i data-lucide="chevron-down" class="w-3 h-3 group-hover/btn:translate-y-0.5 transition-transform"></i>
+                    </button>
+                </div>
               @else
                 <div class="h-12 mt-2"></div> <!-- Spacer to keep cards aligned if no description -->
               @endif

@@ -27,7 +27,7 @@
   ];
 ?>
 
-<section id="contact" class="py-24 bg-gray-50 relative overflow-hidden">
+<section id="contact" class="py-24 bg-gray-50 relative overflow-hidden scroll-mt-32">
   <div class="absolute top-0 right-0 w-80 h-80 bg-primary-100/30 rounded-full blur-3xl"></div>
 
   <div class="max-w-7xl mx-auto px-4 relative">
