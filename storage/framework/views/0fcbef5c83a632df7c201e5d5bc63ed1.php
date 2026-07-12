@@ -304,7 +304,7 @@
     <!-- Actions Save Buttons -->
     <div class="flex items-center justify-end gap-3 pt-6 border-t border-gray-200">
       <a href="<?php echo e(route('admin.dashboard')); ?>" class="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-bold text-sm hover:bg-gray-200 transition-all">تراجع</a>
-      <button type="submit" class="px-8 py-3 bg-gradient-to-l from-emerald-500 to-emerald-600 text-white rounded-xl font-bold text-sm hover:shadow-lg hover:shadow-emerald-500/25 transition-all hover:-translate-y-0.5 cursor-pointer">
+      <button type="submit" class="px-8 py-3 bg-linear-to-l from-emerald-500 to-emerald-600 text-white rounded-xl font-bold text-sm hover:shadow-lg hover:shadow-emerald-500/25 transition-all hover:-translate-y-0.5 cursor-pointer">
         حفظ التغييرات
       </button>
     </div>

@@ -1,4 +1,4 @@
-<section id="services" class="py-24 bg-gradient-to-b from-primary-800 via-primary-900 to-gray-900 relative overflow-hidden scroll-mt-32">
+<section id="services" class="py-24 bg-linear-to-b from-primary-800 via-primary-900 to-gray-900 relative overflow-hidden scroll-mt-32">
   <!-- Decorative background shapes -->
   <div class="absolute top-0 left-0 w-96 h-96 bg-primary-600/15 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
   <div class="absolute bottom-0 right-0 w-96 h-96 bg-emerald-500/8 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
@@ -37,11 +37,11 @@
           $number = $serv->number ?? sprintf("%02d", $index + 1);
         @endphp
         <div
-          class="group bg-white/[0.04] backdrop-blur-sm rounded-2xl p-7 border border-white/[0.08] hover:bg-white/[0.1] hover:border-white/20 transition-all duration-500 hover:-translate-y-3 cursor-pointer relative overflow-hidden"
+          class="group bg-white/4 backdrop-blur-sm rounded-2xl p-7 border border-white/8 hover:bg-white/10 hover:border-white/20 transition-all duration-500 hover:-translate-y-3 cursor-pointer relative overflow-hidden"
           style="animation-delay: {{ $index * 100 }}ms"
         >
           <!-- Absolute Card Number -->
-          <span class="absolute top-4 left-4 text-[3rem] font-black text-white/[0.03] group-hover:text-white/[0.08] transition-colors">
+          <span class="absolute top-4 left-4 text-[3rem] font-black text-white/3 group-hover:text-white/8 transition-colors">
             {{ $number }}
           </span>
 
@@ -49,7 +49,7 @@
           <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity animate-shimmer rounded-2xl"></div>
 
           <div class="relative">
-            <div class="w-14 h-14 bg-gradient-to-br {{ $color }} rounded-2xl flex items-center justify-center mb-5 shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+            <div class="w-14 h-14 bg-linear-to-br {{ $color }} rounded-2xl flex items-center justify-center mb-5 shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
               <i data-lucide="{{ $icon }}" class="text-white w-6.5 h-6.5"></i>
             </div>
             <h3 class="text-lg font-bold text-white mb-3 group-hover:text-emerald-400 transition-colors">
@@ -68,7 +68,7 @@
       <a
         href="#contact"
         onclick="event.preventDefault(); document.getElementById('contact').scrollIntoView({behavior:'smooth'});"
-        class="inline-flex items-center gap-3 bg-gradient-to-l from-emerald-500 to-emerald-600 text-white px-10 py-4.5 rounded-2xl font-bold text-lg hover:shadow-2xl hover:shadow-emerald-500/30 transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+        class="inline-flex items-center gap-3 bg-linear-to-l from-emerald-500 to-emerald-600 text-white px-10 py-4.5 rounded-2xl font-bold text-lg hover:shadow-2xl hover:shadow-emerald-500/30 transition-all duration-300 hover:-translate-y-1 cursor-pointer"
       >
         <span>تعرف على المزيد من خدماتنا</span>
         <span class="text-xl">←</span>

@@ -55,8 +55,8 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16 animate-fade-in-up">
       @foreach($contactInfo as $index => $info)
         <div
-          class="bg-white rounded-2xl p-7 shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-500 hover:-translate-y-3 group text-center"
-          style="animation-delay: {{ $index * 100 }}ms;"
+          class="contact-info-card bg-white rounded-2xl p-7 shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-500 hover:-translate-y-3 group text-center"
+          data-delay="{{ $index * 100 }}"
         >
           <div class="w-16 h-16 bg-linear-to-br {{ $info['color'] }} rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
             <i data-lucide="{{ $info['icon'] }}" class="text-white w-[26px] h-[26px]"></i>
@@ -218,4 +218,12 @@
     document.getElementById('contact-form-container').style.display = 'block';
     document.getElementById('contact-success-state').style.display = 'none';
   }
+
+  // Set animation delays for contact info cards
+  document.querySelectorAll('.contact-info-card').forEach(function(card) {
+    const delay = card.getAttribute('data-delay');
+    if (delay) {
+      card.style.animationDelay = delay + 'ms';
+    }
+  });
 </script>

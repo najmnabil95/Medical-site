@@ -90,7 +90,7 @@
           <div>
             <a
               href="{{ route('admin.dashboard') }}"
-              class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ Route::currentRouteName() === 'admin.dashboard' ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+              class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ Route::currentRouteName() === 'admin.dashboard' ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
             >
               <i data-lucide="layout-dashboard" class="w-4.5 h-4.5"></i>
               <span class="flex-1 text-right">لوحة القيادة</span>
@@ -104,7 +104,7 @@
             <div class="space-y-1">
               <a
                 href="{{ route('doctor.appointments.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'doctor.appointments') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'doctor.appointments') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
               >
                 <i data-lucide="stethoscope" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">مواعيدي</span>
@@ -120,7 +120,7 @@
             <div class="space-y-1">
               <a
                 href="{{ route('admin.appointments.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.appointments') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.appointments') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
               >
                 <i data-lucide="calendar" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">الحجوزات</span>
@@ -128,14 +128,14 @@
               @hasanyrole('Super Admin|Manager|Reception')
               <a
                 href="{{ route('admin.messages.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.messages') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.messages') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
               >
                 <i data-lucide="mail" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">رسائل التواصل</span>
               </a>
               <a
                 href="{{ route('admin.notifications.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.notifications') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.notifications') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
               >
                 <i data-lucide="bell" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">سجل الإشعارات</span>
@@ -152,21 +152,21 @@
             <div class="space-y-1">
               <a
                 href="{{ route('admin.doctors.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.doctors') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.doctors') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
               >
                 <i data-lucide="user-cog" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">الأطباء</span>
               </a>
               <a
                 href="{{ route('admin.departments.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.departments') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.departments') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
               >
                 <i data-lucide="hospital" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">الأقسام الطبية</span>
               </a>
               <a
                 href="{{ route('admin.services.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.services') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.services') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
               >
                 <i data-lucide="activity" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">الخدمات</span>
@@ -182,21 +182,21 @@
             <div class="space-y-1">
               <a
                 href="{{ route('admin.packages.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.packages') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.packages') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
               >
                 <i data-lucide="package" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">باقات الكشف</span>
               </a>
               <a
                 href="{{ route('admin.prices.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.prices') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.prices') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
               >
                 <i data-lucide="dollar-sign" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">قائمة الأسعار</span>
               </a>
               <a
                 href="{{ route('admin.insurances.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.insurances') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.insurances') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
               >
                 <i data-lucide="shield-check" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">شركات التأمين</span>
@@ -212,35 +212,35 @@
             <div class="space-y-1">
               <a
                 href="{{ route('admin.news.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.news') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.news') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
               >
                 <i data-lucide="newspaper" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">المقالات والأخبار</span>
               </a>
               <a
                 href="{{ route('admin.faqs.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.faqs') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.faqs') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
               >
                 <i data-lucide="help-circle" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">الأسئلة الشائعة</span>
               </a>
               <a
                 href="{{ route('admin.testimonials.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.testimonials') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.testimonials') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
               >
                 <i data-lucide="message-square" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">آراء المرضى</span>
               </a>
               <a
                 href="{{ route('admin.partners.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.partners') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.partners') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
               >
                 <i data-lucide="handshake" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">شركاء النجاح</span>
               </a>
               <a
                 href="{{ route('admin.certifications.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.certifications') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.certifications') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
               >
                 <i data-lucide="award" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">شهادات الاعتماد</span>
@@ -257,7 +257,7 @@
               @if(Auth::user()->hasRole('Super Admin') || Auth::user()->hasRole('Manager'))
                 <a
                   href="{{ route('admin.users.index') }}"
-                  class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.users') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                  class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.users') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
                 >
                   <i data-lucide="users" class="w-4.5 h-4.5"></i>
                   <span class="flex-1 text-right">المستخدمون</span>
@@ -266,7 +266,7 @@
               @if(Auth::user()->hasRole('Super Admin') || Auth::user()->hasRole('Manager'))
                 <a
                   href="{{ route('admin.reports.index') }}"
-                  class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.reports') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                  class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.reports') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
                 >
                   <i data-lucide="bar-chart-3" class="w-4.5 h-4.5"></i>
                   <span class="flex-1 text-right">التقارير</span>
@@ -275,7 +275,7 @@
               @if(Auth::user()->hasRole('Super Admin') || Auth::user()->hasRole('Manager'))
                 <a
                   href="{{ route('admin.screens.index') }}"
-                  class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.screens') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                  class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.screens') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
                 >
                   <i data-lucide="monitor" class="w-4.5 h-4.5"></i>
                   <span class="flex-1 text-right">أقسام العرض (Screens)</span>
@@ -284,14 +284,14 @@
               @if(Auth::user()->hasRole('Super Admin'))
                 <a
                   href="{{ route('admin.activity-logs.index') }}"
-                  class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.activity-logs') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                  class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.activity-logs') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
                 >
                   <i data-lucide="history" class="w-4.5 h-4.5"></i>
                   <span class="flex-1 text-right">سجل النشاطات</span>
                 </a>
                 <a
                   href="{{ route('admin.settings.index') }}"
-                  class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.settings') ? 'bg-gradient-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                  class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.settings') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
                 >
                   <i data-lucide="settings" class="w-4.5 h-4.5"></i>
                   <span class="flex-1 text-right">إعدادات الموقع</span>
@@ -308,7 +308,7 @@
             <div class="px-2 space-y-1">
               <a
                 href="/"
-                class="flex items-center gap-3 px-4 py-2.5 bg-gradient-to-l from-emerald-500 to-emerald-600 text-white rounded-xl text-sm font-bold hover:shadow-lg hover:shadow-emerald-500/20 transition-all hover:-translate-y-0.5"
+                class="flex items-center gap-3 px-4 py-2.5 bg-linear-to-l from-emerald-500 to-emerald-600 text-white rounded-xl text-sm font-bold hover:shadow-lg hover:shadow-emerald-500/20 transition-all hover:-translate-y-0.5"
               >
                 <i data-lucide="home" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">زيارة الموقع</span>
@@ -444,7 +444,7 @@
                 onclick="toggleProfileMenu()"
                 class="flex items-center gap-3 p-1.5 pr-4 hover:bg-gray-50 rounded-xl transition-colors cursor-pointer"
               >
-                <div class="w-9 h-9 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                <div class="w-9 h-9 bg-linear-to-l from-primary-500 to-primary-700 rounded-lg flex items-center justify-center text-white font-bold text-sm">
                   {{ substr(Auth::user()->name, 0, 2) }}
                 </div>
                 <div class="hidden md:block text-right">
@@ -495,7 +495,7 @@
         lucide.createIcons();
         
         // Scroll active sidebar item into view
-        const activeItem = document.querySelector("#admin-sidebar nav .bg-gradient-to-l");
+        const activeItem = document.querySelector("#admin-sidebar nav .bg-linear-to-l");
         if (activeItem) {
           activeItem.scrollIntoView({ block: "nearest", behavior: "smooth" });
         }

@@ -6,16 +6,16 @@
 
 @section('content')
   <!-- Hero Section -->
-  <section class="relative pt-40 pb-20 lg:pt-52 lg:pb-28 mt-8 overflow-hidden bg-gradient-to-b from-slate-50 to-white text-right">
+  <section class="relative pt-40 pb-20 lg:pt-52 lg:pb-28 mt-8 overflow-hidden bg-linear-to-b from-slate-50 to-white text-right">
     <div class="absolute inset-0 pointer-events-none">
-      <div class="absolute top-0 right-0 w-3/4 h-full bg-gradient-to-l from-primary-50/50 to-transparent"></div>
+      <div class="absolute top-0 right-0 w-3/4 h-full bg-linear-to-l from-primary-50/50 to-transparent"></div>
       <div class="absolute top-20 left-10 w-72 h-72 bg-emerald-100/40 rounded-full blur-3xl"></div>
     </div>
     
     <div class="max-w-7xl mx-auto px-4 relative z-10">
       
       <!-- Back to Previous Page Button -->
-      <a href="javascript:history.back()" class="fixed top-6 left-4 md:left-8 bg-white/90 backdrop-blur-md text-gray-700 hover:text-primary-600 px-5 py-3 rounded-2xl text-sm font-bold shadow-lg hover:shadow-xl border border-gray-100 hover:border-primary-200 transition-all flex items-center gap-2 group z-[100]">
+      <a href="javascript:history.back()" class="fixed top-6 left-4 md:left-8 bg-white/90 backdrop-blur-md text-gray-700 hover:text-primary-600 px-5 py-3 rounded-2xl text-sm font-bold shadow-lg hover:shadow-xl border border-gray-100 hover:border-primary-200 transition-all flex items-center gap-2 group z-100">
         <span>رجوع</span>
         <i data-lucide="arrow-left" class="w-4.5 h-4.5 group-hover:-translate-x-1 transition-transform"></i>
       </a>
@@ -100,10 +100,10 @@
                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 loading="lazy"
               />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+              <div class="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent"></div>
 
               <!-- Gradient Overlay on hover -->
-              <div class="absolute inset-0 bg-gradient-to-t {{ $gradient }} opacity-0 group-hover:opacity-40 transition-opacity duration-500"></div>
+              <div class="absolute inset-0 bg-linear-to-t {{ $gradient }} opacity-0 group-hover:opacity-40 transition-opacity duration-500"></div>
 
               <!-- Rating -->
               <div class="absolute bottom-5 right-5 bg-white/95 backdrop-blur-sm rounded-full px-3 py-1.5 flex items-center gap-1 shadow-lg">
@@ -150,7 +150,7 @@
               <button
                 type="button"
                 onclick="if(typeof openBookingModal === 'function') openBookingModal('{{ $doc->department }}', '{{ $doc->name }}')"
-                class="mt-6 w-full bg-gradient-to-l {{ $gradient }} text-white py-3.5 rounded-xl font-bold text-sm hover:shadow-lg hover:shadow-primary-500/20 transition-all duration-300 flex items-center justify-center gap-2 opacity-95 hover:opacity-100 hover:-translate-y-0.5 cursor-pointer"
+                class="mt-6 w-full bg-linear-to-l {{ $gradient }} text-white py-3.5 rounded-xl font-bold text-sm hover:shadow-lg hover:shadow-primary-500/20 transition-all duration-300 flex items-center justify-center gap-2 opacity-95 hover:opacity-100 hover:-translate-y-0.5 cursor-pointer"
               >
                 <i data-lucide="calendar-plus" class="w-4.5 h-4.5"></i>
                 <span>احجز موعد الآن</span>

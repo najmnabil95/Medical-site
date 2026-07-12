@@ -60,7 +60,7 @@
         </div>
 
         <!-- Experience Badge -->
-        <div class="absolute -bottom-4 right-8 bg-gradient-to-br from-emerald-500 to-emerald-600 text-white rounded-2xl p-6 shadow-2xl shadow-emerald-500/20 animate-float">
+        <div class="absolute -bottom-4 right-8 bg-linear-to-br from-emerald-500 to-emerald-600 text-white rounded-2xl p-6 shadow-2xl shadow-emerald-500/20 animate-float">
           <div class="text-center">
             <div class="text-5xl font-black leading-none">25<span class="text-emerald-400">+</span></div>
             <div class="text-sm font-medium opacity-90 mt-1">سنة من التميز</div>

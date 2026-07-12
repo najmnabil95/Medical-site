@@ -5,7 +5,7 @@
 <?php endif; ?>
 
 <!-- Doctor Info Modal -->
-<div id="doctor-info-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+<div id="doctor-info-modal" class="fixed inset-0 z-100 items-center justify-center p-4" style="display: none;">
   <!-- Backdrop -->
   <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeDoctorInfoModal()"></div>
   
@@ -19,7 +19,7 @@
     <!-- Modal Header (Image & Basic Info) -->
     <div class="relative h-64 shrink-0 bg-gray-100">
         <img id="modal-doc-image" src="" alt="Doctor Image" class="w-full h-full object-cover" />
-        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent"></div>
+        <div class="absolute inset-0 bg-linear-to-t from-gray-900 via-gray-900/40 to-transparent"></div>
         <div class="absolute bottom-6 right-6 left-6 text-right text-white">
             <span id="modal-doc-dept" class="inline-block bg-primary-600 text-white px-3 py-1 rounded-full text-xs font-bold mb-3 shadow-md"></span>
             <h3 id="modal-doc-name" class="text-3xl font-black mb-1"></h3>
@@ -70,7 +70,7 @@
         <button
             type="button"
             id="modal-doc-book-btn"
-            class="w-full bg-gradient-to-l from-primary-500 to-primary-700 text-white py-3.5 rounded-xl font-bold text-base hover:shadow-lg transition-all hover:-translate-y-0.5 flex items-center justify-center gap-3 cursor-pointer"
+            class="w-full bg-linear-to-l from-primary-500 to-primary-700 text-white py-3.5 rounded-xl font-bold text-base hover:shadow-lg transition-all hover:-translate-y-0.5 flex items-center justify-center gap-3 cursor-pointer"
         >
             <i data-lucide="calendar-plus" class="w-5 h-5"></i>
             <span>احجز موعد مع هذا الطبيب</span>
@@ -116,7 +116,7 @@
     };
 
     // Show modal
-    document.getElementById('doctor-info-modal').classList.remove('hidden');
+    document.getElementById('doctor-info-modal').style.display = 'flex';
     document.body.style.overflow = 'hidden';
     
     if(typeof lucide !== 'undefined') {
@@ -125,7 +125,7 @@
   }
 
   function closeDoctorInfoModal() {
-    document.getElementById('doctor-info-modal').classList.add('hidden');
+    document.getElementById('doctor-info-modal').style.display = 'none';
     document.body.style.overflow = '';
   }
 </script>

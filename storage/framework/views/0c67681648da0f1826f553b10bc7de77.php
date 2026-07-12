@@ -23,7 +23,7 @@
 <footer class="bg-gray-900 text-white relative">
   <?php if(!$isDoctorsPage): ?>
   <!-- Pre Footer CTA -->
-  <div class="bg-gradient-to-l from-primary-600 to-primary-800 relative overflow-hidden">
+  <div class="bg-linear-to-l from-primary-600 to-primary-800 relative overflow-hidden">
     <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle, white 1px, transparent 1px); background-size: 20px 20px;"></div>
     <div class="max-w-7xl mx-auto px-4 py-14 relative">
       <div class="flex flex-col md:flex-row items-center justify-between gap-8">
@@ -80,22 +80,22 @@
         </p>
         <div class="flex items-center gap-2">
           <?php if(!empty($settings->facebook) && $settings->facebook !== '#'): ?>
-            <a href="<?php echo e($settings->facebook); ?>" class="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center text-gray-400 hover:bg-emerald-600 hover:text-white transition-all duration-300 hover:-translate-y-1">
+            <a href="<?php echo e($settings->facebook); ?>" class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-gray-400 hover:bg-emerald-600 hover:text-white transition-all duration-300 hover:-translate-y-1">
               <i data-lucide="facebook" class="w-4 h-4"></i>
             </a>
           <?php endif; ?>
           <?php if(!empty($settings->twitter) && $settings->twitter !== '#'): ?>
-            <a href="<?php echo e($settings->twitter); ?>" class="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center text-gray-400 hover:bg-emerald-600 hover:text-white transition-all duration-300 hover:-translate-y-1">
+            <a href="<?php echo e($settings->twitter); ?>" class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-gray-400 hover:bg-emerald-600 hover:text-white transition-all duration-300 hover:-translate-y-1">
               <i data-lucide="twitter" class="w-4 h-4"></i>
             </a>
           <?php endif; ?>
           <?php if(!empty($settings->instagram) && $settings->instagram !== '#'): ?>
-            <a href="<?php echo e($settings->instagram); ?>" class="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center text-gray-400 hover:bg-emerald-600 hover:text-white transition-all duration-300 hover:-translate-y-1">
+            <a href="<?php echo e($settings->instagram); ?>" class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-gray-400 hover:bg-emerald-600 hover:text-white transition-all duration-300 hover:-translate-y-1">
               <i data-lucide="instagram" class="w-4 h-4"></i>
             </a>
           <?php endif; ?>
           <?php if(!empty($settings->youtube) && $settings->youtube !== '#'): ?>
-            <a href="<?php echo e($settings->youtube); ?>" class="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center text-gray-400 hover:bg-emerald-600 hover:text-white transition-all duration-300 hover:-translate-y-1">
+            <a href="<?php echo e($settings->youtube); ?>" class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-gray-400 hover:bg-emerald-600 hover:text-white transition-all duration-300 hover:-translate-y-1">
               <i data-lucide="youtube" class="w-4 h-4"></i>
             </a>
           <?php endif; ?>
@@ -107,14 +107,14 @@
         <div>
           <h4 class="text-lg font-bold mb-6 relative pb-3 text-white">
             روابط سريعة
-            <span class="absolute bottom-0 right-0 w-12 h-1 bg-gradient-to-l from-primary-500 to-emerald-500 rounded-full"></span>
+            <span class="absolute bottom-0 right-0 w-12 h-1 bg-linear-to-l from-primary-500 to-emerald-500 rounded-full"></span>
           </h4>
           <ul class="space-y-3">
             <?php $__currentLoopData = $enabledQuickLinks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $link): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
               <li>
                 <a
                   href="<?php echo e($link['href']); ?>"
-                  onclick="event.preventDefault(); document.getElementById('<?php echo e(str_replace('#', '', $link['href'])); ?>').scrollIntoView({behavior: 'smooth'});"
+                  onclick="event.preventDefault(); document.getElementById(this.getAttribute('href').replace('#', '')).scrollIntoView({behavior: 'smooth'});"
                   class="text-gray-400 hover:text-emerald-400 transition-colors text-sm flex items-center gap-2 group cursor-pointer"
                 >
                   <span class="w-1.5 h-1.5 bg-primary-600 rounded-full group-hover:bg-emerald-400 transition-colors"></span>
@@ -132,7 +132,7 @@
         <div>
           <h4 class="text-lg font-bold mb-6 relative pb-3 text-white">
             أقسامنا الطبية
-            <span class="absolute bottom-0 right-0 w-12 h-1 bg-gradient-to-l from-primary-500 to-emerald-500 rounded-full"></span>
+            <span class="absolute bottom-0 right-0 w-12 h-1 bg-linear-to-l from-primary-500 to-emerald-500 rounded-full"></span>
           </h4>
           <ul class="space-y-3">
             <?php $__currentLoopData = ['أمراض القلب', 'جراحة المخ والأعصاب', 'جراحة العظام', 'طب الأطفال', 'طب العيون', 'الطب الباطني', 'الطوارئ والإسعاف']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dept): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -156,11 +156,11 @@
       <div>
         <h4 class="text-lg font-bold mb-6 relative pb-3 text-white">
           معلومات التواصل
-          <span class="absolute bottom-0 right-0 w-12 h-1 bg-gradient-to-l from-primary-500 to-emerald-500 rounded-full"></span>
+          <span class="absolute bottom-0 right-0 w-12 h-1 bg-linear-to-l from-primary-500 to-emerald-500 rounded-full"></span>
         </h4>
         <div class="space-y-4">
           <div class="flex items-start gap-3">
-            <div class="w-10 h-10 bg-white/[0.05] rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+            <div class="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
               <i data-lucide="map-pin" class="text-primary-400 w-4.5 h-4.5"></i>
             </div>
             <div>
@@ -168,7 +168,7 @@
             </div>
           </div>
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-white/[0.05] rounded-lg flex items-center justify-center shrink-0">
+            <div class="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center shrink-0">
               <i data-lucide="phone" class="text-primary-400 w-4.5 h-4.5"></i>
             </div>
             <a href="tel:<?php echo e($settings->phone ?? '920012345'); ?>" class="text-gray-400 text-sm hover:text-emerald-400 transition-colors" dir="ltr">
@@ -177,7 +177,7 @@
             </a>
           </div>
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-white/[0.05] rounded-lg flex items-center justify-center shrink-0">
+            <div class="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center shrink-0">
               <i data-lucide="mail" class="text-primary-400 w-4.5 h-4.5"></i>
             </div>
             <a href="mailto:<?php echo e($settings->email ?? 'info@alshifa-hospital.com'); ?>" class="text-gray-400 text-sm hover:text-emerald-400 transition-colors">
@@ -194,7 +194,7 @@
   <?php endif; ?>
 
   <!-- Bottom Copyright Bar -->
-  <div class="border-t border-white/[0.05] text-gray-500">
+  <div class="border-t border-white/5 text-gray-500">
     <div class="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
       <p class="text-sm font-medium">
         <?php echo e($settings->footer_copyright ?? '© ' . date('Y') . ' ' . ($settings->site_name ?? 'مستشفى الشفاء الدولي') . '. جميع الحقوق محفوظة صنع بـ ❤️'); ?>
@@ -212,11 +212,11 @@
 </footer>
 
 <!-- Terms & Conditions Modal (Hidden by Default) -->
-<div id="legal-terms-modal" class="hidden fixed inset-0 z-[110] flex items-center justify-center p-4">
+<div id="legal-terms-modal" class="fixed inset-0 z-110 items-center justify-center p-4" style="display: none;">
   <div class="fixed inset-0 bg-black/70 backdrop-blur-sm" onclick="toggleTermsModal(false)"></div>
   <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden animate-scale-in">
     <!-- Header -->
-    <div class="sticky top-0 bg-gradient-to-l from-primary-600 to-primary-800 text-white px-6 py-5 z-10">
+    <div class="sticky top-0 bg-linear-to-l from-primary-600 to-primary-800 text-white px-6 py-5 z-10">
       <button
         onclick="toggleTermsModal(false)"
         class="absolute top-4 left-4 w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors"
@@ -264,7 +264,7 @@
         </p>
         <button
           onclick="toggleTermsModal(false)"
-          class="mt-4 bg-gradient-to-l from-primary-500 to-primary-700 text-white px-8 py-3 rounded-xl font-bold hover:shadow-lg transition-all"
+          class="mt-4 bg-linear-to-l from-primary-500 to-primary-700 text-white px-8 py-3 rounded-xl font-bold hover:shadow-lg transition-all"
         >
           فهمت، إغلاق
         </button>
@@ -278,9 +278,9 @@
     const modal = document.getElementById('legal-terms-modal');
     if (modal) {
       if (show) {
-        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
       } else {
-        modal.classList.add('hidden');
+        modal.style.display = 'none';
       }
     }
   }

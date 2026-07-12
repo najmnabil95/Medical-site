@@ -25,7 +25,7 @@
     
     <button
       onclick="openCreateModal()"
-      class="bg-gradient-to-l from-primary-500 to-primary-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:shadow-lg hover:shadow-primary-500/30 transition-all hover:-translate-y-0.5 flex items-center gap-2 cursor-pointer self-start md:self-auto"
+      class="bg-linear-to-l from-primary-500 to-primary-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:shadow-lg hover:shadow-primary-500/30 transition-all hover:-translate-y-0.5 flex items-center gap-2 cursor-pointer self-start md:self-auto"
     >
       <i data-lucide="plus" class="w-4.5 h-4.5"></i>
       <span>إضافة طبيب جديد</span>
@@ -35,7 +35,7 @@
   <!-- Counters -->
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
     <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm text-right">
-      <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center text-white mb-2">
+      <div class="w-10 h-10 bg-linear-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center text-white mb-2">
         <i data-lucide="users" class="w-5 h-5"></i>
       </div>
       <div class="text-2xl font-black text-gray-800 tabular-nums">
@@ -46,7 +46,7 @@
     </div>
 
     <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm text-right">
-      <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center text-white mb-2">
+      <div class="w-10 h-10 bg-linear-to-br from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center text-white mb-2">
         <i data-lucide="check-circle" class="w-5 h-5"></i>
       </div>
       <div class="text-2xl font-black text-gray-800 tabular-nums">
@@ -57,7 +57,7 @@
     </div>
 
     <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm text-right">
-      <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-violet-600 rounded-lg flex items-center justify-center text-white mb-2">
+      <div class="w-10 h-10 bg-linear-to-br from-purple-500 to-violet-600 rounded-lg flex items-center justify-center text-white mb-2">
         <i data-lucide="award" class="w-5 h-5"></i>
       </div>
       <div class="text-2xl font-black text-gray-800 tabular-nums">
@@ -68,7 +68,7 @@
     </div>
 
     <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm text-right">
-      <div class="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-600 rounded-lg flex items-center justify-center text-white mb-2">
+      <div class="w-10 h-10 bg-linear-to-br from-amber-500 to-orange-600 rounded-lg flex items-center justify-center text-white mb-2">
         <i data-lucide="star" class="w-5 h-5"></i>
       </div>
       <div class="text-2xl font-black text-gray-800 tabular-nums">
@@ -102,7 +102,7 @@
         data-specialty="<?php echo e($doc->specialty); ?>"
         data-dept="<?php echo e($doc->department); ?>"
       >
-        <div class="h-2.5 bg-gradient-to-l <?php echo e($doc->gradient); ?>"></div>
+        <div class="h-2.5 bg-linear-to-l <?php echo e($doc->gradient); ?>"></div>
         <div class="p-5 text-right flex flex-col justify-between h-full">
           <div>
             <!-- Header section -->
@@ -197,7 +197,7 @@
   </div>
 
   <!-- Create Doctor Modal -->
-  <div id="create-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+  <div id="create-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display: none;">
     <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" onclick="closeCreateModal()"></div>
     <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto animate-scale-in text-right">
       <div class="p-6 border-b border-gray-100 flex items-center justify-between">
@@ -271,14 +271,14 @@
 
         <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
           <button type="button" onclick="closeCreateModal()" class="px-6 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-xl">إلغاء</button>
-          <button type="submit" class="px-6 py-2.5 text-sm font-bold text-white bg-gradient-to-l from-primary-500 to-primary-700 rounded-xl hover:shadow-lg cursor-pointer">إضافة الطبيب</button>
+          <button type="submit" class="px-6 py-2.5 text-sm font-bold text-white bg-linear-to-l from-primary-500 to-primary-700 rounded-xl hover:shadow-lg cursor-pointer">إضافة الطبيب</button>
         </div>
       </form>
     </div>
   </div>
 
   <!-- Edit Doctor Modal -->
-  <div id="edit-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+  <div id="edit-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display: none;">
     <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" onclick="closeEditModal()"></div>
     <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto animate-scale-in text-right">
       <div class="p-6 border-b border-gray-100 flex items-center justify-between">
@@ -354,7 +354,7 @@
 
         <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
           <button type="button" onclick="closeEditModal()" class="px-6 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-xl">إلغاء</button>
-          <button type="submit" class="px-6 py-2.5 text-sm font-bold text-white bg-gradient-to-l from-primary-500 to-primary-700 rounded-xl hover:shadow-lg cursor-pointer">حفظ التغييرات</button>
+          <button type="submit" class="px-6 py-2.5 text-sm font-bold text-white bg-linear-to-l from-primary-500 to-primary-700 rounded-xl hover:shadow-lg cursor-pointer">حفظ التغييرات</button>
         </div>
       </form>
     </div>
@@ -379,11 +379,11 @@
     }
 
     function openCreateModal() {
-      document.getElementById('create-modal').classList.remove('hidden');
+      document.getElementById('create-modal').style.display = 'flex';
     }
 
     function closeCreateModal() {
-      document.getElementById('create-modal').classList.add('hidden');
+      document.getElementById('create-modal').style.display = 'none';
     }
 
     function openEditModal(id, name, specialty, description, department, rating, experience, patients, gradient, active) {
@@ -400,11 +400,11 @@
       document.getElementById('edit-gradient').value = gradient;
       document.getElementById('edit-active').checked = active;
       
-      document.getElementById('edit-modal').classList.remove('hidden');
+      document.getElementById('edit-modal').style.display = 'flex';
     }
 
     function closeEditModal() {
-      document.getElementById('edit-modal').classList.add('hidden');
+      document.getElementById('edit-modal').style.display = 'none';
     }
   </script>
 <?php $__env->stopSection(); ?>
