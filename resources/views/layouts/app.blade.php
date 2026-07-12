@@ -115,7 +115,6 @@
     @include('components.home.Footer')
 
     <!-- Floating Utilities -->
-    @include('components.home.WhatsAppFloat')
     @include('components.home.CookieBanner')
 
     <!-- Global Client JS -->
@@ -128,44 +127,18 @@
         document.getElementById('scroll-progress-bar').style.width = scrolled + '%';
       });
 
-      // Global function to prefill and scroll to appointment
+      // Global function to open the booking modal
       window.prefillAppointment = function(deptName, docName) {
         // Close all department modals if they exist
         const modals = document.querySelectorAll('[id^="dept-modal-"]');
         modals.forEach(modal => modal.classList.add('hidden'));
         document.body.style.overflow = '';
 
-        // Scroll to the appointment section
-        const appointmentSection = document.getElementById('appointment');
-        if (appointmentSection) {
-          const offset = 80;
-          const elementPosition = appointmentSection.getBoundingClientRect().top + window.pageYOffset;
-          window.scrollTo({
-            top: elementPosition - offset,
-            behavior: "smooth"
-          });
+        if (typeof openBookingModal === 'function') {
+            openBookingModal(deptName, docName);
         } else {
-          // If not on homepage, redirect to homepage with params
-          window.location.href = `/?dept=${encodeURIComponent(deptName)}&doc=${encodeURIComponent(docName)}`;
-          return;
+            console.error('Booking modal function not found.');
         }
-
-        // Prefill the form fields
-        setTimeout(() => {
-          const deptSelect = document.querySelector('select[name="department"]');
-          const docSelect = document.querySelector('select[name="doctor"]');
-
-          if (deptSelect) {
-            deptSelect.value = deptName;
-            deptSelect.dispatchEvent(new Event('change'));
-          }
-
-          if (docSelect && docName) {
-            setTimeout(() => {
-              docSelect.value = docName;
-            }, 100);
-          }
-        }, 500);
       };
 
       // Dark Mode Toggler Logic
@@ -225,39 +198,20 @@
           }, 400);
         }
 
-        // Prefill Appointment parameters if redirected from doctors page
+        // Open Booking Modal if parameters are passed in URL
         const urlParams = new URLSearchParams(window.location.search);
         const urlDept = urlParams.get('dept');
         const urlDoc = urlParams.get('doc');
         if (urlDept || urlDoc) {
           setTimeout(() => {
-            const appointmentSection = document.getElementById('appointment');
-            if (appointmentSection) {
-              const offset = 80;
-              const elementPosition = appointmentSection.getBoundingClientRect().top + window.pageYOffset;
-              window.scrollTo({
-                top: elementPosition - offset,
-                behavior: "smooth"
-              });
+            if (typeof openBookingModal === 'function') {
+                openBookingModal(urlDept, urlDoc);
             }
-
-            const deptSelect = document.querySelector('select[name="department"]');
-            if (deptSelect && urlDept) {
-              deptSelect.value = urlDept;
-              deptSelect.dispatchEvent(new Event('change'));
-            }
-
-            setTimeout(() => {
-              const docSelect = document.querySelector('select[name="doctor"]');
-              if (docSelect && urlDoc) {
-                docSelect.value = urlDoc;
-                docSelect.dispatchEvent(new Event('change'));
-              }
-            }, 350);
-          }, 800);
+          }, 500);
         }
       });
     </script>
+    <x-booking-modal />
     @yield('scripts')
   </body>
 </html>

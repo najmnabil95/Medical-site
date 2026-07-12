@@ -1,9 +1,7 @@
-@extends('layouts.admin')
+<?php $__env->startSection('title', 'إدارة الأطباء - لوحة التحكم'); ?>
 
-@section('title', 'إدارة الأطباء - لوحة التحكم')
-
-@section('content')
-  @php
+<?php $__env->startSection('content'); ?>
+  <?php
     $departments = \App\Models\Department::where('active', true)->get();
 
     $gradients = [
@@ -13,7 +11,7 @@
       'from-amber-500 to-orange-600' => 'برتقالي دافئ',
       'from-rose-500 to-pink-600' => 'وردي ناعم',
     ];
-  @endphp
+  ?>
 
   <!-- Header -->
   <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4 text-right">
@@ -41,7 +39,8 @@
         <i data-lucide="users" class="w-5 h-5"></i>
       </div>
       <div class="text-2xl font-black text-gray-800 tabular-nums">
-        {{ $doctors->count() }}
+        <?php echo e($doctors->count()); ?>
+
       </div>
       <div class="text-xs text-gray-400 mt-1 font-medium">إجمالي الأطباء</div>
     </div>
@@ -51,7 +50,8 @@
         <i data-lucide="check-circle" class="w-5 h-5"></i>
       </div>
       <div class="text-2xl font-black text-gray-800 tabular-nums">
-        {{ $doctors->where('active', true)->count() }}
+        <?php echo e($doctors->where('active', true)->count()); ?>
+
       </div>
       <div class="text-xs text-gray-400 mt-1 font-medium">نشط بالخارجية</div>
     </div>
@@ -61,7 +61,8 @@
         <i data-lucide="award" class="w-5 h-5"></i>
       </div>
       <div class="text-2xl font-black text-gray-800 tabular-nums">
-        {{ number_format((float) $doctors->filter(fn($d) => !empty($d->experience))->avg(fn($d) => (float) preg_replace('/[^0-9.]/', '', (string) $d->experience)), 1) }}
+        <?php echo e(number_format((float) $doctors->filter(fn($d) => !empty($d->experience))->avg(fn($d) => (float) preg_replace('/[^0-9.]/', '', (string) $d->experience)), 1)); ?>
+
       </div>
       <div class="text-xs text-gray-400 mt-1 font-medium">متوسط سنوات الخبرة</div>
     </div>
@@ -71,7 +72,8 @@
         <i data-lucide="star" class="w-5 h-5"></i>
       </div>
       <div class="text-2xl font-black text-gray-800 tabular-nums">
-        ★ {{ number_format((float) $doctors->filter(fn($d) => is_numeric($d->rating))->avg('rating'), 1) }}
+        ★ <?php echo e(number_format((float) $doctors->filter(fn($d) => is_numeric($d->rating))->avg('rating'), 1)); ?>
+
       </div>
       <div class="text-xs text-gray-400 mt-1 font-medium">متوسط التقييم</div>
     </div>
@@ -93,48 +95,48 @@
 
   <!-- Doctors Cards Grid -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="doctors-grid">
-    @forelse($doctors as $doc)
+    <?php $__empty_1 = true; $__currentLoopData = $doctors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $doc): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
       <div
-        class="doctor-card bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl transition-all {{ !$doc->active ? 'opacity-65' : '' }}"
-        data-name="{{ $doc->name }}"
-        data-specialty="{{ $doc->specialty }}"
-        data-dept="{{ $doc->department }}"
+        class="doctor-card bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl transition-all <?php echo e(!$doc->active ? 'opacity-65' : ''); ?>"
+        data-name="<?php echo e($doc->name); ?>"
+        data-specialty="<?php echo e($doc->specialty); ?>"
+        data-dept="<?php echo e($doc->department); ?>"
       >
-        <div class="h-2.5 bg-gradient-to-l {{ $doc->gradient }}"></div>
+        <div class="h-2.5 bg-gradient-to-l <?php echo e($doc->gradient); ?>"></div>
         <div class="p-5 text-right flex flex-col justify-between h-full">
           <div>
             <!-- Header section -->
             <div class="flex items-start justify-between mb-4">
               <div class="flex items-center gap-3">
                 <div class="w-14 h-14 rounded-xl overflow-hidden border border-gray-100 shrink-0 shadow-sm bg-gray-50">
-                  <img src="{{ $doc->image }}" alt="{{ $doc->name }}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=150&q=80'" />
+                  <img src="<?php echo e($doc->image); ?>" alt="<?php echo e($doc->name); ?>" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=150&q=80'" />
                 </div>
                 <div class="text-right">
-                  <h3 class="font-bold text-gray-800 text-base">{{ $doc->name }}</h3>
-                  <p class="text-xs text-primary-600 font-bold mt-0.5">{{ $doc->specialty }}</p>
+                  <h3 class="font-bold text-gray-800 text-base"><?php echo e($doc->name); ?></h3>
+                  <p class="text-xs text-primary-600 font-bold mt-0.5"><?php echo e($doc->specialty); ?></p>
                 </div>
               </div>
 
               <!-- Active Badge/Status Toggle -->
-              <form action="{{ route('admin.doctors.update', $doc->id) }}" method="POST" class="inline">
-                @csrf
-                @method('PUT')
-                <input type="hidden" name="name" value="{{ $doc->name }}" />
-                <input type="hidden" name="specialty" value="{{ $doc->specialty }}" />
-                <input type="hidden" name="department" value="{{ $doc->department }}" />
-                <input type="hidden" name="rating" value="{{ $doc->rating }}" />
-                <input type="hidden" name="experience" value="{{ $doc->experience }}" />
-                <input type="hidden" name="patients" value="{{ $doc->patients }}" />
-                <input type="hidden" name="gradient" value="{{ $doc->gradient }}" />
-                @if($doc->active)
+              <form action="<?php echo e(route('admin.doctors.update', $doc->id)); ?>" method="POST" class="inline">
+                <?php echo csrf_field(); ?>
+                <?php echo method_field('PUT'); ?>
+                <input type="hidden" name="name" value="<?php echo e($doc->name); ?>" />
+                <input type="hidden" name="specialty" value="<?php echo e($doc->specialty); ?>" />
+                <input type="hidden" name="department" value="<?php echo e($doc->department); ?>" />
+                <input type="hidden" name="rating" value="<?php echo e($doc->rating); ?>" />
+                <input type="hidden" name="experience" value="<?php echo e($doc->experience); ?>" />
+                <input type="hidden" name="patients" value="<?php echo e($doc->patients); ?>" />
+                <input type="hidden" name="gradient" value="<?php echo e($doc->gradient); ?>" />
+                <?php if($doc->active): ?>
                   <button type="submit" class="text-emerald-500 hover:scale-115 transition-transform cursor-pointer">
                     <i data-lucide="toggle-right" class="w-8 h-8"></i>
                   </button>
-                @else
+                <?php else: ?>
                   <button type="submit" name="active" value="1" class="text-gray-300 hover:scale-115 transition-transform cursor-pointer">
                     <i data-lucide="toggle-left" class="w-8 h-8"></i>
                   </button>
-                @endif
+                <?php endif; ?>
               </form>
             </div>
 
@@ -142,22 +144,22 @@
             <div class="grid grid-cols-3 gap-2 bg-gray-50 rounded-xl p-3 text-center text-xs text-gray-500 mb-4 font-bold">
               <div>
                 <p class="text-gray-400 font-normal mb-0.5">الخبرة</p>
-                <p class="text-gray-800 text-sm font-black">{{ $doc->experience }} سنة</p>
+                <p class="text-gray-800 text-sm font-black"><?php echo e($doc->experience); ?> سنة</p>
               </div>
               <div class="border-x border-gray-200">
                 <p class="text-gray-400 font-normal mb-0.5">المرضى</p>
-                <p class="text-gray-800 text-sm font-black">+{{ $doc->patients }}</p>
+                <p class="text-gray-800 text-sm font-black">+<?php echo e($doc->patients); ?></p>
               </div>
               <div>
                 <p class="text-gray-400 font-normal mb-0.5">التقييم</p>
-                <p class="text-amber-500 text-sm font-black">★ {{ $doc->rating }}</p>
+                <p class="text-amber-500 text-sm font-black">★ <?php echo e($doc->rating); ?></p>
               </div>
             </div>
 
             <div class="space-y-1.5 text-xs text-gray-500 mb-5">
               <div class="flex items-center gap-2">
                 <i data-lucide="hospital" class="w-4 h-4 text-gray-400"></i>
-                <span>القسم: <strong>{{ $doc->department }}</strong></span>
+                <span>القسم: <strong><?php echo e($doc->department); ?></strong></span>
               </div>
             </div>
           </div>
@@ -165,16 +167,16 @@
           <!-- Card actions -->
           <div class="flex items-center gap-2 pt-3 border-t border-gray-50">
             <button
-              onclick="openEditModal({{ $doc->id }}, '{{ addslashes($doc->name) }}', '{{ addslashes($doc->specialty) }}', '{{ addslashes($doc->description ?? '') }}', '{{ addslashes($doc->department) }}', '{{ $doc->rating }}', '{{ preg_replace('/[^0-9]/', '', $doc->experience) }}', '{{ preg_replace('/[^0-9]/', '', $doc->patients) }}', '{{ $doc->gradient }}', {{ $doc->active ? 'true' : 'false' }})"
+              onclick="openEditModal(<?php echo e($doc->id); ?>, '<?php echo e(addslashes($doc->name)); ?>', '<?php echo e(addslashes($doc->specialty)); ?>', '<?php echo e(addslashes($doc->department)); ?>', '<?php echo e($doc->rating); ?>', '<?php echo e(preg_replace('/[^0-9]/', '', $doc->experience)); ?>', '<?php echo e(preg_replace('/[^0-9]/', '', $doc->patients)); ?>', '<?php echo e($doc->gradient); ?>', <?php echo e($doc->active ? 'true' : 'false'); ?>)"
               class="flex-1 py-2 bg-blue-50 text-blue-600 rounded-lg text-xs font-bold hover:bg-blue-100 transition-colors flex items-center justify-center gap-1 cursor-pointer"
             >
               <i data-lucide="edit" class="w-3.5 h-3.5"></i>
               <span>تعديل البيانات</span>
             </button>
 
-            <form action="{{ route('admin.doctors.destroy', $doc->id) }}" method="POST" class="flex-1" onsubmit="return confirm('هل أنت متأكد من حذف الطبيب نهائياً؟');">
-              @csrf
-              @method('DELETE')
+            <form action="<?php echo e(route('admin.doctors.destroy', $doc->id)); ?>" method="POST" class="flex-1" onsubmit="return confirm('هل أنت متأكد من حذف الطبيب نهائياً؟');">
+              <?php echo csrf_field(); ?>
+              <?php echo method_field('DELETE'); ?>
               <button
                 type="submit"
                 class="w-full py-2 bg-red-50 text-red-600 rounded-lg text-xs font-bold hover:bg-red-100 transition-colors flex items-center justify-center gap-1 cursor-pointer"
@@ -186,12 +188,12 @@
           </div>
         </div>
       </div>
-    @empty
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
       <div class="col-span-full bg-white rounded-3xl p-16 border border-gray-100 text-center text-gray-400">
         <i data-lucide="users" class="mx-auto mb-4 opacity-30 w-16 h-16"></i>
         <p>لا يوجد أطباء مسجلين</p>
       </div>
-    @endforelse
+    <?php endif; ?>
   </div>
 
   <!-- Create Doctor Modal -->
@@ -205,8 +207,8 @@
         <h3 class="text-xl font-bold text-gray-800">إضافة طبيب جديد</h3>
       </div>
       
-      <form action="{{ route('admin.doctors.store') }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-4 text-gray-700">
-        @csrf
+      <form action="<?php echo e(route('admin.doctors.store')); ?>" method="POST" enctype="multipart/form-data" class="p-6 space-y-4 text-gray-700">
+        <?php echo csrf_field(); ?>
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="block text-xs font-bold text-gray-500 mb-2">اسم الطبيب الكامل</label>
@@ -218,26 +220,21 @@
           </div>
         </div>
 
-        <div>
-          <label class="block text-xs font-bold text-gray-500 mb-2">وصف الطبيب</label>
-          <textarea name="description" rows="3" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500" placeholder="نبذة عن الطبيب وخبراته..."></textarea>
-        </div>
-
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="block text-xs font-bold text-gray-500 mb-2">القسم الطبي المسند</label>
             <select name="department" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500">
-              @foreach($departments as $dept)
-                <option value="{{ $dept->name }}">{{ $dept->name }}</option>
-              @endforeach
+              <?php $__currentLoopData = $departments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dept): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <option value="<?php echo e($dept->name); ?>"><?php echo e($dept->name); ?></option>
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </select>
           </div>
           <div>
             <label class="block text-xs font-bold text-gray-500 mb-2">التنسيق / المظهر اللوني</label>
             <select name="gradient" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500">
-              @foreach($gradients as $val => $lbl)
-                <option value="{{ $val }}">{{ $lbl }}</option>
-              @endforeach
+              <?php $__currentLoopData = $gradients; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $val => $lbl): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <option value="<?php echo e($val); ?>"><?php echo e($lbl); ?></option>
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </select>
           </div>
         </div>
@@ -287,8 +284,8 @@
       </div>
       
       <form id="edit-form" action="" method="POST" enctype="multipart/form-data" class="p-6 space-y-4 text-gray-700">
-        @csrf
-        @method('PUT')
+        <?php echo csrf_field(); ?>
+        <?php echo method_field('PUT'); ?>
         
         <div class="grid grid-cols-2 gap-4">
           <div>
@@ -301,26 +298,21 @@
           </div>
         </div>
 
-        <div>
-          <label class="block text-xs font-bold text-gray-500 mb-2">وصف الطبيب</label>
-          <textarea name="description" id="edit-description" rows="3" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none" placeholder="نبذة عن الطبيب وخبراته..."></textarea>
-        </div>
-
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="block text-xs font-bold text-gray-500 mb-2">القسم الطبي المسند</label>
             <select name="department" id="edit-department" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none">
-              @foreach($departments as $dept)
-                <option value="{{ $dept->name }}">{{ $dept->name }}</option>
-              @endforeach
+              <?php $__currentLoopData = $departments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dept): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <option value="<?php echo e($dept->name); ?>"><?php echo e($dept->name); ?></option>
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </select>
           </div>
           <div>
             <label class="block text-xs font-bold text-gray-500 mb-2">التنسيق / المظهر اللوني</label>
             <select name="gradient" id="edit-gradient" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none">
-              @foreach($gradients as $val => $lbl)
-                <option value="{{ $val }}">{{ $lbl }}</option>
-              @endforeach
+              <?php $__currentLoopData = $gradients; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $val => $lbl): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <option value="<?php echo e($val); ?>"><?php echo e($lbl); ?></option>
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </select>
           </div>
         </div>
@@ -384,13 +376,12 @@
       document.getElementById('create-modal').classList.add('hidden');
     }
 
-    function openEditModal(id, name, specialty, description, department, rating, experience, patients, gradient, active) {
+    function openEditModal(id, name, specialty, department, rating, experience, patients, gradient, active) {
       const form = document.getElementById('edit-form');
       form.action = `/admin/doctors/${id}`;
       
       document.getElementById('edit-name').value = name;
       document.getElementById('edit-specialty').value = specialty;
-      document.getElementById('edit-description').value = description;
       document.getElementById('edit-department').value = department;
       document.getElementById('edit-rating').value = rating;
       document.getElementById('edit-experience').value = experience;
@@ -405,4 +396,6 @@
       document.getElementById('edit-modal').classList.add('hidden');
     }
   </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\laravel-hospital-website-development\resources\views/admin/doctors/index.blade.php ENDPATH**/ ?>

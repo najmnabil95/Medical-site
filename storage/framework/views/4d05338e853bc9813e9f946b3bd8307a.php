@@ -25,7 +25,7 @@
 
     <!-- Doctors Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 animate-fade-in-up">
-      <?php $__currentLoopData = $doctors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $doc): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+      <?php $__currentLoopData = $doctors->take(4); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $doc): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
       <?php
       $gradient = $doc->gradient ?? 'from-primary-500 to-primary-700';
       ?>
@@ -39,10 +39,10 @@
             src="<?php echo e($doc->image); ?>"
             alt="<?php echo e($doc->name); ?>"
             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-          <div class="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
 
           <!-- Gradient Overlay on hover -->
-          <div class="absolute inset-0 bg-linear-to-t <?php echo e($gradient); ?> opacity-0 group-hover:opacity-40 transition-opacity duration-500"></div>
+          <div class="absolute inset-0 bg-gradient-to-t <?php echo e($gradient); ?> opacity-0 group-hover:opacity-40 transition-opacity duration-500"></div>
 
           <!-- Social Links -->
           <div class="absolute top-5 left-5 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-y-4 group-hover:translate-y-0" onclick="event.stopPropagation()">
@@ -88,7 +88,7 @@
           <button
             data-book-dept="<?php echo e($doc->department); ?>"
             data-book-doc="<?php echo e($doc->name); ?>"
-            class="book-appointment-btn mt-5 w-full bg-linear-to-l <?php echo e($gradient); ?> text-white py-3 rounded-xl font-bold text-sm hover:shadow-lg transition-all flex items-center justify-center gap-2 opacity-90 hover:opacity-100 cursor-pointer">
+            class="book-appointment-btn mt-5 w-full bg-gradient-to-l <?php echo e($gradient); ?> text-white py-3 rounded-xl font-bold text-sm hover:shadow-lg transition-all flex items-center justify-center gap-2 opacity-90 hover:opacity-100 cursor-pointer">
             <i data-lucide="calendar" class="w-4 h-4"></i>
             <span>احجز الآن</span>
           </button>

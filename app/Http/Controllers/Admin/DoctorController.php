@@ -37,6 +37,7 @@ class DoctorController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'specialty' => 'required|string|max:255',
+            'description' => 'nullable|string',
             'department' => 'required|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'rating' => 'required|numeric|min:1|max:5',
@@ -74,6 +75,7 @@ class DoctorController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'specialty' => 'required|string|max:255',
+            'description' => 'nullable|string',
             'department' => 'required|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'rating' => 'required|numeric|min:1|max:5',

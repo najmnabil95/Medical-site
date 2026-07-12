@@ -39,6 +39,18 @@ class AppServiceProvider extends ServiceProvider
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\View::share('settings', null);
         }
+
+        \Illuminate\Support\Facades\View::composer('components.booking-modal', function ($view) {
+            try {
+                $departments = \App\Models\Department::where('active', true)->orderBy('order')->get();
+                $doctors = \App\Models\Doctor::where('active', true)->orderBy('id', 'desc')->get();
+                $view->with('departments', $departments);
+                $view->with('doctors', $doctors);
+            } catch (\Exception $e) {
+                $view->with('departments', collect());
+                $view->with('doctors', collect());
+            }
+        });
     }
 }
 

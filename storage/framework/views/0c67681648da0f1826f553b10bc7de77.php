@@ -16,8 +16,12 @@
 
   $departmentsEnabled = $screens->firstWhere('component', 'Departments')->enabled ?? true;
 ?>
+<?php
+  $isDoctorsPage = Request::is('doctors') || Request::is('doctors/*');
+?>
 
 <footer class="bg-gray-900 text-white relative">
+  <?php if(!$isDoctorsPage): ?>
   <!-- Pre Footer CTA -->
   <div class="bg-gradient-to-l from-primary-600 to-primary-800 relative overflow-hidden">
     <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle, white 1px, transparent 1px); background-size: 20px 20px;"></div>
@@ -187,6 +191,7 @@
 
     </div>
   </div>
+  <?php endif; ?>
 
   <!-- Bottom Copyright Bar -->
   <div class="border-t border-white/[0.05] text-gray-500">
