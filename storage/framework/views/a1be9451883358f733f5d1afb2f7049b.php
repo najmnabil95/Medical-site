@@ -3,20 +3,20 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'لوحة التحكم') - {{ $settings->site_name ?? 'مستشفى الشفاء الدولي' }}</title>
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+    <title><?php echo $__env->yieldContent('title', 'لوحة التحكم'); ?> - <?php echo e($settings->site_name ?? 'مستشفى الشفاء الدولي'); ?></title>
     
     <!-- Favicon -->
-    @if(!empty($settings->favicon))
-        <link rel="icon" type="image/png" href="{{ $settings->favicon }}">
-    @else
+    <?php if(!empty($settings->favicon)): ?>
+        <link rel="icon" type="image/png" href="<?php echo e($settings->favicon); ?>">
+    <?php else: ?>
         <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    @endif
+    <?php endif; ?>
 
     <!-- Google Fonts: Tajawal -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    @php
+    <?php
       $fontFamily = $settings->font_family ?? 'Tajawal';
       $fontUrl = 'https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap';
       if ($fontFamily === 'Cairo') {
@@ -30,17 +30,17 @@
       } elseif ($fontFamily === 'Readex Pro') {
           $fontUrl = 'https://fonts.googleapis.com/css2?family=Readex+Pro:wght@200;300;400;500;600;700&display=swap';
       }
-    @endphp
+    ?>
 
     <!-- Google Fonts Dynamic -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="{{ $fontUrl }}" rel="stylesheet">
+    <link href="<?php echo e($fontUrl); ?>" rel="stylesheet">
 
     <!-- CSS Override to enforce Font Family -->
     <style>
       *:not(i):not([class*="lucide"]) {
-        font-family: '{{ $fontFamily }}', sans-serif !important;
+        font-family: '<?php echo e($fontFamily); ?>', sans-serif !important;
       }
     </style>
 
@@ -48,7 +48,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <!-- Vite Assets -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
   </head>
   <body class="min-h-screen bg-gray-50 font-tajawal antialiased text-gray-900">
 
@@ -61,20 +61,20 @@
       >
         <!-- Logo Header -->
         <div class="h-16 px-6 flex items-center justify-between border-b border-gray-100">
-          <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
+          <a href="<?php echo e(route('admin.dashboard')); ?>" class="flex items-center gap-3">
             <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center border border-gray-100 shadow-md p-1 overflow-hidden shrink-0">
-              @if(!empty($settings->logo))
-                @if(str_starts_with($settings->logo, 'http') || str_starts_with($settings->logo, 'data:'))
-                  <img src="{{ $settings->logo }}" alt="Logo" class="w-full h-full object-contain" />
-                @else
-                  <span class="text-primary-600 text-base font-bold">{{ $settings->logo }}</span>
-                @endif
-              @else
+              <?php if(!empty($settings->logo)): ?>
+                <?php if(str_starts_with($settings->logo, 'http') || str_starts_with($settings->logo, 'data:')): ?>
+                  <img src="<?php echo e($settings->logo); ?>" alt="Logo" class="w-full h-full object-contain" />
+                <?php else: ?>
+                  <span class="text-primary-600 text-base font-bold"><?php echo e($settings->logo); ?></span>
+                <?php endif; ?>
+              <?php else: ?>
                 <span class="text-white text-base font-bold">🏥</span>
-              @endif
+              <?php endif; ?>
             </div>
             <div class="text-right">
-              <h1 class="text-base font-bold text-primary-700 leading-tight">{{ $settings->site_name ?? 'مستشفى الشفاء' }}</h1>
+              <h1 class="text-base font-bold text-primary-700 leading-tight"><?php echo e($settings->site_name ?? 'مستشفى الشفاء'); ?></h1>
               <p class="text-[9px] text-gray-400 tracking-wider">لوحة التحكم</p>
             </div>
           </a>
@@ -89,217 +89,217 @@
           <!-- لوحة التحكم -->
           <div>
             <a
-              href="{{ route('admin.dashboard') }}"
-              class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ Route::currentRouteName() === 'admin.dashboard' ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+              href="<?php echo e(route('admin.dashboard')); ?>"
+              class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 <?php echo e(Route::currentRouteName() === 'admin.dashboard' ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600'); ?>"
             >
               <i data-lucide="layout-dashboard" class="w-4.5 h-4.5"></i>
               <span class="flex-1 text-right">لوحة القيادة</span>
             </a>
           </div>
 
-          @if(auth()->user()->hasRole('Doctor'))
+          <?php if(auth()->user()->hasRole('Doctor')): ?>
           <!-- قسم الطبيب -->
           <div>
             <p class="text-[10px] font-bold text-gray-400 mb-2 px-3 tracking-wider text-right uppercase">منطقة الطبيب</p>
             <div class="space-y-1">
               <a
-                href="{{ route('doctor.appointments.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'doctor.appointments') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                href="<?php echo e(route('doctor.appointments.index')); ?>"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 <?php echo e(str_starts_with(Route::currentRouteName(), 'doctor.appointments') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600'); ?>"
               >
                 <i data-lucide="stethoscope" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">مواعيدي</span>
               </a>
             </div>
           </div>
-          @endif
+          <?php endif; ?>
 
           <!-- قسم العمليات -->
-          @hasanyrole('Super Admin|Manager|Reception|Nurse')
+          <?php if (\Illuminate\Support\Facades\Blade::check('hasanyrole', 'Super Admin|Manager|Reception|Nurse')): ?>
           <div>
             <p class="text-[10px] font-bold text-gray-400 mb-2 px-3 tracking-wider text-right uppercase">العمليات والطلبات</p>
             <div class="space-y-1">
               <a
-                href="{{ route('admin.appointments.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.appointments') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                href="<?php echo e(route('admin.appointments.index')); ?>"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 <?php echo e(str_starts_with(Route::currentRouteName(), 'admin.appointments') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600'); ?>"
               >
                 <i data-lucide="calendar" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">الحجوزات</span>
               </a>
-              @hasanyrole('Super Admin|Manager|Reception')
+              <?php if (\Illuminate\Support\Facades\Blade::check('hasanyrole', 'Super Admin|Manager|Reception')): ?>
               <a
-                href="{{ route('admin.messages.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.messages') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                href="<?php echo e(route('admin.messages.index')); ?>"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 <?php echo e(str_starts_with(Route::currentRouteName(), 'admin.messages') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600'); ?>"
               >
                 <i data-lucide="mail" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">رسائل التواصل</span>
               </a>
               <a
-                href="{{ route('admin.notifications.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.notifications') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                href="<?php echo e(route('admin.notifications.index')); ?>"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 <?php echo e(str_starts_with(Route::currentRouteName(), 'admin.notifications') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600'); ?>"
               >
                 <i data-lucide="bell" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">سجل الإشعارات</span>
               </a>
-              @endhasanyrole
+              <?php endif; ?>
             </div>
           </div>
-          @endhasanyrole
+          <?php endif; ?>
 
           <!-- قسم الإدارة الطبية -->
-          @hasanyrole('Super Admin|Manager|Editor')
+          <?php if (\Illuminate\Support\Facades\Blade::check('hasanyrole', 'Super Admin|Manager|Editor')): ?>
           <div>
             <p class="text-[10px] font-bold text-gray-400 mb-2 px-3 tracking-wider text-right uppercase">الإدارة الطبية</p>
             <div class="space-y-1">
               <a
-                href="{{ route('admin.doctors.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.doctors') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                href="<?php echo e(route('admin.doctors.index')); ?>"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 <?php echo e(str_starts_with(Route::currentRouteName(), 'admin.doctors') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600'); ?>"
               >
                 <i data-lucide="user-cog" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">الأطباء</span>
               </a>
               <a
-                href="{{ route('admin.departments.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.departments') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                href="<?php echo e(route('admin.departments.index')); ?>"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 <?php echo e(str_starts_with(Route::currentRouteName(), 'admin.departments') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600'); ?>"
               >
                 <i data-lucide="hospital" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">الأقسام الطبية</span>
               </a>
               <a
-                href="{{ route('admin.services.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.services') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                href="<?php echo e(route('admin.services.index')); ?>"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 <?php echo e(str_starts_with(Route::currentRouteName(), 'admin.services') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600'); ?>"
               >
                 <i data-lucide="activity" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">الخدمات</span>
               </a>
             </div>
           </div>
-          @endhasanyrole
+          <?php endif; ?>
 
           <!-- الخدمات والأسعار -->
-          @hasanyrole('Super Admin|Manager|Accountant')
+          <?php if (\Illuminate\Support\Facades\Blade::check('hasanyrole', 'Super Admin|Manager|Accountant')): ?>
           <div>
             <p class="text-[10px] font-bold text-gray-400 mb-2 px-3 tracking-wider text-right uppercase">الخدمات والأسعار</p>
             <div class="space-y-1">
               <a
-                href="{{ route('admin.packages.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.packages') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                href="<?php echo e(route('admin.packages.index')); ?>"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 <?php echo e(str_starts_with(Route::currentRouteName(), 'admin.packages') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600'); ?>"
               >
                 <i data-lucide="package" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">باقات الكشف</span>
               </a>
               <a
-                href="{{ route('admin.prices.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.prices') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                href="<?php echo e(route('admin.prices.index')); ?>"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 <?php echo e(str_starts_with(Route::currentRouteName(), 'admin.prices') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600'); ?>"
               >
                 <i data-lucide="dollar-sign" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">قائمة الأسعار</span>
               </a>
               <a
-                href="{{ route('admin.insurances.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.insurances') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                href="<?php echo e(route('admin.insurances.index')); ?>"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 <?php echo e(str_starts_with(Route::currentRouteName(), 'admin.insurances') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600'); ?>"
               >
                 <i data-lucide="shield-check" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">شركات التأمين</span>
               </a>
             </div>
           </div>
-          @endhasanyrole
+          <?php endif; ?>
 
           <!-- الإعلام والمحتوى -->
-          @hasanyrole('Super Admin|Manager|Editor')
+          <?php if (\Illuminate\Support\Facades\Blade::check('hasanyrole', 'Super Admin|Manager|Editor')): ?>
           <div>
             <p class="text-[10px] font-bold text-gray-400 mb-2 px-3 tracking-wider text-right uppercase">المحتوى والشهادات</p>
             <div class="space-y-1">
               <a
-                href="{{ route('admin.news.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.news') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                href="<?php echo e(route('admin.news.index')); ?>"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 <?php echo e(str_starts_with(Route::currentRouteName(), 'admin.news') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600'); ?>"
               >
                 <i data-lucide="newspaper" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">المقالات والأخبار</span>
               </a>
               <a
-                href="{{ route('admin.faqs.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.faqs') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                href="<?php echo e(route('admin.faqs.index')); ?>"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 <?php echo e(str_starts_with(Route::currentRouteName(), 'admin.faqs') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600'); ?>"
               >
                 <i data-lucide="help-circle" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">الأسئلة الشائعة</span>
               </a>
               <a
-                href="{{ route('admin.testimonials.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.testimonials') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                href="<?php echo e(route('admin.testimonials.index')); ?>"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 <?php echo e(str_starts_with(Route::currentRouteName(), 'admin.testimonials') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600'); ?>"
               >
                 <i data-lucide="message-square" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">آراء المرضى</span>
               </a>
               <a
-                href="{{ route('admin.partners.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.partners') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                href="<?php echo e(route('admin.partners.index')); ?>"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 <?php echo e(str_starts_with(Route::currentRouteName(), 'admin.partners') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600'); ?>"
               >
                 <i data-lucide="handshake" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">شركاء النجاح</span>
               </a>
               <a
-                href="{{ route('admin.certifications.index') }}"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.certifications') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                href="<?php echo e(route('admin.certifications.index')); ?>"
+                class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 <?php echo e(str_starts_with(Route::currentRouteName(), 'admin.certifications') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600'); ?>"
               >
                 <i data-lucide="award" class="w-4.5 h-4.5"></i>
                 <span class="flex-1 text-right">شهادات الاعتماد</span>
               </a>
             </div>
           </div>
-          @endhasanyrole
+          <?php endif; ?>
 
           <!-- إدارة النظام -->
-          @hasanyrole('Super Admin|Manager')
+          <?php if (\Illuminate\Support\Facades\Blade::check('hasanyrole', 'Super Admin|Manager')): ?>
           <div>
             <p class="text-[10px] font-bold text-gray-400 mb-2 px-3 tracking-wider text-right uppercase">إدارة النظام</p>
             <div class="space-y-1">
-              @if(Auth::user()->hasRole('Super Admin') || Auth::user()->hasRole('Manager'))
+              <?php if(Auth::user()->hasRole('Super Admin') || Auth::user()->hasRole('Manager')): ?>
                 <a
-                  href="{{ route('admin.users.index') }}"
-                  class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.users') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                  href="<?php echo e(route('admin.users.index')); ?>"
+                  class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 <?php echo e(str_starts_with(Route::currentRouteName(), 'admin.users') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600'); ?>"
                 >
                   <i data-lucide="users" class="w-4.5 h-4.5"></i>
                   <span class="flex-1 text-right">المستخدمون</span>
                 </a>
-              @endif
-              @if(Auth::user()->hasRole('Super Admin') || Auth::user()->hasRole('Manager'))
+              <?php endif; ?>
+              <?php if(Auth::user()->hasRole('Super Admin') || Auth::user()->hasRole('Manager')): ?>
                 <a
-                  href="{{ route('admin.reports.index') }}"
-                  class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.reports') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                  href="<?php echo e(route('admin.reports.index')); ?>"
+                  class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 <?php echo e(str_starts_with(Route::currentRouteName(), 'admin.reports') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600'); ?>"
                 >
                   <i data-lucide="bar-chart-3" class="w-4.5 h-4.5"></i>
                   <span class="flex-1 text-right">التقارير</span>
                 </a>
-              @endif
-              @if(Auth::user()->hasRole('Super Admin') || Auth::user()->hasRole('Manager'))
+              <?php endif; ?>
+              <?php if(Auth::user()->hasRole('Super Admin') || Auth::user()->hasRole('Manager')): ?>
                 <a
-                  href="{{ route('admin.screens.index') }}"
-                  class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.screens') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                  href="<?php echo e(route('admin.screens.index')); ?>"
+                  class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 <?php echo e(str_starts_with(Route::currentRouteName(), 'admin.screens') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600'); ?>"
                 >
                   <i data-lucide="monitor" class="w-4.5 h-4.5"></i>
                   <span class="flex-1 text-right">أقسام العرض (Screens)</span>
                 </a>
-              @endif
-              @if(Auth::user()->hasRole('Super Admin'))
+              <?php endif; ?>
+              <?php if(Auth::user()->hasRole('Super Admin')): ?>
                 <a
-                  href="{{ route('admin.activity-logs.index') }}"
-                  class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.activity-logs') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                  href="<?php echo e(route('admin.activity-logs.index')); ?>"
+                  class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 <?php echo e(str_starts_with(Route::currentRouteName(), 'admin.activity-logs') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600'); ?>"
                 >
                   <i data-lucide="history" class="w-4.5 h-4.5"></i>
                   <span class="flex-1 text-right">سجل النشاطات</span>
                 </a>
                 <a
-                  href="{{ route('admin.settings.index') }}"
-                  class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ str_starts_with(Route::currentRouteName(), 'admin.settings') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600' }}"
+                  href="<?php echo e(route('admin.settings.index')); ?>"
+                  class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 <?php echo e(str_starts_with(Route::currentRouteName(), 'admin.settings') ? 'bg-linear-to-l from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/20 font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600'); ?>"
                 >
                   <i data-lucide="settings" class="w-4.5 h-4.5"></i>
                   <span class="flex-1 text-right">إعدادات الموقع</span>
                 </a>
-              @endif
+              <?php endif; ?>
             </div>
           </div>
-          @endhasanyrole
+          <?php endif; ?>
             
           <!-- Divider inside nav -->
           <div class="h-px bg-gray-100 my-4"></div>
@@ -320,8 +320,8 @@
 
         <!-- Logout Panel -->
         <div class="absolute bottom-0 right-0 left-0 p-4 border-t border-gray-100 bg-white">
-          <form action="{{ route('logout') }}" method="POST" id="logout-form">
-            @csrf
+          <form action="<?php echo e(route('logout')); ?>" method="POST" id="logout-form">
+            <?php echo csrf_field(); ?>
             <button
               type="submit"
               class="flex items-center gap-3 w-full px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 rounded-xl transition-all cursor-pointer"
@@ -373,11 +373,11 @@
             </a>
 
             <!-- Notification Bell -->
-            @php
+            <?php
               $headerPendingCount = \App\Models\Appointment::where('status', 'pending')->count();
               $headerUnreadMessages = \App\Models\Message::where('status', 'new')->count();
               $headerTotalBadge = $headerPendingCount + $headerUnreadMessages;
-            @endphp
+            ?>
             <div class="relative">
               <button
                 onclick="toggleNotificationPanel()"
@@ -385,55 +385,55 @@
                 title="الإشعارات"
               >
                 <i data-lucide="bell" class="w-5 h-5"></i>
-                @if($headerTotalBadge > 0)
-                  <span class="absolute -top-0.5 -right-0.5 w-5 h-5 bg-rose-500 text-white text-[10px] font-black rounded-full flex items-center justify-center animate-pulse shadow-md">{{ min($headerTotalBadge, 99) }}</span>
-                @endif
+                <?php if($headerTotalBadge > 0): ?>
+                  <span class="absolute -top-0.5 -right-0.5 w-5 h-5 bg-rose-500 text-white text-[10px] font-black rounded-full flex items-center justify-center animate-pulse shadow-md"><?php echo e(min($headerTotalBadge, 99)); ?></span>
+                <?php endif; ?>
               </button>
 
               <!-- Notification Dropdown Panel -->
               <div id="notification-panel" class="hidden absolute left-0 mt-2 w-80 bg-white rounded-2xl shadow-2xl border border-gray-100 z-50 overflow-hidden">
                 <div class="px-5 py-3 border-b border-gray-50 flex items-center justify-between">
                   <h4 class="font-black text-gray-900 text-sm">الإشعارات</h4>
-                  @if($headerTotalBadge > 0)
-                    <span class="text-xs font-bold bg-rose-50 text-rose-600 px-2 py-0.5 rounded-full">{{ $headerTotalBadge }} جديد</span>
-                  @endif
+                  <?php if($headerTotalBadge > 0): ?>
+                    <span class="text-xs font-bold bg-rose-50 text-rose-600 px-2 py-0.5 rounded-full"><?php echo e($headerTotalBadge); ?> جديد</span>
+                  <?php endif; ?>
                 </div>
 
                 <div class="max-h-72 overflow-y-auto divide-y divide-gray-50">
-                  @if($headerPendingCount > 0)
-                  <a href="{{ route('admin.appointments.index') }}" class="flex items-start gap-3 px-5 py-3.5 hover:bg-primary-50/50 transition-colors">
+                  <?php if($headerPendingCount > 0): ?>
+                  <a href="<?php echo e(route('admin.appointments.index')); ?>" class="flex items-start gap-3 px-5 py-3.5 hover:bg-primary-50/50 transition-colors">
                     <div class="w-9 h-9 bg-amber-100 rounded-xl flex items-center justify-center shrink-0 mt-0.5">
                       <i data-lucide="calendar-clock" class="w-4.5 h-4.5 text-amber-600"></i>
                     </div>
                     <div>
                       <p class="text-sm font-bold text-gray-800">حجوزات قيد الانتظار</p>
-                      <p class="text-xs text-gray-400 mt-0.5">يوجد <span class="font-bold text-amber-600">{{ $headerPendingCount }}</span> حجز بحاجة للتأكيد</p>
+                      <p class="text-xs text-gray-400 mt-0.5">يوجد <span class="font-bold text-amber-600"><?php echo e($headerPendingCount); ?></span> حجز بحاجة للتأكيد</p>
                     </div>
                   </a>
-                  @endif
+                  <?php endif; ?>
 
-                  @if($headerUnreadMessages > 0)
-                  <a href="{{ route('admin.messages.index') }}" class="flex items-start gap-3 px-5 py-3.5 hover:bg-primary-50/50 transition-colors">
+                  <?php if($headerUnreadMessages > 0): ?>
+                  <a href="<?php echo e(route('admin.messages.index')); ?>" class="flex items-start gap-3 px-5 py-3.5 hover:bg-primary-50/50 transition-colors">
                     <div class="w-9 h-9 bg-blue-100 rounded-xl flex items-center justify-center shrink-0 mt-0.5">
                       <i data-lucide="mail" class="w-4.5 h-4.5 text-blue-600"></i>
                     </div>
                     <div>
                       <p class="text-sm font-bold text-gray-800">رسائل جديدة</p>
-                      <p class="text-xs text-gray-400 mt-0.5">يوجد <span class="font-bold text-blue-600">{{ $headerUnreadMessages }}</span> رسالة غير مقروءة</p>
+                      <p class="text-xs text-gray-400 mt-0.5">يوجد <span class="font-bold text-blue-600"><?php echo e($headerUnreadMessages); ?></span> رسالة غير مقروءة</p>
                     </div>
                   </a>
-                  @endif
+                  <?php endif; ?>
 
-                  @if($headerTotalBadge === 0)
+                  <?php if($headerTotalBadge === 0): ?>
                   <div class="px-5 py-8 text-center">
                     <i data-lucide="bell-off" class="w-8 h-8 text-gray-200 mx-auto mb-2"></i>
                     <p class="text-xs text-gray-400 font-medium">لا توجد إشعارات جديدة</p>
                   </div>
-                  @endif
+                  <?php endif; ?>
                 </div>
 
                 <div class="px-5 py-2.5 border-t border-gray-50 bg-gray-50/50">
-                  <a href="{{ route('admin.notifications.index') }}" class="text-xs font-bold text-primary-600 hover:text-primary-700 transition-colors">عرض جميع الإشعارات ←</a>
+                  <a href="<?php echo e(route('admin.notifications.index')); ?>" class="text-xs font-bold text-primary-600 hover:text-primary-700 transition-colors">عرض جميع الإشعارات ←</a>
                 </div>
               </div>
             </div>
@@ -445,11 +445,12 @@
                 class="flex items-center gap-3 p-1.5 pr-4 hover:bg-gray-50 rounded-xl transition-colors cursor-pointer"
               >
                 <div class="w-9 h-9 bg-linear-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                  {{ substr(Auth::user()->name, 0, 2) }}
+                  <?php echo e(substr(Auth::user()->name, 0, 2)); ?>
+
                 </div>
                 <div class="hidden md:block text-right">
-                  <p class="text-sm font-bold text-gray-800">{{ Auth::user()->name }}</p>
-                  <p class="text-xs text-gray-500">{{ Auth::user()->email }}</p>
+                  <p class="text-sm font-bold text-gray-800"><?php echo e(Auth::user()->name); ?></p>
+                  <p class="text-xs text-gray-500"><?php echo e(Auth::user()->email); ?></p>
                 </div>
                 <i data-lucide="chevron-down" class="text-gray-400 w-4 h-4"></i>
               </button>
@@ -471,20 +472,20 @@
         <main class="p-4 lg:p-8">
           
           <!-- Alert Success/Error Messages -->
-          @if(session('success'))
+          <?php if(session('success')): ?>
             <div class="mb-6 bg-emerald-50 border-r-4 border-emerald-500 rounded-xl p-4 flex items-start gap-3">
               <i data-lucide="check-circle" class="text-emerald-600 shrink-0 mt-0.5 w-[18px] h-[18px]"></i>
-              <span class="text-sm text-emerald-800">{{ session('success') }}</span>
+              <span class="text-sm text-emerald-800"><?php echo e(session('success')); ?></span>
             </div>
-          @endif
-          @if(session('error'))
+          <?php endif; ?>
+          <?php if(session('error')): ?>
             <div class="mb-6 bg-red-50 border-r-4 border-red-500 rounded-xl p-4 flex items-start gap-3">
               <i data-lucide="alert-circle" class="text-red-600 shrink-0 mt-0.5 w-[18px] h-[18px]"></i>
-              <span class="text-sm text-red-800">{{ session('error') }}</span>
+              <span class="text-sm text-red-800"><?php echo e(session('error')); ?></span>
             </div>
-          @endif
+          <?php endif; ?>
 
-          @yield('content')
+          <?php echo $__env->yieldContent('content'); ?>
         </main>
       </div>
 
@@ -542,6 +543,7 @@
         }
       });
     </script>
-    @yield('scripts')
+    <?php echo $__env->yieldContent('scripts'); ?>
   </body>
 </html>
+<?php /**PATH D:\laravel-hospital-website-development\resources\views/layouts/admin.blade.php ENDPATH**/ ?>

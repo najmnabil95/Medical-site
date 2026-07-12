@@ -1,15 +1,15 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="rtl">
+<html lang="<?php echo e(str_replace('_', '-', app()->getLocale())); ?>" dir="rtl">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <meta name="theme-color" content="#0f766e">
     
-    <title>@yield('title', 'مستشفى الشفاء الدولي | Al-Shifa International Hospital')</title>
-    <meta name="description" content="@yield('description', $settings->description ?? 'مستشفى الشفاء الدولي يقدم أفضل الرعايات الطبية والعمليات الجراحية بأحدث التقنيات وبأيدي أمهر الاستشاريين والأطباء.')">
+    <title><?php echo $__env->yieldContent('title', 'مستشفى الشفاء الدولي | Al-Shifa International Hospital'); ?></title>
+    <meta name="description" content="<?php echo $__env->yieldContent('description', $settings->description ?? 'مستشفى الشفاء الدولي يقدم أفضل الرعايات الطبية والعمليات الجراحية بأحدث التقنيات وبأيدي أمهر الاستشاريين والأطباء.'); ?>">
 
-    @php
+    <?php
       $fontFamily = $settings->font_family ?? 'Tajawal';
       $fontUrl = 'https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap';
       if ($fontFamily === 'Cairo') {
@@ -23,12 +23,12 @@
       } elseif ($fontFamily === 'Readex Pro') {
           $fontUrl = 'https://fonts.googleapis.com/css2?family=Readex+Pro:wght@200;300;400;500;600;700&display=swap';
       }
-    @endphp
+    ?>
 
     <!-- Google Fonts Dynamic -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="{{ $fontUrl }}" rel="stylesheet">
+    <link href="<?php echo e($fontUrl); ?>" rel="stylesheet">
 
     <!-- DNS Prefetch for external resources -->
     <link rel="dns-prefetch" href="https://unpkg.com">
@@ -37,7 +37,7 @@
     <!-- CSS Override to enforce Font Family -->
     <style>
       *:not(i):not([class*="lucide"]) {
-        font-family: '{{ $fontFamily }}', sans-serif !important;
+        font-family: '<?php echo e($fontFamily); ?>', sans-serif !important;
       }
       /* Lazy loading image fade-in */
       img[loading="lazy"] {
@@ -50,14 +50,14 @@
     </style>
 
     <!-- Favicon -->
-    @if(!empty($settings->favicon))
-        <link rel="icon" type="image/png" href="{{ $settings->favicon }}">
-    @else
+    <?php if(!empty($settings->favicon)): ?>
+        <link rel="icon" type="image/png" href="<?php echo e($settings->favicon); ?>">
+    <?php else: ?>
         <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    @endif
+    <?php endif; ?>
 
     <!-- Vite Assets -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
 
     <!-- Inline Dark Mode Toggle Guard (Prevents Flicker) -->
     <script>
@@ -79,7 +79,7 @@
     <!-- Progress Indicator -->
     <div id="scroll-progress-bar" class="fixed top-0 right-0 h-1 bg-linear-to-l from-emerald-500 to-cyan-500 z-9999 transition-all duration-100" style="width: 0%;"></div>
 
-    @php
+    <?php
       $showNewsTicker = false;
       try {
           if (isset($screens)) {
@@ -90,33 +90,33 @@
       } catch (\Exception $e) {
           $showNewsTicker = false;
       }
-    @endphp
+    ?>
 
-    @php
+    <?php
       $isDoctorsPage = Request::is('doctors') || Request::is('doctors/*');
-    @endphp
+    ?>
 
-    @if(!$isDoctorsPage)
+    <?php if(!$isDoctorsPage): ?>
       <!-- Main Header / Navbar -->
-      @include('components.home.Navbar')
+      <?php echo $__env->make('components.home.Navbar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
-      @if($showNewsTicker)
+      <?php if($showNewsTicker): ?>
         <!-- News Ticker -->
-        @include('components.home.NewsTicker')
-      @endif
-    @endif
+        <?php echo $__env->make('components.home.NewsTicker', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+      <?php endif; ?>
+    <?php endif; ?>
 
     <!-- Main Content Area -->
     <main>
-      @yield('content')
+      <?php echo $__env->yieldContent('content'); ?>
     </main>
 
     <!-- Footer -->
-    @include('components.home.Footer')
+    <?php echo $__env->make('components.home.Footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <!-- Floating Utilities -->
-    @include('components.home.WhatsAppFloat')
-    @include('components.home.CookieBanner')
+    <?php echo $__env->make('components.home.WhatsAppFloat', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    <?php echo $__env->make('components.home.CookieBanner', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <!-- Global Client JS -->
     <script>
@@ -258,6 +258,7 @@
         }
       });
     </script>
-    @yield('scripts')
+    <?php echo $__env->yieldContent('scripts'); ?>
   </body>
 </html>
+<?php /**PATH D:\laravel-hospital-website-development\resources\views/layouts/app.blade.php ENDPATH**/ ?>

@@ -135,9 +135,13 @@ class DatabaseSeeder extends Seeder
             ['name' => 'الخدمات', 'component' => 'Services', 'order' => 7, 'icon' => '💼'],
             ['name' => 'حجز موعد', 'component' => 'Appointment', 'order' => 8, 'icon' => '📅'],
             ['name' => 'حاسبة التكلفة', 'component' => 'CostCalculator', 'order' => 9, 'icon' => '🧮'],
-            ['name' => 'الأخبار', 'component' => 'NewsTicker', 'order' => 10, 'icon' => '📰'],
-            ['name' => 'الأسئلة الشائعة', 'component' => 'FAQ', 'order' => 11, 'icon' => '❓'],
-            ['name' => 'تواصل معنا', 'component' => 'Contact', 'order' => 12, 'icon' => '📞'],
+            ['name' => 'آراء المرضى', 'component' => 'Testimonials', 'order' => 10, 'icon' => '💬'],
+            ['name' => 'الباقات', 'component' => 'Packages', 'order' => 11, 'icon' => '📦'],
+            ['name' => 'أخبار ومقالات', 'component' => 'NewsSection', 'order' => 12, 'icon' => '📰'],
+            ['name' => 'الأخبار', 'component' => 'NewsTicker', 'order' => 13, 'icon' => '📢'],
+            ['name' => 'الشركاء والاعتمادات', 'component' => 'Partners', 'order' => 14, 'icon' => '🤝'],
+            ['name' => 'الأسئلة الشائعة', 'component' => 'FAQ', 'order' => 15, 'icon' => '❓'],
+            ['name' => 'تواصل معنا', 'component' => 'Contact', 'order' => 16, 'icon' => '📞'],
         ];
 
         Screen::query()->whereNotIn('name', array_column($screenDefinitions, 'name'))->update(['enabled' => false]);

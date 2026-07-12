@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\CertificationController;
 use App\Http\Controllers\Admin\PriceItemController;
 use App\Http\Controllers\Admin\ScreenController;
 use App\Http\Controllers\Admin\ActivityLogController;
+use App\Http\Controllers\Admin\ReportController;
 
 // Public site routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -38,8 +39,11 @@ Route::post('/logout', [WebAuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
     
-    // Super Admin and Manager Protected Routes (Users & Screens)
+    // Super Admin and Manager Protected Routes (Users, Screens & Reports)
     Route::middleware(['role:Super Admin|Manager'])->group(function () {
+        // Reports
+        Route::get('/reports', [ReportController::class, 'index'])->name('admin.reports.index');
+
         // Users management
         Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
         Route::post('/users', [UserController::class, 'store'])->name('admin.users.store');
