@@ -68,7 +68,7 @@ class DoctorController extends Controller
      * @param  int      $id       معرف الطبيب.
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, string $id)
     {
         $doctor = Doctor::findOrFail($id);
 
@@ -102,7 +102,7 @@ class DoctorController extends Controller
         return redirect()->route('admin.doctors.index')->with('success', 'تم تحديث بيانات الطبيب بنجاح.');
     }
 
-    public function destroy($id)
+    public function destroy(string $id)
     {
         $doctor = Doctor::findOrFail($id);
 

@@ -30,37 +30,40 @@
 
     <!-- Services Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 animate-fade-in-up">
-      @foreach($services as $index => $serv)
-        @php
+      <?php $__currentLoopData = $services; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $serv): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <?php
           $icon = strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', $serv->icon ?? 'activity'));
           $color = $serv->color ?? 'from-primary-500 to-primary-700';
           $number = $serv->number ?? sprintf("%02d", $index + 1);
-        @endphp
+        ?>
         <div
           class="group bg-white/4 backdrop-blur-sm rounded-2xl p-7 border border-white/8 hover:bg-white/10 hover:border-white/20 transition-all duration-500 hover:-translate-y-3 cursor-pointer relative overflow-hidden"
-          @style(["animation-delay: " . (($index % 4) * 100) . "ms"])
+          style="animation-delay: <?php echo e($index * 100); ?>ms"
         >
           <!-- Absolute Card Number -->
           <span class="absolute top-4 left-4 text-[3rem] font-black text-white/3 group-hover:text-white/8 transition-colors">
-            {{ $number }}
+            <?php echo e($number); ?>
+
           </span>
 
           <!-- Shimmer effect -->
           <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity animate-shimmer rounded-2xl"></div>
 
           <div class="relative">
-            <div class="w-14 h-14 bg-linear-to-br {{ $color }} rounded-2xl flex items-center justify-center mb-5 shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
-              <i data-lucide="{{ $icon }}" class="text-white w-6.5 h-6.5"></i>
+            <div class="w-14 h-14 bg-linear-to-br <?php echo e($color); ?> rounded-2xl flex items-center justify-center mb-5 shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+              <i data-lucide="<?php echo e($icon); ?>" class="text-white w-6.5 h-6.5"></i>
             </div>
             <h3 class="text-lg font-bold text-white mb-3 group-hover:text-emerald-400 transition-colors">
-              {{ $serv->title }}
+              <?php echo e($serv->title); ?>
+
             </h3>
             <p class="text-white/40 text-sm leading-relaxed group-hover:text-white/60 transition-colors line-clamp-3">
-              {{ $serv->desc }}
+              <?php echo e($serv->desc); ?>
+
             </p>
           </div>
         </div>
-      @endforeach
+      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </div>
 
     <!-- CTA bottom button -->
@@ -77,3 +80,4 @@
 
   </div>
 </section>
+<?php /**PATH D:\laravel-hospital-website-development\resources\views\components\home\Services.blade.php ENDPATH**/ ?>

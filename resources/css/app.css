@@ -2,6 +2,7 @@
 
 @source "../views/**/*.blade.php";
 @source "../../app/**/*.php";
+@source "../../database/seeders/**/*.php";
 
 @theme {
   --font-tajawal: "Tajawal", sans-serif;
@@ -401,6 +402,7 @@ body.dark-mode ::-webkit-scrollbar-thumb {
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -408,6 +410,7 @@ body.dark-mode ::-webkit-scrollbar-thumb {
 .line-clamp-3 {
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

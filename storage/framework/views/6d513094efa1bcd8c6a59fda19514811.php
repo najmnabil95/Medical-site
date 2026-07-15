@@ -25,24 +25,24 @@
 
     <!-- Doctors Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 animate-fade-in-up">
-      @foreach($doctors->take(4) as $index => $doc)
-      @php
+      <?php $__currentLoopData = $doctors->take(4); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $doc): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+      <?php
       $gradient = $doc->gradient ?? 'from-primary-500 to-primary-700';
-      @endphp
+      ?>
       <div
         data-href="/doctors"
-        data-delay="{{ $index * 150 }}"
+        data-delay="<?php echo e($index * 150); ?>"
         class="doctor-card group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-4 border border-gray-100 cursor-pointer">
         <!-- Image Container -->
         <div class="relative overflow-hidden h-72">
           <img
-            src="{{ $doc->image }}"
-            alt="{{ $doc->name }}"
+            src="<?php echo e($doc->image); ?>"
+            alt="<?php echo e($doc->name); ?>"
             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
           <div class="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent"></div>
 
           <!-- Gradient Overlay on hover -->
-          <div class="absolute inset-0 bg-linear-to-t {{ $gradient }} opacity-0 group-hover:opacity-40 transition-opacity duration-500"></div>
+          <div class="absolute inset-0 bg-linear-to-t <?php echo e($gradient); ?> opacity-0 group-hover:opacity-40 transition-opacity duration-500"></div>
 
           <!-- Social Links -->
           <div class="absolute top-5 left-5 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-y-4 group-hover:translate-y-0" onclick="event.stopPropagation()">
@@ -61,53 +61,54 @@
           <!-- Rating -->
           <div class="absolute bottom-5 right-5 bg-white/95 backdrop-blur-sm rounded-full px-3 py-1.5 flex items-center gap-1 shadow-lg">
             <i data-lucide="star" class="text-yellow-500 fill-current w-3.5 h-3.5"></i>
-            <span class="text-sm font-bold text-gray-800">{{ $doc->rating }}</span>
+            <span class="text-sm font-bold text-gray-800"><?php echo e($doc->rating); ?></span>
           </div>
         </div>
 
         <!-- Info Panel -->
         <div class="p-6">
           <h3 class="text-xl font-bold text-gray-900 group-hover:text-primary-600 transition-colors">
-            {{ $doc->name }}
+            <?php echo e($doc->name); ?>
+
           </h3>
-          <p class="text-primary-600 text-sm font-bold mt-1.5">{{ $doc->specialty }}</p>
-          @if($doc->description)
+          <p class="text-primary-600 text-sm font-bold mt-1.5"><?php echo e($doc->specialty); ?></p>
+          <?php if($doc->description): ?>
             <div class="relative">
-                <p class="text-gray-500 text-xs font-medium mt-2 line-clamp-2 leading-relaxed text-right">{{ $doc->description }}</p>
-                <button onclick="if(typeof openDoctorInfoModal === 'function') openDoctorInfoModal('{{ $doc->id }}')" class="text-primary-600 hover:text-primary-700 text-xs font-bold mt-1 inline-flex items-center gap-1 group/btn cursor-pointer">
+                <p class="text-gray-500 text-xs font-medium mt-2 line-clamp-2 leading-relaxed text-right"><?php echo e($doc->description); ?></p>
+                <button onclick="if(typeof openDoctorInfoModal === 'function') openDoctorInfoModal(<?php echo e($doc->id); ?>)" class="text-primary-600 hover:text-primary-700 text-xs font-bold mt-1 inline-flex items-center gap-1 group/btn cursor-pointer">
                     <span>عرض التفاصيل</span>
                     <i data-lucide="chevron-down" class="w-3 h-3 group-hover/btn:translate-y-0.5 transition-transform"></i>
                 </button>
             </div>
-          @else
+          <?php else: ?>
             <div class="h-8 mt-2"></div> <!-- Spacer -->
-          @endif
+          <?php endif; ?>
 
           <div class="flex items-center justify-between mt-5 pt-5 border-t border-gray-100 text-gray-700">
             <div class="text-center">
-              <div class="text-sm font-bold text-gray-800">{{ $doc->experience }}</div>
+              <div class="text-sm font-bold text-gray-800"><?php echo e($doc->experience); ?></div>
               <div class="text-xs text-gray-400 mt-0.5">خبرة</div>
             </div>
             <div class="h-8 w-px bg-gray-200"></div>
             <div class="text-center">
-              <div class="text-sm font-bold text-gray-800">{{ $doc->patients }}</div>
+              <div class="text-sm font-bold text-gray-800"><?php echo e($doc->patients); ?></div>
               <div class="text-xs text-gray-400 mt-0.5">مريض</div>
             </div>
           </div>
 
           <button
-            data-book-dept="{{ $doc->department }}"
-            data-book-doc="{{ $doc->name }}"
-            class="book-appointment-btn mt-5 w-full bg-linear-to-l {{ $gradient }} text-white py-3 rounded-xl font-bold text-sm hover:shadow-lg transition-all flex items-center justify-center gap-2 opacity-90 hover:opacity-100 cursor-pointer">
+            data-book-dept="<?php echo e($doc->department); ?>"
+            data-book-doc="<?php echo e($doc->name); ?>"
+            class="book-appointment-btn mt-5 w-full bg-linear-to-l <?php echo e($gradient); ?> text-white py-3 rounded-xl font-bold text-sm hover:shadow-lg transition-all flex items-center justify-center gap-2 opacity-90 hover:opacity-100 cursor-pointer">
             <i data-lucide="calendar" class="w-4 h-4"></i>
             <span>احجز الآن</span>
           </button>
         </div>
       </div>
-      @endforeach
+      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </div>
 
-    @if(!$doctors->isEmpty())
+    <?php if(!$doctors->isEmpty()): ?>
     <!-- View More Button -->
     <div class="text-center mt-12">
       <a
@@ -117,10 +118,10 @@
         <i data-lucide="arrow-left" class="w-5 h-5 transition-transform hover:-translate-x-1"></i>
       </a>
     </div>
-    @else
+    <?php else: ?>
     <div class="text-center py-16">
       <p class="text-gray-400 text-lg">لا يوجد أطباء متاحين حالياً</p>
     </div>
-    @endif
+    <?php endif; ?>
   </div>
-</section>
+</section><?php /**PATH D:\laravel-hospital-website-development\resources\views\components\home\Doctors.blade.php ENDPATH**/ ?>

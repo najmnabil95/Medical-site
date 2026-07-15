@@ -284,4 +284,4 @@
     }
   }
 </script>
-<?php /**PATH D:\laravel-hospital-website-development\resources\views/components/home/Footer.blade.php ENDPATH**/ ?>
+<?php /**PATH D:\laravel-hospital-website-development\resources\views\components\home\Footer.blade.php ENDPATH**/ ?>
