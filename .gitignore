@@ -4,12 +4,10 @@
 /node_modules/
 /public/build/
 /public/hot
-//storage/*.key
-//storage/framework/cache/
-//storage/framework/sessions/
-//storage/framework/views/
-//storage/logs/
-/storage/app/public/
+/storage/*.key
+/storage/framework/
+/storage/logs/
+/storage/app/public
 
 # OS
 .DS_Store
@@ -22,4 +20,17 @@ Thumbs.db
 *.ntvs*
 *.njsproj
 *.sln
-node_modules
+
+# Package managers
+npm-debug.log*
+yarn-error.log*
+
+# VSIX / editor extensions
+*.vsix
+
+# Vite
+/public/hot
+
+# Ignore build artifacts
+/dist
+/build
