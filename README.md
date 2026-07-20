@@ -7,7 +7,7 @@
 ## 🚀 التشغيل السريع
 
 ```bash
-cd hospital-backend
+cd .
 
 # إعداد قاعدة البيانات
 php artisan migrate --seed
@@ -31,7 +31,7 @@ php -S 127.0.0.1:8000 -t public
 ## 📁 هيكل المشروع
 
 ```
-hospital-backend/
+./
 ├── app/Http/Controllers/
 │   ├── HomeController.php         ← الصفحة الرئيسية
 │   ├── WebAuthController.php      ← تسجيل الدخول/الخروج
@@ -74,7 +74,7 @@ hospital-backend/
 | Blade Templates | محرك القوالب |
 | Tailwind CSS 4 | التصميم |
 | MySQL | قاعدة البيانات |
-| Vite | تجميع الأصول |
+| Vite | تج��يع الأصول |
 | Lucide Icons | الأيقونات |
 | Google Fonts (Tajawal) | الخطوط |
 
@@ -114,7 +114,7 @@ DB_PASSWORD=your_password
 
 ```bash
 # تثبيت مكتبات Node
-cd hospital-backend
+cd .
 npm install
 
 # تطوير
