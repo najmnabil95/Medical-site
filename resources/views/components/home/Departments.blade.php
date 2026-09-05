@@ -116,14 +116,12 @@ $deptNameEscaped = str_replace("'", "\\'", $dept->name);
 
 <div id="{{ $modalId }}" class="fixed inset-0 z-9999 items-center justify-center p-4" style="display: none;">
   {{-- Solid dark overlay (no backdrop-blur for performance) --}}
-  <div class="fixed inset-0 bg-black/75" {!! $closeModalData !!}></div>
+  <div class="fixed inset-0 bg-black/75" data-close-modal="{{ $dept->id }}"></div>
   <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto z-10" style="animation: deptModalIn 0.25s ease-out;">
     <!-- Header -->
     <div class="relative h-48 bg-linear-to-br {{ $deptColor }} overflow-hidden">
       <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle, white 1px, transparent 1px); background-size: 25px 25px;"></div>
-      <button
-        {!! $closeModalData !!}
-        class="absolute top-4 left-4 w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors">
+      <button data-close-modal="{{ $dept->id }}" class="absolute top-4 left-4 w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
       <div class="absolute bottom-6 right-6 text-white">

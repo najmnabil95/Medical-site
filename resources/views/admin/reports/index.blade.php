@@ -336,8 +336,8 @@
 <script>
 (function() {
   // ===== Daily Appointments Line Chart =====
-  const dailyLabels = JSON.parse('{!! json_encode($dailyLabels ?? []) !!}');
-  const dailyCounts = JSON.parse('{!! json_encode($dailyCounts ?? []) !!}');
+  const dailyLabels = @json($dailyLabels ?? []);
+  const dailyCounts = @json($dailyCounts ?? []);
 
   if (dailyLabels.length) {
     const dailyCtx = document.getElementById('dailyChart');
@@ -390,9 +390,9 @@
   }
 
   // ===== Status Distribution Doughnut =====
-  const statusData = JSON.parse('{!! json_encode($statusDistribution ?? []) !!}');
-  const statusLabels = JSON.parse('{!! json_encode($statusLabels) !!}');
-  const statusColorMap = JSON.parse('{!! json_encode($statusColors) !!}');
+  const statusData = @json($statusDistribution ?? []);
+  const statusLabels = @json($statusLabels);
+  const statusColorMap = @json($statusColors);
 
   if (Object.keys(statusData).length) {
     const statusCtx = document.getElementById('statusChart');
@@ -427,8 +427,8 @@
   }
 
   // ===== Type Distribution Bar Chart =====
-  const typeData = JSON.parse('{!! json_encode($typeDistribution ?? []) !!}');
-  const typeLabelsMap = JSON.parse('{!! json_encode($typeLabels) !!}');
+  const typeData = @json($typeDistribution ?? []);
+  const typeLabelsMap = @json($typeLabels);
 
   if (Object.keys(typeData).length) {
     const typeCtx = document.getElementById('typeChart');
